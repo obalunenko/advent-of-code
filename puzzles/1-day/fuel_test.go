@@ -10,46 +10,41 @@ import (
 
 func Test_module_fuel(t *testing.T) {
 	type fields struct {
-		mass string
+		mass int
 	}
 
 	tests := []struct {
-		name    string
-		fields  fields
-		want    int
-		wantErr bool
+		name   string
+		fields fields
+		want   int
 	}{
 		{
 			name: "mass 12",
 			fields: fields{
-				mass: "12",
+				mass: 12,
 			},
-			want:    2,
-			wantErr: false,
+			want: 2,
 		},
 		{
 			name: "mass 14",
 			fields: fields{
-				mass: "14",
+				mass: 14,
 			},
-			want:    2,
-			wantErr: false,
+			want: 2,
 		},
 		{
 			name: "mass 1969",
 			fields: fields{
-				mass: "1969",
+				mass: 1969,
 			},
-			want:    654,
-			wantErr: false,
+			want: 654,
 		},
 		{
 			name: "mass 100756",
 			fields: fields{
-				mass: "100756",
+				mass: 100756,
 			},
-			want:    33583,
-			wantErr: false,
+			want: 33583,
 		},
 	}
 
@@ -61,12 +56,7 @@ func Test_module_fuel(t *testing.T) {
 				mass: tt.fields.mass,
 			}
 
-			got, err := m.fuel()
-			if tt.wantErr {
-				require.Error(t, err)
-			}
-
-			require.NoError(t, err)
+			got := m.fuel()
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -88,7 +78,7 @@ func Test_calculate(t *testing.T) {
 			args: args{
 				filepath: filepath.Join("testdata", "input.txt"),
 			},
-			want:    3464458,
+			want:    5193796,
 			wantErr: false,
 		},
 	}
