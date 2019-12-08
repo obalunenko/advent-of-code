@@ -25,19 +25,19 @@ func (m module) fuel() int {
 	return f
 }
 
-func calc(in chan input, res chan result, done chan struct{}) {
+func calc(in chan module, res chan int, done chan struct{}) {
 	for i := range in {
-		go fuelForModule(i.m, res, done)
+		go fuelForModule(i, res, done)
 	}
 }
 
-func fuelForModule(m module, res chan result, done chan struct{}) {
+func fuelForModule(m module, res chan int, done chan struct{}) {
 	var isDone bool
+
 	for !isDone {
 		f := m.fuel()
-		res <- result{
-			fuel: f,
-		}
+
+		res <- f
 
 		if f/3 > 1 {
 			m.mass = f
@@ -47,15 +47,6 @@ func fuelForModule(m module, res chan result, done chan struct{}) {
 	}
 
 	done <- struct{}{}
-}
-
-type input struct {
-	m module
-}
-
-type result struct {
-	fuel int
-	err  error
 }
 
 func calculate(filepath string) (int, error) {
@@ -68,8 +59,8 @@ func calculate(filepath string) (int, error) {
 
 	var sum int
 
-	in := make(chan input)
-	res := make(chan result)
+	in := make(chan module)
+	res := make(chan int)
 	done := make(chan struct{})
 
 	go calc(in, res, done)
@@ -87,10 +78,8 @@ func calculate(filepath string) (int, error) {
 			return 0, err
 		}
 
-		in <- input{
-			module{
-				mass: mass,
-			},
+		in <- module{
+			mass: mass,
 		}
 		lines++
 	}
@@ -104,11 +93,7 @@ func calculate(filepath string) (int, error) {
 	for lines > 0 {
 		select {
 		case r := <-res:
-			if r.err != nil {
-				return 0, err
-			}
-
-			sum += r.fuel
+			sum += r
 		case <-done:
 			lines--
 		}
