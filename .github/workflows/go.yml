@@ -1,0 +1,29 @@
+name: Go
+on: [push]
+jobs:
+
+  vet-test:
+    name: Vet and test
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+        id: go
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+
+      - name: Get dependencies
+        run: go mod download
+
+      - name: Vet
+        run: go vet $(go list ./...)
+        
+      - name: Test
+        run: go test -race -v $(go list ./...)
+      
+        
+
