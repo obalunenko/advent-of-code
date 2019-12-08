@@ -9,14 +9,11 @@ import (
 )
 
 type module struct {
-	mass string
+	mass int
 }
 
-func (m module) fuel() (int, error) {
-	mass, err := strconv.Atoi(m.mass)
-	if err != nil {
-		return 0, err
-	}
+func (m module) fuel() int {
+	mass := m.mass
 
 	diff := mass % 3
 	if diff != 0 {
@@ -25,21 +22,31 @@ func (m module) fuel() (int, error) {
 
 	f := (mass / 3) - 2
 
-	return f, nil
+	return f
 }
 
-func calc(in chan input, res chan result) {
+func calc(in chan input, res chan result, done chan struct{}) {
 	for i := range in {
-		go fuelForModule(i.m, res)
+		go fuelForModule(i.m, res, done)
 	}
 }
 
-func fuelForModule(m module, res chan result) {
-	f, err := m.fuel()
-	res <- result{
-		fuel: f,
-		err:  err,
+func fuelForModule(m module, res chan result, done chan struct{}) {
+	var isDone bool
+	for !isDone {
+		f := m.fuel()
+		res <- result{
+			fuel: f,
+		}
+
+		if f/3 > 1 {
+			m.mass = f
+		} else {
+			isDone = true
+		}
 	}
+
+	done <- struct{}{}
 }
 
 type input struct {
@@ -63,17 +70,26 @@ func calculate(filepath string) (int, error) {
 
 	in := make(chan input)
 	res := make(chan result)
+	done := make(chan struct{})
 
-	go calc(in, res)
+	go calc(in, res, done)
 
-	var lines int
+	var (
+		lines int
+		mass  int
+	)
 
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
+		mass, err = strconv.Atoi(scanner.Text())
+		if err != nil {
+			return 0, err
+		}
+
 		in <- input{
 			module{
-				mass: scanner.Text(),
+				mass: mass,
 			},
 		}
 		lines++
@@ -86,14 +102,16 @@ func calculate(filepath string) (int, error) {
 	}
 
 	for lines > 0 {
-		r := <-res
-		if r.err != nil {
-			return 0, err
+		select {
+		case r := <-res:
+			if r.err != nil {
+				return 0, err
+			}
+
+			sum += r.fuel
+		case <-done:
+			lines--
 		}
-
-		sum += r.fuel
-
-		lines--
 	}
 
 	close(res)
