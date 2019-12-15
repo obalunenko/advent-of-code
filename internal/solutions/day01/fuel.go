@@ -3,7 +3,6 @@ package day01
 import (
 	"bufio"
 	"io"
-	"log"
 	"strconv"
 
 	"github.com/pkg/errors"
@@ -81,24 +80,21 @@ func calc(input io.Reader, calcFn calcFunc) (string, error) {
 		}
 		lines++
 	}
-	log.Printf("lines: %d\n", lines)
 
 	close(in)
 
 	if err = scanner.Err(); err != nil {
 		return "", errors.Wrap(err, "scanner error")
 	}
-	var resNumCount int
+
 	for lines > 0 {
 		select {
 		case r := <-res:
 			sum += r
-			resNumCount++
 		case <-done:
 			lines--
 		}
 	}
-	log.Printf("res count: %d \n", resNumCount)
 
 	close(res)
 
