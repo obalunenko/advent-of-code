@@ -7,7 +7,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/oleg-balunenko/advent-of-code/internal/puzzle"
+	"github.com/oleg-balunenko/advent-of-code/puzzles"
 )
 
 type solver struct {
@@ -17,7 +17,7 @@ type solver struct {
 func init() {
 	const puzzleName = "day01"
 
-	puzzle.Register(puzzleName, solver{
+	puzzles.Register(puzzleName, solver{
 		name: puzzleName,
 	})
 }
