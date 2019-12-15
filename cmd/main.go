@@ -42,15 +42,14 @@ func menu() {
 	var text string
 
 	for {
-		_, err := fmt.Scanln(&text)
-		if err != nil {
+		if _, err := fmt.Scanln(&text); err != nil {
 			log.Fatal(err)
 		}
 
-		if pname, ok := choices[text]; !ok {
+		if puz, ok := choices[text]; !ok {
 			fmt.Println("wrong choice, try again")
 		} else {
-			run(pname)
+			run(puz)
 			return
 		}
 	}
