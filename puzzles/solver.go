@@ -7,6 +7,7 @@ import (
 	"log"
 	"sort"
 	"sync"
+	"testing"
 
 	"github.com/pkg/errors"
 )
@@ -39,6 +40,18 @@ func Register(name string, solver Solver) {
 	}
 
 	solvers[name] = solver
+}
+
+// UnregisterAllSolvers cleans up registered solvers. Use for testing only.
+func UnregisterAllSolvers(tb testing.TB) {
+	if tb == nil {
+		panic("could not be called outside of tests")
+	}
+
+	solversMu.Lock()
+	defer solversMu.Unlock()
+
+	solvers = make(map[string]Solver)
 }
 
 // Solvers returns a sorted list of the names of the registered puzzle solvers.
