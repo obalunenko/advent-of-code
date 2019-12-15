@@ -10,8 +10,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/oleg-balunenko/advent-of-code/internal/puzzle"
-	_ "github.com/oleg-balunenko/advent-of-code/internal/solutions/day01"
+	"github.com/oleg-balunenko/advent-of-code/puzzles"
+	_ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions/day01"
 )
 
 var (
@@ -30,7 +30,7 @@ func main() {
 func menu() {
 	fmt.Println("Menu:")
 
-	solvers := puzzle.Solvers()
+	solvers := puzzles.Solvers()
 
 	var choices = make(map[string]string, len(solvers))
 
@@ -57,14 +57,14 @@ func menu() {
 }
 
 func run(name string) {
-	s, err := puzzle.GetSolver(name)
+	s, err := puzzles.GetSolver(name)
 	if err != nil {
 		log.Fatal(errors.Wrap(err, "failed to get solver"))
 	}
 
 	input := filepath.Join(*inputDir, fmt.Sprintf("%s.txt", name))
 
-	if err := puzzle.Run(s, input); err != nil {
+	if err := puzzles.Run(s, input); err != nil {
 		log.Fatal(errors.Wrap(err, "failed to run puzzle solver"))
 	}
 }
