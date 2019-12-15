@@ -29,31 +29,31 @@ var (
 func Register(name string, solver Solver) {
 	solversMu.Lock()
 	defer solversMu.Unlock()
+
 	if solver == nil {
 		panic("puzzle: Register solver is nil")
 	}
+
 	if _, dup := solvers[name]; dup {
 		panic("puzzle: Register called twice for solver " + name)
 	}
-	solvers[name] = solver
-}
 
-func unregisterAllSolvers() {
-	solversMu.Lock()
-	defer solversMu.Unlock()
-	// For tests.
-	solvers = make(map[string]Solver)
+	solvers[name] = solver
 }
 
 // Solvers returns a sorted list of the names of the registered puzzle solvers.
 func Solvers() []string {
 	solversMu.RLock()
 	defer solversMu.RUnlock()
-	var list []string
+
+	list := make([]string, 0, len(solvers))
+
 	for name := range solvers {
 		list = append(list, name)
 	}
+
 	sort.Strings(list)
+
 	return list
 }
 
