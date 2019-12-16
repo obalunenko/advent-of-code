@@ -21,3 +21,25 @@ jobs:
         - echo "Run unit tests..."
         - go vet $(go list ./...)
         - go test -v -race $(go list ./...)
+
+    - stage: Build
+      go:
+        -1.13.x
+      os:
+        - linux
+      before_script:
+        - go mod tidy -v
+        - export GOVERSION=$(go version | awk '{print $3;}')
+      script:
+        - echo "Build stage"
+        - make compile
+      after_success:
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: make release
+        on:
+          tags: true
+          condition: "$TRAVIS_OS_NAME = linux"
+        addons:
+        ssh_known_hosts: github.com
