@@ -215,7 +215,7 @@ func Test_solver_Part1(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			s := solver{
+			s := solution{
 				name: tt.fields.name,
 			}
 			input := readerFromFile(t, tt.args.inputPath)
@@ -265,7 +265,7 @@ func Test_solver_Part2(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			s := solver{
+			s := solution{
 				name: tt.fields.name,
 			}
 			input := readerFromFile(t, tt.args.inputPath)
