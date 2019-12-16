@@ -12,7 +12,8 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/oleg-balunenko/advent-of-code/puzzles"
-	_ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions/2019/day01"
+	// register all solutions
+	_ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions"
 )
 
 const (

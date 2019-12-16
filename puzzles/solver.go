@@ -1,3 +1,4 @@
+// Package puzzles declares common interface for puzzle solutions and functionality for register and run them.
 package puzzles
 
 import (

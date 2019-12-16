@@ -1,6 +1,6 @@
-// Package declares common interface for puzzle solutions and functionality for register and run them.
+// Package solutions registers solutions of puzzles.
 //
-// Each solution should implement `Solver` interface, be implemented udnder separate package and contain `init()`
+// Each solution should implement `Solver` interface, be implemented under separate package and contain `init()`
 // function that will register that solution in list of all solvers.
 //
 // Example:
@@ -20,7 +20,11 @@
 // 	}
 //
 // Then to register solution in the list of all solutions: make a blank import of package with puzzle solution
-// at main.go
+// at register.go
 //
 // 	import  _ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions/day01"
+//
+// And then blank import solutions package at main.go to register all solutions
+//
+//  import _ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions
 package solutions
