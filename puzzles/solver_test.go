@@ -39,6 +39,7 @@ func (a anotherMockSolver) Name() string {
 }
 
 func TestSolver(t *testing.T) {
+	puzzles.UnregisterAllSolvers(t)
 	defer puzzles.UnregisterAllSolvers(t)
 
 	solvers := map[string]puzzles.Solver{
