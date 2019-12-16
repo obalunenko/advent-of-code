@@ -1,3 +1,5 @@
+[![GoDoc](https://godoc.org/github.com/oleg-balunenko/advent-of-code?status.svg)](https://godoc.org/github.com/oleg-balunenko/advent-of-code)
+
 # advent-of-code
 My solutions of puzzles for [Advent Of Code](https://adventofcode.com/)
 
