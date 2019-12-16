@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/oleg-balunenko/advent-of-code.svg?branch=master)](https://travis-ci.com/oleg-balunenko/advent-of-code)
 [![GoDoc](https://godoc.org/github.com/oleg-balunenko/advent-of-code?status.svg)](https://godoc.org/github.com/oleg-balunenko/advent-of-code)
 
 # advent-of-code
