@@ -2,9 +2,9 @@ package puzzles
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"sort"
 	"sync"
 	"testing"
@@ -101,21 +101,21 @@ func Run(solver Solver, filepath string) error {
 		return errors.Wrap(err, "failed to open file")
 	}
 
-	log.Printf("run puzzle solver [%s]\n", solver.Name())
+	fmt.Printf("run puzzle solver [%s]\n", solver.Name())
 
 	res, err = solver.Part1(bytes.NewBuffer(input))
 	if err != nil {
 		return errors.Wrapf(err, "failed to run Part1 for puzzle [%s]", solver.Name())
 	}
 
-	log.Printf("Part1 answer: %s \n", res)
+	fmt.Printf("Part1 answer: %s \n", res)
 
 	res, err = solver.Part2(bytes.NewBuffer(input))
 	if err != nil {
 		return errors.Wrapf(err, "failed to run Part2 for puzzle [%s]", solver.Name())
 	}
 
-	log.Printf("Part2 answer: %s \n", res)
+	fmt.Printf("Part2 answer: %s \n", res)
 
 	return nil
 }
