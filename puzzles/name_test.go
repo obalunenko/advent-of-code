@@ -1,4 +1,4 @@
-package solutions
+package puzzles
 
 import (
 	"os"
@@ -12,6 +12,7 @@ func TestMakeName(t *testing.T) {
 		year   string
 		puzzle string
 	}
+
 	tests := []struct {
 		name    string
 		args    args
@@ -46,7 +47,10 @@ func TestMakeName(t *testing.T) {
 			wantErr: true,
 		},
 	}
+
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := MakeName(tt.args.year, tt.args.puzzle)
 			if tt.wantErr {
