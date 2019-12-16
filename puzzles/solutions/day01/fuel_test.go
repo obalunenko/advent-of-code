@@ -1,9 +1,13 @@
 package day01
 
 import (
+	"io"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_module_fuel(t *testing.T) {
@@ -176,4 +180,113 @@ func Test_calcPart2(t *testing.T) {
 	}
 
 	close(in)
+}
+
+func Test_solver_Part1(t *testing.T) {
+	type fields struct {
+		name string
+	}
+
+	type args struct {
+		inputPath string
+	}
+
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "",
+			fields: fields{
+				name: "day01",
+			},
+			args: args{
+				inputPath: filepath.Join("testdata", "input.txt"),
+			},
+			want:    "34241",
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			s := solver{
+				name: tt.fields.name,
+			}
+			input := readerFromFile(t, tt.args.inputPath)
+
+			got, err := s.Part1(input)
+			if tt.wantErr {
+				assert.Error(t, err)
+				return
+			}
+
+			assert.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func Test_solver_Part2(t *testing.T) {
+	type fields struct {
+		name string
+	}
+
+	type args struct {
+		inputPath string
+	}
+
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "",
+			fields: fields{
+				name: "day01",
+			},
+			args: args{
+				inputPath: filepath.Join("testdata", "input.txt"),
+			},
+			want:    "51316",
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			s := solver{
+				name: tt.fields.name,
+			}
+			input := readerFromFile(t, tt.args.inputPath)
+
+			got, err := s.Part2(input)
+			if tt.wantErr {
+				assert.Error(t, err)
+				return
+			}
+
+			assert.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func readerFromFile(tb testing.TB, fpath string) io.Reader {
+	tb.Helper()
+
+	file, err := os.Open(fpath)
+	require.NoError(tb, err)
+
+	return file
 }
