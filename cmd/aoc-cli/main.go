@@ -12,7 +12,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/oleg-balunenko/advent-of-code/puzzles"
-	_ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions/day01"
+	_ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions/2019/day01"
 )
 
 const (

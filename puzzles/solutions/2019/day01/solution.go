@@ -1,3 +1,4 @@
+// Package day01 solves https://adventofcode.com/2019/day/1
 package day01
 
 import (
@@ -10,27 +11,27 @@ import (
 	"github.com/oleg-balunenko/advent-of-code/puzzles"
 )
 
-type solver struct {
+type solution struct {
 	name string
 }
 
 func init() {
 	const puzzleName = "day01"
 
-	puzzles.Register(puzzleName, solver{
+	puzzles.Register(puzzleName, solution{
 		name: puzzleName,
 	})
 }
 
-func (s solver) Part1(input io.Reader) (string, error) {
+func (s solution) Part1(input io.Reader) (string, error) {
 	return calc(input, calcPart1)
 }
 
-func (s solver) Part2(input io.Reader) (string, error) {
+func (s solution) Part2(input io.Reader) (string, error) {
 	return calc(input, calcPart2)
 }
 
-func (s solver) Name() string {
+func (s solution) Name() string {
 	return s.name
 }
 
