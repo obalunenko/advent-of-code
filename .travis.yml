@@ -24,7 +24,7 @@ jobs:
 
     - stage: Build
       go:
-        -1.13.x
+        - 1.13.x
       os:
         - linux
       before_script:
