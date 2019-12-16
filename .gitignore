@@ -14,3 +14,5 @@
 .idea
 
 bin/
+dist/
+release/
