@@ -46,7 +46,7 @@ archives:
     files:
       - LICENSE
       - README.md
-      - input/*
+      - input/*/*
 checksum:
   name_template: "{{ .ProjectName }}-{{ .Version }}-checksums.txt"
 

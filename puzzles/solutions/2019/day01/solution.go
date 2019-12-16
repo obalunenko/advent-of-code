@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/oleg-balunenko/advent-of-code/puzzles"
+	"github.com/oleg-balunenko/advent-of-code/puzzles/solutions"
 )
 
 type solution struct {
@@ -16,7 +17,10 @@ type solution struct {
 }
 
 func init() {
-	const puzzleName = "day01"
+	puzzleName, err := solutions.MakeName("2019", "day01")
+	if err != nil {
+		panic(err)
+	}
 
 	puzzles.Register(puzzleName, solution{
 		name: puzzleName,
