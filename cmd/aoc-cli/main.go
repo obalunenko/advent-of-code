@@ -115,7 +115,7 @@ func handleChoices(opt promptui.Select, inputDir string) error {
 		}
 
 		log.WithFields(log.Fields{
-			"name":  res.Puzzle,
+			"name":  res.Name,
 			"part1": res.Part1,
 			"part2": res.Part2,
 		}).Info("Puzzle answers")

@@ -3,7 +3,6 @@ package puzzles
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"sort"
@@ -11,6 +10,11 @@ import (
 	"testing"
 
 	"github.com/pkg/errors"
+)
+
+var (
+	// ErrNotImplemented signal that puzzle in not implemented yet
+	ErrNotImplemented = errors.New("not implemented")
 )
 
 // Solver represents solutions for puzzles methods.
@@ -89,34 +93,38 @@ func GetSolver(name string) (Solver, error) {
 	return s, nil
 }
 
+// Result represents puzzle solution result.
+type Result struct {
+	Name  string
+	Part1 string
+	Part2 string
+}
+
 // Run uses solver of puzzle and path to input.
-func Run(solver Solver, filepath string) error {
+func Run(solver Solver, filepath string) (Result, error) {
 	var (
 		input []byte
-		res   string
 		err   error
 	)
 
+	res := Result{
+		Name: solver.Name(),
+	}
+
 	input, err = ioutil.ReadFile(filepath)
 	if err != nil {
-		return errors.Wrap(err, "failed to open file")
+		return Result{}, errors.Wrap(err, "failed to open input file")
 	}
 
-	fmt.Printf("run puzzle solver [%s]\n", solver.Name())
-
-	res, err = solver.Part1(bytes.NewBuffer(input))
-	if err != nil {
-		return errors.Wrapf(err, "failed to run Part1 for puzzle [%s]", solver.Name())
+	res.Part1, err = solver.Part1(bytes.NewBuffer(input))
+	if err != nil && errors.Cause(err) != ErrNotImplemented {
+		return Result{}, errors.Wrap(err, "failed to solve Part1")
 	}
 
-	fmt.Printf("Part1 answer: %s \n", res)
-
-	res, err = solver.Part2(bytes.NewBuffer(input))
-	if err != nil {
-		return errors.Wrapf(err, "failed to run Part2 for puzzle [%s]", solver.Name())
+	res.Part2, err = solver.Part2(bytes.NewBuffer(input))
+	if err != nil && errors.Cause(err) != ErrNotImplemented {
+		return Result{}, errors.Wrap(err, "failed to solve Part1")
 	}
 
-	fmt.Printf("Part2 answer: %s \n", res)
-
-	return nil
+	return res, nil
 }
