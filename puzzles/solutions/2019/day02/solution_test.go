@@ -25,7 +25,7 @@ func Test_newComputer(t *testing.T) {
 			args: args{
 				input: strings.NewReader("1,9,10,3,2,3,11,0,99,30,40,50"),
 			},
-			want: computer{input: map[int]int{
+			want: computer{memory: map[int]int{
 				0:  1,
 				1:  9,
 				2:  10,
@@ -38,7 +38,8 @@ func Test_newComputer(t *testing.T) {
 				9:  30,
 				10: 40,
 				11: 50,
-			}},
+			},
+				initial: []int{1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50}},
 			wantErr: false,
 		},
 	}
@@ -54,7 +55,7 @@ func Test_newComputer(t *testing.T) {
 			}
 
 			assert.NoError(t, err)
-			assert.EqualValues(t, tt.want.input, got.input)
+			assert.EqualValues(t, tt.want.memory, got.memory)
 		})
 	}
 }
@@ -64,6 +65,16 @@ func initComp(tb testing.TB, reader io.Reader) computer {
 	require.NoError(tb, err)
 
 	return c
+}
+
+func makeMemory(data []int) map[int]int {
+	m := make(map[int]int, len(data))
+
+	for i, num := range data {
+		m[i] = num
+	}
+
+	return m
 }
 
 func Test_computer_add(t *testing.T) {
@@ -77,7 +88,7 @@ func Test_computer_add(t *testing.T) {
 		name     string
 		c        computer
 		args     args
-		expected computer
+		expected map[int]int
 	}{
 		{
 			name: "",
@@ -87,7 +98,7 @@ func Test_computer_add(t *testing.T) {
 				bPos:   10,
 				resPos: 3,
 			},
-			expected: initComp(t, strings.NewReader("1,9,10,70,2,3,11,0,99,30,40,50")),
+			expected: makeMemory([]int{1, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50}),
 		},
 		{
 			name: "",
@@ -97,7 +108,7 @@ func Test_computer_add(t *testing.T) {
 				bPos:   0,
 				resPos: 0,
 			},
-			expected: initComp(t, strings.NewReader("2,0,0,0,99")),
+			expected: makeMemory([]int{2, 0, 0, 0, 99}),
 		},
 	}
 
@@ -108,7 +119,7 @@ func Test_computer_add(t *testing.T) {
 			err := tt.c.add(tt.args.aPos, tt.args.bPos, tt.args.resPos)
 			require.NoError(t, err)
 
-			assert.EqualValues(t, tt.expected, tt.c)
+			assert.EqualValues(t, tt.expected, tt.c.memory)
 		})
 	}
 }
@@ -124,7 +135,7 @@ func Test_computer_mult(t *testing.T) {
 		name     string
 		c        computer
 		args     args
-		expected computer
+		expected map[int]int
 	}{
 		{
 			name: "",
@@ -134,7 +145,7 @@ func Test_computer_mult(t *testing.T) {
 				bPos:   11,
 				resPos: 0,
 			},
-			expected: initComp(t, strings.NewReader("3500,9,10,70,2,3,11,0,99,30,40,50")),
+			expected: makeMemory([]int{3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50}),
 		},
 		{
 			name: "",
@@ -144,7 +155,7 @@ func Test_computer_mult(t *testing.T) {
 				bPos:   0,
 				resPos: 3,
 			},
-			expected: initComp(t, strings.NewReader("2,3,0,6,99")),
+			expected: makeMemory([]int{2, 3, 0, 6, 99}),
 		},
 	}
 
@@ -154,30 +165,29 @@ func Test_computer_mult(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			err := tt.c.mult(tt.args.aPos, tt.args.bPos, tt.args.resPos)
 			require.NoError(t, err)
-
-			assert.EqualValues(t, tt.expected, tt.c)
+			assert.EqualValues(t, tt.expected, tt.c.memory)
 		})
 	}
 }
 
 func Test_computer_calc(t *testing.T) {
 	tests := []struct {
-		name     string
-		c        computer
-		want     int
-		wantComp computer
+		name    string
+		c       computer
+		want    int
+		wantMap map[int]int
 	}{
 		{
-			name:     "",
-			c:        initComp(t, strings.NewReader("1,9,10,3,2,3,11,0,99,30,40,50")),
-			want:     3500,
-			wantComp: initComp(t, strings.NewReader("3500,9,10,70,2,3,11,0,99,30,40,50")),
+			name:    "",
+			c:       initComp(t, strings.NewReader("1,9,10,3,2,3,11,0,99,30,40,50")),
+			want:    3500,
+			wantMap: makeMemory([]int{3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50}),
 		},
 		{
-			name:     "",
-			c:        initComp(t, strings.NewReader("1,1,1,4,99,5,6,0,99")),
-			want:     30,
-			wantComp: initComp(t, strings.NewReader("30,1,1,4,2,5,6,0,99")),
+			name:    "",
+			c:       initComp(t, strings.NewReader("1,1,1,4,99,5,6,0,99")),
+			want:    30,
+			wantMap: makeMemory([]int{30, 1, 1, 4, 2, 5, 6, 0, 99}),
 		},
 	}
 
@@ -190,32 +200,32 @@ func Test_computer_calc(t *testing.T) {
 
 			require.NoError(t, err)
 			assert.Equal(t, tt.want, got)
-			assert.EqualValues(t, tt.wantComp, comp)
+			assert.EqualValues(t, tt.wantMap, comp.memory)
 		})
 	}
 }
 
 func Test_computer_replace(t *testing.T) {
 	type args struct {
-		data map[int]int
+		noun int
+		verb int
 	}
 
 	tests := []struct {
-		name     string
-		c        computer
-		args     args
-		wantComp computer
+		name       string
+		c          computer
+		args       args
+		wantMemory map[int]int
 	}{
 		{
 			name: "",
 			c:    initComp(t, strings.NewReader("1,1,1,4,99,5,6,0,99")),
 			args: args{
-				data: map[int]int{
-					1: 9,
-					2: 12,
-				},
+				noun: 9,
+				verb: 12,
 			},
-			wantComp: initComp(t, strings.NewReader("1,9,12,4,99,5,6,0,99")),
+
+			wantMemory: makeMemory([]int{1, 9, 12, 4, 99, 5, 6, 0, 99}),
 		},
 	}
 
@@ -224,8 +234,39 @@ func Test_computer_replace(t *testing.T) {
 
 		t.Run(tt.name, func(t *testing.T) {
 			comp := tt.c
-			comp.replace(tt.args.data)
-			assert.EqualValues(t, tt.wantComp, comp)
+			comp.input(tt.args.noun, tt.args.verb)
+			assert.EqualValues(t, tt.wantMemory, comp.memory)
+		})
+	}
+}
+
+func Test_nounVerb(t *testing.T) {
+	type args struct {
+		noun int
+		verb int
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "",
+			args: args{
+				noun: 12,
+				verb: 2,
+			},
+			want: 1202,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			got := nounVerb(tt.args.noun, tt.args.verb)
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }
