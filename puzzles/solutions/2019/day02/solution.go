@@ -110,7 +110,9 @@ loop:
 			result, err = c.abort()
 			break loop
 		default:
-			return -1, errors.Errorf("not supported opt code [%d] at pos [%d]", opt, i)
+			result = -1
+			err = errors.Errorf("not supported opt code [%d] at pos [%d]", opt, i)
+			break loop
 		}
 	}
 
