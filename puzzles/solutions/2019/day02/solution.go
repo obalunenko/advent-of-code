@@ -1,3 +1,4 @@
+// Package day02 solves https://adventofcode.com/2019/day/2
 package day02
 
 import (
