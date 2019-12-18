@@ -182,79 +182,41 @@ func Test_calcPart2(t *testing.T) {
 	close(in)
 }
 
-func Test_solver_Part1(t *testing.T) {
-	type fields struct {
-		name string
-	}
+func readerFromFile(tb testing.TB, fpath string) io.Reader {
+	tb.Helper()
 
+	file, err := os.Open(fpath)
+	require.NoError(tb, err)
+
+	return file
+}
+
+func Test_calc(t *testing.T) {
 	type args struct {
 		inputPath string
+		calcFn    calcFunc
 	}
 
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		want    string
 		wantErr bool
 	}{
 		{
-			name: "",
-			fields: fields{
-				name: "day01",
-			},
+			name: "part 1",
 			args: args{
 				inputPath: filepath.Join("testdata", "input.txt"),
+				calcFn:    calcPart1,
 			},
 			want:    "34241",
 			wantErr: false,
 		},
-	}
-
-	for _, tt := range tests {
-		tt := tt
-
-		t.Run(tt.name, func(t *testing.T) {
-			s := solution{
-				name: tt.fields.name,
-			}
-			input := readerFromFile(t, tt.args.inputPath)
-
-			got, err := s.Part1(input)
-			if tt.wantErr {
-				assert.Error(t, err)
-				return
-			}
-
-			assert.NoError(t, err)
-			assert.Equal(t, tt.want, got)
-		})
-	}
-}
-
-func Test_solver_Part2(t *testing.T) {
-	type fields struct {
-		name string
-	}
-
-	type args struct {
-		inputPath string
-	}
-
-	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    string
-		wantErr bool
-	}{
 		{
-			name: "",
-			fields: fields{
-				name: "day01",
-			},
+			name: "part 2",
 			args: args{
 				inputPath: filepath.Join("testdata", "input.txt"),
+				calcFn:    calcPart2,
 			},
 			want:    "51316",
 			wantErr: false,
@@ -265,12 +227,9 @@ func Test_solver_Part2(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			s := solution{
-				name: tt.fields.name,
-			}
 			input := readerFromFile(t, tt.args.inputPath)
+			got, err := calc(input, tt.args.calcFn)
 
-			got, err := s.Part2(input)
 			if tt.wantErr {
 				assert.Error(t, err)
 				return
@@ -280,13 +239,4 @@ func Test_solver_Part2(t *testing.T) {
 			assert.Equal(t, tt.want, got)
 		})
 	}
-}
-
-func readerFromFile(tb testing.TB, fpath string) io.Reader {
-	tb.Helper()
-
-	file, err := os.Open(fpath)
-	require.NoError(tb, err)
-
-	return file
 }

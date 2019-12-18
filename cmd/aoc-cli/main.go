@@ -3,10 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/manifoldco/promptui"
 	"github.com/pkg/errors"
@@ -20,18 +21,49 @@ const (
 	exit = "exit"
 )
 
+var (
+	logLevel = flag.String("log_level", "INFO", "Set level of output logs")
+)
+
 func main() {
 	defer func() {
 		fmt.Println("Exiting...")
 	}()
 
+	flag.Parse()
+
 	printVersion()
 
-	flag.Parse()
+	setLogger()
 
 	if err := menu(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func setLogger() {
+	l, err := log.ParseLevel(*logLevel)
+	if err != nil {
+		l = log.InfoLevel
+	}
+
+	log.SetLevel(l)
+
+	formatter := &log.TextFormatter{
+		ForceColors:               true,
+		DisableColors:             false,
+		EnvironmentOverrideColors: false,
+		DisableTimestamp:          true,
+		FullTimestamp:             false,
+		TimestampFormat:           "",
+		DisableSorting:            false,
+		SortingFunc:               nil,
+		DisableLevelTruncation:    true,
+		QuoteEmptyFields:          true,
+		FieldMap:                  nil,
+		CallerPrettyfier:          nil,
+	}
+	log.SetFormatter(formatter)
 }
 
 func menu() error {
@@ -49,7 +81,7 @@ func menu() error {
 	prompt := promptui.Select{
 		Label:             "Puzzles menu (input 'exit' for exit)",
 		Items:             append(solvers, exit),
-		Size:              0,
+		Size:              20,
 		IsVimMode:         false,
 		HideHelp:          false,
 		HideSelected:      false,
@@ -62,19 +94,31 @@ func menu() error {
 		Stdout:            nil,
 	}
 
+	return handleChoices(prompt, path)
+}
+
+func handleChoices(opt promptui.Select, inputDir string) error {
 	for {
-		_, result, err := prompt.Run()
+		_, choice, err := opt.Run()
 		if err != nil {
 			return errors.Wrap(err, "prompt failed")
 		}
 
-		if isExit(result) {
+		if isExit(choice) {
 			return nil
 		}
 
-		if err := run(result, path); err != nil {
-			return errors.Wrap(err, "failed run puzzle")
+		res, err := run(choice, inputDir)
+		if err != nil {
+			log.Error(err)
+			continue
 		}
+
+		log.WithFields(log.Fields{
+			"name":  res.Name,
+			"part1": res.Part1,
+			"part2": res.Part2,
+		}).Info("Puzzle answers")
 	}
 }
 
@@ -115,19 +159,20 @@ func inputPath() (string, error) {
 	return path, nil
 }
 
-func run(puzzle string, inputdir string) error {
+func run(puzzle string, inputdir string) (puzzles.Result, error) {
 	s, err := puzzles.GetSolver(puzzle)
 	if err != nil {
-		return errors.Wrap(err, "failed to get solver")
+		return puzzles.Result{}, errors.Wrap(err, "failed to get solver")
 	}
 
 	input := filepath.Clean(
-		filepath.Join(inputdir, fmt.Sprintf("%s.txt", puzzle)),
+		filepath.Join(inputdir, fmt.Sprintf("%s.txt", s.Name())),
 	)
 
-	if err := puzzles.Run(s, input); err != nil {
-		return errors.Wrap(err, "failed to run puzzle solver")
+	res, err := puzzles.Run(s, input)
+	if err != nil {
+		return puzzles.Result{}, errors.Wrapf(err, "failed to run [%s]", s.Name())
 	}
 
-	return nil
+	return res, nil
 }
