@@ -123,7 +123,7 @@ func Run(solver Solver, filepath string) (Result, error) {
 
 	res.Part2, err = solver.Part2(bytes.NewBuffer(input))
 	if err != nil && errors.Cause(err) != ErrNotImplemented {
-		return Result{}, errors.Wrap(err, "failed to solve Part1")
+		return Result{}, errors.Wrap(err, "failed to solve Part2")
 	}
 
 	return res, nil
