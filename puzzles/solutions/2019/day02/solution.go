@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/oleg-balunenko/advent-of-code/puzzles"
 )
@@ -32,10 +33,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		return "", errors.Wrap(err, "failed to init computer")
 	}
 
-	c.replace(map[int]int{
-		1: 12,
-		2: 2,
-	})
+	c.input(12, 2)
 
 	res, err := c.calc()
 	if err != nil {
@@ -46,7 +44,37 @@ func (s solution) Part1(input io.Reader) (string, error) {
 }
 
 func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	c, err := newComputer(input)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to init computer")
+	}
+
+	for i := 0; i <= 99; i++ {
+		for j := 0; j <= 99; j++ {
+			c.reset()
+
+			c.input(i, j)
+
+			res, err := c.calc()
+			if err != nil {
+				return "", errors.Wrap(err, "failed to calc")
+			}
+
+			if res == 19690720 {
+				log.WithFields(log.Fields{
+					"noun": i,
+					"verb": j,
+				}).Info("Solved at positions")
+				return strconv.Itoa(nounVerb(i, j)), nil
+			}
+		}
+	}
+
+	return "", errors.New("can't found non and verb")
+}
+
+func nounVerb(noun int, verb int) int {
+	return 100*noun + verb
 }
 
 func (s solution) Name() string {
@@ -54,7 +82,8 @@ func (s solution) Name() string {
 }
 
 type computer struct {
-	input map[int]int
+	memory  map[int]int
+	initial []int
 }
 
 const (
@@ -74,7 +103,8 @@ func newComputer(input io.Reader) (computer, error) {
 	}
 
 	nums := strings.Split(buf.String(), ",")
-	c.input = make(map[int]int, len(nums))
+	c.initial = make([]int, len(nums))
+	c.memory = make(map[int]int, len(nums))
 
 	for i, num := range nums {
 		n, err := strconv.Atoi(num)
@@ -82,7 +112,8 @@ func newComputer(input io.Reader) (computer, error) {
 			return c, errors.Wrap(err, "failed to convert string to int")
 		}
 
-		c.input[i] = n
+		c.initial[i] = n
+		c.memory[i] = n
 	}
 
 	return c, nil
@@ -95,8 +126,8 @@ func (c computer) calc() (int, error) {
 	)
 
 loop:
-	for i := 0; i < len(c.input); i += shift {
-		opt, aPos, bPos, resPos := c.input[i], c.input[i+1], c.input[i+2], c.input[i+3]
+	for i := 0; i < len(c.memory); i += shift {
+		opt, aPos, bPos, resPos := c.memory[i], c.memory[i+1], c.memory[i+2], c.memory[i+3]
 		switch opt {
 		case optAdd:
 			if err = c.add(aPos, bPos, resPos); err != nil {
@@ -120,41 +151,41 @@ loop:
 }
 
 func (c computer) add(aPos, bPos, resPos int) error {
-	a, ok := c.input[aPos]
+	a, ok := c.memory[aPos]
 	if !ok {
 		return errors.New("value not exist")
 	}
 
-	b, ok := c.input[bPos]
+	b, ok := c.memory[bPos]
 	if !ok {
 		return errors.New("value not exist")
 	}
 
 	res := a + b
-	c.input[resPos] = res
+	c.memory[resPos] = res
 
 	return nil
 }
 
 func (c *computer) mult(aPos, bPos, resPos int) error {
-	a, ok := c.input[aPos]
+	a, ok := c.memory[aPos]
 	if !ok {
 		return errors.New("value not exist")
 	}
 
-	b, ok := c.input[bPos]
+	b, ok := c.memory[bPos]
 	if !ok {
 		return errors.New("value not exist")
 	}
 
 	res := a * b
-	c.input[resPos] = res
+	c.memory[resPos] = res
 
 	return nil
 }
 
 func (c *computer) abort() (int, error) {
-	res, ok := c.input[0]
+	res, ok := c.memory[0]
 	if !ok {
 		return 0, errors.New("value not exist")
 	}
@@ -162,8 +193,16 @@ func (c *computer) abort() (int, error) {
 	return res, nil
 }
 
-func (c *computer) replace(data map[int]int) {
-	for i, v := range data {
-		c.input[i] = v
+func (c *computer) input(noun int, verb int) {
+	c.memory[1] = noun
+	c.memory[2] = verb
+}
+
+func (c *computer) reset() {
+	c.memory = make(map[int]int, len(c.initial))
+
+	for i, n := range c.initial {
+		n := n
+		c.memory[i] = n
 	}
 }
