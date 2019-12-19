@@ -7,10 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/manifoldco/promptui"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/oleg-balunenko/advent-of-code/puzzles"
 	// register all solutions
