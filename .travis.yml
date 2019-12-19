@@ -20,7 +20,9 @@ jobs:
       script:
         - echo "Run unit tests..."
         - go vet $(go list ./...)
-        - go test -v -race $(go list ./...)
+        - make test-cover
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
 
     - stage: Build
       go:
