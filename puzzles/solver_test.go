@@ -3,9 +3,11 @@ package puzzles_test
 import (
 	"fmt"
 	"io"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/oleg-balunenko/advent-of-code/puzzles"
 )
@@ -76,4 +78,53 @@ func TestSolver(t *testing.T) {
 	assert.Panics(t, func() {
 		puzzles.UnregisterAllSolvers(nil)
 	})
+}
+
+func TestRun(t *testing.T) {
+	puzzles.Register("mockSolver", mockSolver{})
+	defer puzzles.UnregisterAllSolvers(t)
+
+	s, err := puzzles.GetSolver("mockSolver")
+	require.NoError(t, err)
+
+	type args struct {
+		solver puzzles.Solver
+		input  io.Reader
+	}
+
+	tests := []struct {
+		name    string
+		args    args
+		want    puzzles.Result
+		wantErr bool
+	}{
+		{
+			name: "",
+			args: args{
+				solver: s,
+				input:  strings.NewReader("testdata"),
+			},
+			want: puzzles.Result{
+				Name:  "mockSolver",
+				Part1: "part 1 of mockSolver",
+				Part2: "part 2 of mockSolver",
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := puzzles.Run(tt.args.solver, tt.args.input)
+			if tt.wantErr {
+				assert.Error(t, err)
+				return
+			}
+
+			assert.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
 }
