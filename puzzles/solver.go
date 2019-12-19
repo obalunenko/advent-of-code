@@ -4,7 +4,6 @@ package puzzles
 import (
 	"bytes"
 	"io"
-	"io/ioutil"
 	"sort"
 	"sync"
 	"testing"
@@ -101,27 +100,28 @@ type Result struct {
 }
 
 // Run uses solver of puzzle and path to input.
-func Run(solver Solver, filepath string) (Result, error) {
+func Run(solver Solver, input io.Reader) (Result, error) {
 	var (
-		input []byte
-		err   error
+		err error
 	)
 
 	res := Result{
 		Name: solver.Name(),
 	}
 
-	input, err = ioutil.ReadFile(filepath)
-	if err != nil {
-		return Result{}, errors.Wrap(err, "failed to open input file")
+	var buf bytes.Buffer
+	if _, err = buf.ReadFrom(input); err != nil {
+		return Result{}, errors.Wrap(err, "failed to read")
 	}
 
-	res.Part1, err = solver.Part1(bytes.NewBuffer(input))
+	b := buf.Bytes()
+
+	res.Part1, err = solver.Part1(bytes.NewReader(b))
 	if err != nil && errors.Cause(err) != ErrNotImplemented {
 		return Result{}, errors.Wrap(err, "failed to solve Part1")
 	}
 
-	res.Part2, err = solver.Part2(bytes.NewBuffer(input))
+	res.Part2, err = solver.Part2(bytes.NewReader(b))
 	if err != nil && errors.Cause(err) != ErrNotImplemented {
 		return Result{}, errors.Wrap(err, "failed to solve Part2")
 	}
