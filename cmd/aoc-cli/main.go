@@ -7,10 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/manifoldco/promptui"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/oleg-balunenko/advent-of-code/puzzles"
 	// register all solutions
@@ -165,9 +164,12 @@ func run(puzzle string, inputdir string) (puzzles.Result, error) {
 		return puzzles.Result{}, errors.Wrap(err, "failed to get solver")
 	}
 
-	input := filepath.Clean(
-		filepath.Join(inputdir, fmt.Sprintf("%s.txt", s.Name())),
+	input, err := os.Open(filepath.Clean(
+		filepath.Join(inputdir, fmt.Sprintf("%s.txt", s.Name()))),
 	)
+	if err != nil {
+		return puzzles.Result{}, errors.Wrap(err, "failed to open input data")
+	}
 
 	res, err := puzzles.Run(s, input)
 	if err != nil {
