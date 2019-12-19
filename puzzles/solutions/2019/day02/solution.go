@@ -66,6 +66,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 					"noun": i,
 					"verb": j,
 				}).Info("Solved at positions")
+
 				return strconv.Itoa(nounVerb(i, j)), nil
 			}
 		}
