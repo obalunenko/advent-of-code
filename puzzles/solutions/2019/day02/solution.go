@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
 
 	"github.com/oleg-balunenko/advent-of-code/puzzles"
 )
@@ -62,11 +61,6 @@ func (s solution) Part2(input io.Reader) (string, error) {
 			}
 
 			if res == 19690720 {
-				log.WithFields(log.Fields{
-					"noun": i,
-					"verb": j,
-				}).Info("Solved at positions")
-
 				return strconv.Itoa(nounVerb(i, j)), nil
 			}
 		}
