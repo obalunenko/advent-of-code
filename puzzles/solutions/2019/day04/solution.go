@@ -1,3 +1,4 @@
+// Package day04 solves https://adventofcode.com/2019/day/4
 package day04
 
 import (
