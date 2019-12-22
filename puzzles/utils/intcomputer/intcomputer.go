@@ -1,11 +1,3 @@
-// Package intcomputer provides functionality for Intcode programs calculation
-// Intcode programs are given as a list of integers; these values are used as the initial state for the computer's
-// memory. When you run an Intcode program, make sure to start by initializing memory to the program's values.
-// A position in memory is called an address (for example, the first value in memory is at "address 0").
-//
-// Opcodes (like 1, 2, or 99) mark the beginning of an instruction. The values used immediately after an opcode,
-// if any, are called the instruction's parameters. For example, in the instruction 1,2,3,4, 1 is the opcode; 2, 3,
-// and 4 are the parameters. The instruction 99 contains only an opcode and has no parameters.
 package intcomputer
 
 import (
