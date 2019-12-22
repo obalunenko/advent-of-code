@@ -315,7 +315,7 @@ func Test_solution_Part2(t *testing.T) {
 			args: args{
 				input: strings.NewReader("111000-111222"),
 			},
-			want:    "46",
+			want:    "8",
 			wantErr: false,
 		},
 	}
