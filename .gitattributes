@@ -1,2 +1,3 @@
 linguist-language=Go
 *.sh linguist-vendored
+Makefile linguist-vendored
