@@ -6,4 +6,5 @@ import (
 	_ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions/2019/day02" // register day02 solution
 	_ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions/2019/day03" // register day03 solution
 	_ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions/2019/day04" // register day04 solution
+	_ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions/2019/day05" // register day05 solution
 )
