@@ -18,4 +18,4 @@ Other than the range rule, the following are true:
  
 How many different passwords within the range given in your puzzle input meet these criteria?
 
-Your puzzle input is 108457-562041.
+Your puzzle input is `108457-562041`.
