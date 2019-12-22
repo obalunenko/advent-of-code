@@ -27,6 +27,18 @@ type solution struct {
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
+	return run(input, isPasswordPart1)
+}
+
+func (s solution) Part2(input io.Reader) (string, error) {
+	return run(input, isPasswordPart2)
+}
+
+func (s solution) Name() string {
+	return s.name
+}
+
+func run(input io.Reader, criteria isPwdFunc) (string, error) {
 	buf := new(bytes.Buffer)
 	if _, err := buf.ReadFrom(input); err != nil {
 		return "", errors.Wrap(err, "failed to read")
@@ -37,7 +49,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		return "", errors.New("invalid number of limits")
 	}
 
-	passwords, err := findPasswords(limits[0], limits[1])
+	passwords, err := findPasswords(limits[0], limits[1], criteria)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to find passwords")
 	}
@@ -45,15 +57,9 @@ func (s solution) Part1(input io.Reader) (string, error) {
 	return strconv.Itoa(passwords), nil
 }
 
-func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
-}
+type isPwdFunc func(n int) bool
 
-func (s solution) Name() string {
-	return s.name
-}
-
-func findPasswords(low, high string) (int, error) {
+func findPasswords(low, high string, criteria isPwdFunc) (int, error) {
 	lowd, err := strconv.Atoi(low)
 	if err != nil {
 		return -1, errors.Wrap(err, "failed to convert low to int")
@@ -67,7 +73,7 @@ func findPasswords(low, high string) (int, error) {
 	pwds := make([]int, 0, highd-lowd)
 
 	for i := lowd; i <= highd; i++ {
-		if isPassword(i) {
+		if criteria(i) {
 			pwds = append(pwds, i)
 		}
 	}
@@ -87,22 +93,54 @@ func isIncreasing(n int) bool {
 	return true
 }
 
-func hasDouble(n int) bool {
+func hasRepeated(n int) bool {
 	nmbs := intToSlice(n)
 
-	var hasDouble bool
+	var hasRepeated bool
 
 	for i := 1; i <= len(nmbs)-1; i++ {
 		if nmbs[i] == nmbs[i-1] {
-			hasDouble = true
+			hasRepeated = true
+		}
+	}
+
+	return hasRepeated
+}
+
+func hasRepeatedWithDouble(n int) bool {
+	nmbs := intToSlice(n)
+
+	repeated := make(map[int]int)
+
+	for i := 1; i <= len(nmbs)-1; i++ {
+		if nmbs[i] == nmbs[i-1] {
+			repeated[nmbs[i]]++
+		}
+	}
+
+	if len(repeated) == 0 {
+		return false
+	}
+
+	var hasDouble bool
+
+	for i := 1; i < 10; i++ {
+		if n, ok := repeated[i]; ok {
+			if n == 1 {
+				hasDouble = true
+			}
 		}
 	}
 
 	return hasDouble
 }
 
-func isPassword(n int) bool {
-	return isIncreasing(n) && hasDouble(n)
+func isPasswordPart1(n int) bool {
+	return isIncreasing(n) && hasRepeated(n)
+}
+
+func isPasswordPart2(n int) bool {
+	return isIncreasing(n) && hasRepeatedWithDouble(n)
 }
 
 func intToSlice(n int) [6]int {

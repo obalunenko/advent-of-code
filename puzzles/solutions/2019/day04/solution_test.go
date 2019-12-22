@@ -84,7 +84,7 @@ func Test_findPasswords(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := findPasswords(tt.args.low, tt.args.high)
+			got, err := findPasswords(tt.args.low, tt.args.high, isPasswordPart1)
 			if tt.wantErr {
 				assert.Error(t, err)
 				return
@@ -168,7 +168,7 @@ func Test_intToSlice(t *testing.T) {
 	}
 }
 
-func Test_hasDouble(t *testing.T) {
+func Test_hasRepeated(t *testing.T) {
 	type args struct {
 		n int
 	}
@@ -198,7 +198,7 @@ func Test_hasDouble(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			got := hasDouble(tt.args.n)
+			got := hasRepeated(tt.args.n)
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -241,7 +241,100 @@ func Test_isPassword(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			got := isPassword(tt.args.n)
+			got := isPasswordPart1(tt.args.n)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func Test_isPasswordPart2(t *testing.T) {
+	type args struct {
+		n int
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "meets these criteria because the digits never decrease and all repeated digits are " +
+				"exactly two digits long.",
+			args: args{
+				n: 112233,
+			},
+			want: true,
+		},
+		{
+			name: "no longer meets the criteria (the repeated `44` is part of a larger group of `444`)",
+			args: args{
+				n: 123444,
+			},
+			want: false,
+		},
+		{
+			name: "meets the criteria (even though `1` is repeated more than twice, it still contains a double `22`).",
+			args: args{
+				n: 111122,
+			},
+			want: true,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			got := isPasswordPart2(tt.args.n)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func Test_solution_Part2(t *testing.T) {
+	type fields struct {
+		name string
+	}
+
+	type args struct {
+		input io.Reader
+	}
+
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "",
+			fields: fields{
+				name: "",
+			},
+			args: args{
+				input: strings.NewReader("111000-111222"),
+			},
+			want:    "46",
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			s := solution{
+				name: tt.fields.name,
+			}
+
+			got, err := s.Part2(tt.args.input)
+			if tt.wantErr {
+				assert.Error(t, err)
+				return
+			}
+
+			assert.NoError(t, err)
 			assert.Equal(t, tt.want, got)
 		})
 	}
