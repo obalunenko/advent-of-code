@@ -16,7 +16,7 @@ jobs:
       os:
         - linux
       before_script:
-      - go mod tidy -v
+        - go mod tidy -v
       script:
         - echo "Run unit tests..."
         - go vet $(go list ./...)
@@ -35,7 +35,7 @@ jobs:
       script:
         - echo "Build stage"
         - make compile
-      after_success:
+      after_success: true
       deploy:
         skip_cleanup: true
         provider: script

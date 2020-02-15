@@ -78,10 +78,7 @@ linters-settings:
       underef:
         skipRecvDeref: true
 
-
 run:
-
-
   skip-dirs:
     - vendor/
 
@@ -89,13 +86,12 @@ output:
   format: colored-line-number
 
 issues:
-    # Excluding configuration per-path, per-linter, per-text and per-source
+  # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
-      # Exclude some linters from running on tests files.
-      - path: _test\.go
-        linters:
+    # Exclude some linters from running on tests files.
+    - path: _test\.go
+      linters:
         - gocyclo
         - funlen
         - dupl
         - gosec
-
