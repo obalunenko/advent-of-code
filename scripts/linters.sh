@@ -99,7 +99,7 @@ function golangci() {
     golangci-lint run --out-format=colored-line-number ./...
   else
     printf "Cannot check golang-ci, please run:
-        curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin \n"
+        curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b %s /bin \n" "$(go env GOPATH)"
     exit 1
   fi
   echo ""
@@ -111,7 +111,7 @@ function golangci-ci_execute() {
     golangci-lint run ./... >linters.out
   else
     printf "Cannot check golang-ci, please run:
-        curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin \n"
+        curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b %s /bin \n" "$(go env GOPATH)"
     exit 1
   fi
   echo ""

@@ -53,6 +53,7 @@ lint:
 	./scripts/run-linters.sh
 .PHONY: lint
 
+## lint-ci runs linters for ci.
 lint-ci:
 	${call colored, lint_ci is running...}
 	./scripts/run-linters-ci.sh
@@ -75,6 +76,7 @@ test-cover:
 	./scripts/coverage.sh
 .PHONY: test-cover
 
+## new-version releases new version with new tag
 new-version: lint test compile
 	${call colored, new version is running...}
 	./scripts/version.sh
@@ -98,5 +100,19 @@ dependencies:
 	${call colored, dependensies is running...}
 	./scripts/get-dependencies.sh
 .PHONY: dependencies
+
+## vendor-sync checks if all dependencies are correct in go.mod file and if vendor directory is up to date.
+vendor-sync:
+	./scripts/sync-vendor.sh
+.PHONY: vendor-sync
+
+## vendor-check if dependencies were not changed.
+vendor-check:
+	./scripts/check-vendor.sh
+.PHONY: vendor-check
+
+vet:
+	./scripts/vet.sh
+.PHONY: vet
 
 .DEFAULT_GOAL := test

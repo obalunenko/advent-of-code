@@ -19,3 +19,5 @@ rm -rf "${BIN_DIR}"
 mkdir -p "${BIN_DIR}"
 
 go build -o "${BIN_DIR}"/"${APP}" -a -ldflags "${GO_BUILD_LDFLAGS}" "${GO_BUILD_PACKAGE}"
+
+echo "Executable built and stored at ${BIN_DIR}/${APP}"
