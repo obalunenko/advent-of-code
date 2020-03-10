@@ -35,6 +35,11 @@ linters-settings:
     simple: true
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: false # Report preallocation suggestions on for loops, false by default
+  gomnd:
+    settings:
+      mnd:
+        # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
+        checks: case,condition,operation,return
   gocritic:
     enabled-checks:
       - docStub
