@@ -38,6 +38,11 @@ func (s solution) Name() string {
 	return s.name
 }
 
+const (
+	divFactor = 3
+	subFactor = 2
+)
+
 type module struct {
 	mass int
 }
@@ -45,12 +50,12 @@ type module struct {
 func (m module) fuel() int {
 	mass := m.mass
 
-	diff := mass % 3
+	diff := mass % divFactor
 	if diff != 0 {
 		mass = mass - diff
 	}
 
-	f := (mass / 3) - 2
+	f := (mass / divFactor) - subFactor
 
 	return f
 }
@@ -118,20 +123,20 @@ func calcPart1(in chan module, res chan int, done chan struct{}) {
 }
 
 func calcPart2(in chan module, res chan int, done chan struct{}) {
+	const endNum = 1
+
 	for i := range in {
 		go func(m module, res chan int, done chan struct{}) {
-			var isDone bool
-
-			for !isDone {
+			for {
 				f := m.fuel()
 
 				res <- f
 
-				if f/3 > 1 {
-					m.mass = f
-				} else {
-					isDone = true
+				if f/divFactor <= endNum {
+					break
 				}
+
+				m.mass = f
 			}
 
 			done <- struct{}{}

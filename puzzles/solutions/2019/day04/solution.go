@@ -45,8 +45,10 @@ func run(input io.Reader, criteria isPwdFunc) (string, error) {
 		return "", errors.Wrap(err, "failed to read")
 	}
 
+	const limitsNum = 2
+
 	limits := strings.Split(buf.String(), "-") // should be 2: low and high
-	if len(limits) != 2 {
+	if len(limits) != limitsNum {
 		return "", errors.New("invalid number of limits")
 	}
 
