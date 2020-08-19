@@ -35,7 +35,7 @@ For example, suppose you have the following program:
 
 For the purposes of illustration, here is the same program split into multiple lines:
 
-``` text
+```text
 1,9,10,3,
 2,3,11,0,
 99,
@@ -116,5 +116,5 @@ Once the program has halted, its output is available at address 0, also just lik
 inputs, make sure you first reset the computer's memory to the values in the program (your puzzle input) - in other
 words, don't reuse memory from a previous attempt.
 
-Find the input noun and verb that cause the program to produce the output 19690720. What is 100 * noun + verb?
+Find the input noun and verb that cause the program to produce the output 19690720. What is 100 \* noun + verb?
 (For example, if noun=12 and verb=2, the answer would be 1202.)

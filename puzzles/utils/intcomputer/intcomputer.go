@@ -9,7 +9,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// IntComputer represents inctomputer instance.
+// IntComputer represents intComputer instance.
 type IntComputer struct {
 	memory  map[int]int
 	initial []int
@@ -23,12 +23,12 @@ const (
 	shift = 4
 )
 
-// New creates instance of IntComputer from passed intcode program.
-func New(intcode io.Reader) (IntComputer, error) {
+// New creates instance of IntComputer from passed intCode program.
+func New(intCode io.Reader) (IntComputer, error) {
 	var c IntComputer
 
 	buf := new(bytes.Buffer)
-	if _, err := buf.ReadFrom(intcode); err != nil {
+	if _, err := buf.ReadFrom(intCode); err != nil {
 		return c, errors.Wrap(err, "failed to read")
 	}
 
@@ -58,7 +58,15 @@ func (c *IntComputer) Execute() (int, error) {
 
 loop:
 	for i := 0; i < len(c.memory); i += shift {
-		opt, aPos, bPos, resPos := c.memory[i], c.memory[i+1], c.memory[i+2], c.memory[i+3]
+		cursorPos := i
+
+		var (
+			opt    = c.memory[cursorPos]
+			aPos   = c.memory[cursorPos+1]
+			bPos   = c.memory[cursorPos+2]
+			resPos = c.memory[cursorPos+3]
+		)
+
 		switch opt {
 		case optAdd:
 			if err = c.add(aPos, bPos, resPos); err != nil {

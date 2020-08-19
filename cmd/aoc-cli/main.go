@@ -158,14 +158,14 @@ func inputPath() (string, error) {
 	return path, nil
 }
 
-func run(puzzle string, inputdir string) (puzzles.Result, error) {
+func run(puzzle string, inputDir string) (puzzles.Result, error) {
 	s, err := puzzles.GetSolver(puzzle)
 	if err != nil {
 		return puzzles.Result{}, errors.Wrap(err, "failed to get solver")
 	}
 
 	input, err := os.Open(filepath.Clean(
-		filepath.Join(inputdir, fmt.Sprintf("%s.txt", s.Name()))),
+		filepath.Join(inputDir, fmt.Sprintf("%s.txt", s.Name()))),
 	)
 	if err != nil {
 		return puzzles.Result{}, errors.Wrap(err, "failed to open input data")

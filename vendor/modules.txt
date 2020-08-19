@@ -5,36 +5,32 @@ github.com/davecgh/go-spew/spew
 # github.com/juju/ansiterm v0.0.0-20180109212912-720a0952cc2a
 github.com/juju/ansiterm
 github.com/juju/ansiterm/tabwriter
-# github.com/konsorten/go-windows-terminal-sequences v1.0.2
-## explicit
+# github.com/konsorten/go-windows-terminal-sequences v1.0.3
 github.com/konsorten/go-windows-terminal-sequences
-# github.com/lunixbochs/vtclean v1.0.0
-## explicit
+# github.com/lunixbochs/vtclean v0.0.0-20180621232353-2d01aacdc34a
 github.com/lunixbochs/vtclean
 # github.com/manifoldco/promptui v0.7.0
 ## explicit
 github.com/manifoldco/promptui
 github.com/manifoldco/promptui/list
 github.com/manifoldco/promptui/screenbuf
-# github.com/mattn/go-colorable v0.1.6
-## explicit
+# github.com/mattn/go-colorable v0.0.9
 github.com/mattn/go-colorable
-# github.com/mattn/go-isatty v0.0.12
+# github.com/mattn/go-isatty v0.0.4
 github.com/mattn/go-isatty
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
-# github.com/sirupsen/logrus v1.5.0
+# github.com/sirupsen/logrus v1.6.0
 ## explicit
 github.com/sirupsen/logrus
-# github.com/stretchr/objx v0.1.1
-## explicit
-# github.com/stretchr/testify v1.2.2
+# github.com/stretchr/testify v1.6.1
 ## explicit
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
-# golang.org/x/sys v0.0.0-20200327173247-9dae0f8f5775
-## explicit
+# golang.org/x/sys v0.0.0-20190422165155-953cdadca894
 golang.org/x/sys/unix
+# gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
+gopkg.in/yaml.v3
