@@ -1,9 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -11,9 +11,11 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/oleg-balunenko/advent-of-code/puzzles"
-	// register all solutions
-	_ "github.com/oleg-balunenko/advent-of-code/puzzles/solutions"
+	"github.com/oleg-balunenko/advent-of-code/internal/input"
+	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
+
+	// register all solutions.
+	_ "github.com/oleg-balunenko/advent-of-code/internal/puzzles/solutions"
 )
 
 const (
@@ -51,6 +53,8 @@ func setLogger() {
 	formatter := &log.TextFormatter{
 		ForceColors:               true,
 		DisableColors:             false,
+		ForceQuote:                false,
+		DisableQuote:              false,
 		EnvironmentOverrideColors: false,
 		DisableTimestamp:          true,
 		FullTimestamp:             false,
@@ -58,6 +62,7 @@ func setLogger() {
 		DisableSorting:            false,
 		SortingFunc:               nil,
 		DisableLevelTruncation:    true,
+		PadLevelText:              false,
 		QuoteEmptyFields:          true,
 		FieldMap:                  nil,
 		CallerPrettyfier:          nil,
@@ -66,21 +71,15 @@ func setLogger() {
 }
 
 func menu() error {
-	path, err := inputPath()
-	if err != nil {
-		return errors.Wrap(err, "failed to get puzzles input directory")
-	}
-
-	if isExit(path) {
-		return nil
-	}
-
 	solvers := puzzles.Solvers()
+
+	pageSize := 20
 
 	prompt := promptui.Select{
 		Label:             "Puzzles menu (input 'exit' for exit)",
 		Items:             append(solvers, exit),
-		Size:              20,
+		Size:              pageSize,
+		CursorPos:         0,
 		IsVimMode:         false,
 		HideHelp:          false,
 		HideSelected:      false,
@@ -93,10 +92,10 @@ func menu() error {
 		Stdout:            nil,
 	}
 
-	return handleChoices(prompt, path)
+	return handleChoices(prompt)
 }
 
-func handleChoices(opt promptui.Select, inputDir string) error {
+func handleChoices(opt promptui.Select) error {
 	for {
 		_, choice, err := opt.Run()
 		if err != nil {
@@ -107,9 +106,10 @@ func handleChoices(opt promptui.Select, inputDir string) error {
 			return nil
 		}
 
-		res, err := run(choice, inputDir)
+		res, err := run(choice)
 		if err != nil {
 			log.Error(err)
+
 			continue
 		}
 
@@ -125,53 +125,19 @@ func isExit(input string) bool {
 	return strings.EqualFold(exit, input)
 }
 
-func inputPath() (string, error) {
-	validate := func(input string) error {
-		if isExit(input) {
-			return nil
-		}
-
-		if _, err := os.Stat(input); os.IsNotExist(err) {
-			return errors.Wrap(err, "invalid input directory path")
-		}
-
-		return nil
-	}
-
-	prompt := promptui.Prompt{
-		Label:     "Puzzles input path (input 'exit' for exit)",
-		Default:   "",
-		AllowEdit: false,
-		Validate:  validate,
-		Mask:      0,
-		Templates: nil,
-		IsConfirm: false,
-		IsVimMode: false,
-		Pointer:   promptui.DefaultCursor,
-	}
-
-	path, err := prompt.Run()
-	if err != nil {
-		return "", errors.Wrap(err, "path prompt failed")
-	}
-
-	return path, nil
-}
-
-func run(puzzle string, inputdir string) (puzzles.Result, error) {
+func run(puzzle string) (puzzles.Result, error) {
 	s, err := puzzles.GetSolver(puzzle)
 	if err != nil {
 		return puzzles.Result{}, errors.Wrap(err, "failed to get solver")
 	}
 
-	input, err := os.Open(filepath.Clean(
-		filepath.Join(inputdir, fmt.Sprintf("%s.txt", s.Name()))),
-	)
+	asset, err := input.Asset(filepath.Clean(
+		filepath.Join(input.InputDir, fmt.Sprintf("%s.txt", s.Name()))))
 	if err != nil {
 		return puzzles.Result{}, errors.Wrap(err, "failed to open input data")
 	}
 
-	res, err := puzzles.Run(s, input)
+	res, err := puzzles.Run(s, bytes.NewReader(asset))
 	if err != nil {
 		return puzzles.Result{}, errors.Wrapf(err, "failed to run [%s]", s.Name())
 	}

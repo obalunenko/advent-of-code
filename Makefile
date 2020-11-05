@@ -33,8 +33,6 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
-
-
 ## app compile
 compile:
 	${call colored, compile is running...}
@@ -53,6 +51,7 @@ lint:
 	./scripts/run-linters.sh
 .PHONY: lint
 
+## Lint in CI
 lint-ci:
 	${call colored, lint_ci is running...}
 	./scripts/run-linters-ci.sh
@@ -75,11 +74,11 @@ test-cover:
 	./scripts/coverage.sh
 .PHONY: test-cover
 
+## Increase version number
 new-version: lint test compile
 	${call colored, new version is running...}
 	./scripts/version.sh
 .PHONY: new-version
-
 
 ## Release
 release:
@@ -93,10 +92,32 @@ imports:
 	./scripts/fix-imports.sh
 .PHONY: imports
 
-## dependencies - fetch all dependencies for sripts
+## fetch all dependencies for scripts
 dependencies:
 	${call colored, dependensies is running...}
 	./scripts/get-dependencies.sh
 .PHONY: dependencies
+
+## Sync vendor
+gomod:
+	${call colored, gomod is running...}
+	go mod tidy -v
+	go mod verify
+	go mod download
+	go mod vendor
+.PHONY: gomod
+
+## Update dependencies
+gomod-update:
+	${call colored, gomod is running...}
+	go get -u -v ./...
+	make gomod
+.PHONY: gomod-update
+
+## Recreate generated files
+generate:
+	${call colored, generate is running...}
+	./scripts/generate.sh
+.PHONY: generate
 
 .DEFAULT_GOAL := test

@@ -15,7 +15,11 @@ MODULE="github.com/oleg-balunenko/advent-of-code"
 GO_BUILD_PACKAGE="${MODULE}/cmd/aoc-cli/."
 
 BIN_DIR="${REPO_ROOT}/bin"
+BIN_PATH=${BIN_DIR}/${APP}
+
 rm -rf "${BIN_DIR}"
 mkdir -p "${BIN_DIR}"
 
-go build -o "${BIN_DIR}"/"${APP}" -a -ldflags "${GO_BUILD_LDFLAGS}" "${GO_BUILD_PACKAGE}"
+go build -o "${BIN_PATH}" -a -ldflags "${GO_BUILD_LDFLAGS}" "${GO_BUILD_PACKAGE}"
+
+echo "Stored at ${BIN_PATH}"

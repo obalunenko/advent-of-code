@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## [0.8.0] - 2020-09-28
+
+### Added
+
+- Support ctrl-h for backspace
+- Allow hiding entered data after submit
+- Allow masking input with an empty rune to hide input length
+
+### Fixed
+
+- Fix echo of cursor after input is finished
+- Better support for keycodes on Windows
+
+
+## [0.7.0] - 2020-01-11
+
+### Added
+
+- Add support for configurable Stdin/Stdout on Prompt
+- Add support for setting initial cursor position
+- Switch to golangci-lint for linting
+
+### Removed
+
+- Removed support for Go 1.11
+
+### Fixed
+
+- Reduce tool-based deps, hopefully fixing any install issues
+
 ## [0.6.0] - 2019-11-29
 
 ### Added

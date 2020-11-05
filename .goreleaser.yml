@@ -5,7 +5,8 @@ release:
 
 before:
   hooks:
-    - go mod tidy
+    - make test
+    - make generate
 
 builds:
   - id: cli
@@ -46,7 +47,6 @@ archives:
     files:
       - LICENSE
       - README.md
-      - input/*/*
 checksum:
   name_template: "{{ .ProjectName }}-{{ .Version }}-checksums.txt"
 

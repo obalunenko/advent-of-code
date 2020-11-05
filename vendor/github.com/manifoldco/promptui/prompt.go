@@ -33,6 +33,9 @@ type Prompt struct {
 	// allows hiding private information like passwords.
 	Mask rune
 
+	// HideEntered sets whether to hide the text after the user has pressed enter.
+	HideEntered bool
+
 	// Templates can be used to customize the prompt output. If nil is passed, the
 	// default templates are used. See the PromptTemplates docs for more info.
 	Templates *PromptTemplates
@@ -47,8 +50,8 @@ type Prompt struct {
 	// the Pointer defines how to render the cursor.
 	Pointer Pointer
 
-	stdin  io.ReadCloser
-	stdout io.WriteCloser
+	Stdin  io.ReadCloser
+	Stdout io.WriteCloser
 }
 
 // PromptTemplates allow a prompt to be customized following stdlib
@@ -118,8 +121,8 @@ func (p *Prompt) Run() (string, error) {
 	}
 
 	c := &readline.Config{
-		Stdin:          p.stdin,
-		Stdout:         p.stdout,
+		Stdin:          p.Stdin,
+		Stdout:         p.Stdout,
 		EnableMask:     p.Mask != 0,
 		MaskRune:       p.Mask,
 		HistoryLimit:   -1,
@@ -218,9 +221,9 @@ func (p *Prompt) Run() (string, error) {
 		return "", err
 	}
 
-	echo := cur.Format()
+	echo := cur.Get()
 	if p.Mask != 0 {
-		echo = cur.FormatMask(p.Mask)
+		echo = cur.GetMask(p.Mask)
 	}
 
 	prompt := render(p.Templates.success, p.Label)
@@ -234,9 +237,14 @@ func (p *Prompt) Run() (string, error) {
 		}
 	}
 
-	sb.Reset()
-	sb.Write(prompt)
-	sb.Flush()
+	if p.HideEntered {
+		clearScreen(sb)
+	} else {
+		sb.Reset()
+		sb.Write(prompt)
+		sb.Flush()
+	}
+
 	rl.Write([]byte(showCursor))
 	rl.Close()
 

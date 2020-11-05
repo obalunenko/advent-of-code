@@ -9,10 +9,11 @@
 *.test
 
 # Output of the go coverage tool, specifically when used with LiteIDE
-*.out
+*.out*
 
 .idea
 
 bin/
 dist/
 release/
+.DS_Store
