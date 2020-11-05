@@ -11,6 +11,8 @@ function get_dependencies() {
     "mvdan.cc/gofumpt/..."
     "github.com/daixiang0/gci/..."
     "github.com/shuLhan/go-bindata/..."
+    "github.com/axw/gocov/gocov/..."
+    "github.com/matm/gocov-html/..."
   )
 
   ## now loop through the above array
