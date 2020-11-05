@@ -8,6 +8,9 @@ env:
     - MYEMAIL=oleg.balunenko@gmail.com
     - GOPROXY=https://gocenter.io
 
+before_script:
+  - make dependencies
+  - make generate
 jobs:
   include:
     - stage: Unit Tests, Vet

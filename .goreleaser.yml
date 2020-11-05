@@ -3,11 +3,6 @@ release:
     owner: oleg-balunenko
     name: advent-of-code
 
-before:
-  hooks:
-    - make test
-    - make generate
-
 builds:
   - id: cli
     binary: aoc-cli
