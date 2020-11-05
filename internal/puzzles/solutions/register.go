@@ -13,4 +13,7 @@ import (
 
 	// register day04 solution.
 	_ "github.com/oleg-balunenko/advent-of-code/internal/puzzles/solutions/2019/day04"
+
+	// register day05 solution.
+	_ "github.com/oleg-balunenko/advent-of-code/internal/puzzles/solutions/2019/day05"
 )

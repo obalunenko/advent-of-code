@@ -3,7 +3,7 @@ package day05
 import (
 	"io"
 
-	"github.com/oleg-balunenko/advent-of-code/puzzles"
+	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
 )
 
 func init() {
