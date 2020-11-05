@@ -25,7 +25,7 @@ function vet() {
 
 function fmt() {
   echo "fmt lint..."
-  declare -a fmts=$(gofmt -s -l $(find . -type f -name '*.go' | grep -v 'vendor' | grep -v '.git'))
+  declare -a fmts=$(gofmt -s -l $(find . -type f -name '*.go' | grep -v 'vendor' | grep -v '.git' |grep -v 'generated'))
 
   if [[ ${fmts} ]]; then
     echo "fix it:"
@@ -64,32 +64,6 @@ function go-lint() {
     exit 1
   fi
   echo ""
-}
-
-function go-group() {
-  echo "gogroup..."
-  if [[ -f "$(go env GOPATH)/bin/gogroup" ]] || [[ -f "/usr/local/bin/gogroup" ]]; then
-    declare -a lints=$(gogroup -order std,other,prefix=github.com/oleg-balunenko/ $(find . -type f -name "*.go" | grep -v "vendor/"))
-
-    if [[ ${lints} ]]; then
-      echo "fix it:"
-      for l in "${lints[@]}"; do
-        echo "$l"
-
-      done
-      exit 1
-
-    else
-      echo "code is ok"
-      echo ${lints}
-    fi
-  else
-    printf "Cannot check gogroup, please run:
-        go get -u -v github.com/Bubblyworld/gogroup/... \n"
-    exit 1
-  fi
-  echo ""
-
 }
 
 function golangci() {
