@@ -51,6 +51,7 @@ func Test_New(t *testing.T) {
 			got, err := New(tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)
+
 				return
 			}
 

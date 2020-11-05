@@ -79,6 +79,7 @@ func Test_solution_Part1(t *testing.T) {
 			got, err := s.Part1(tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)
+
 				return
 			}
 

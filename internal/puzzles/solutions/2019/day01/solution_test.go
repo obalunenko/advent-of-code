@@ -232,6 +232,7 @@ func Test_calc(t *testing.T) {
 
 			if tt.wantErr {
 				assert.Error(t, err)
+
 				return
 			}
 

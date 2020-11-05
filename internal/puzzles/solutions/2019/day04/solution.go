@@ -9,7 +9,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/oleg-balunenko/advent-of-code/puzzles"
+	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
 )
 
 func init() {

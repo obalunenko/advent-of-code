@@ -3,12 +3,13 @@ package day01
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/pkg/errors"
 
-	"github.com/oleg-balunenko/advent-of-code/puzzles"
+	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
 )
 
 type solution struct {
@@ -76,7 +77,7 @@ func calc(input io.Reader, calcFn calcFunc) (string, error) {
 	for scanner.Scan() {
 		mass, err = strconv.Atoi(scanner.Text())
 		if err != nil {
-			return "", err
+			return "", fmt.Errorf("faied to parse int: %w", err)
 		}
 
 		in <- module{

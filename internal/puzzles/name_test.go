@@ -55,6 +55,7 @@ func TestMakeName(t *testing.T) {
 			got, err := MakeName(tt.args.year, tt.args.puzzle)
 			if tt.wantErr {
 				assert.Error(t, err)
+
 				return
 			}
 			assert.NoError(t, err)

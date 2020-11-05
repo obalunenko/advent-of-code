@@ -48,6 +48,7 @@ func Test_solution_Part1(t *testing.T) {
 			got, err := s.Part1(tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)
+
 				return
 			}
 
@@ -87,6 +88,7 @@ func Test_findPasswords(t *testing.T) {
 			got, err := findPasswords(tt.args.low, tt.args.high, isPasswordPart1)
 			if tt.wantErr {
 				assert.Error(t, err)
+
 				return
 			}
 
@@ -331,6 +333,7 @@ func Test_solution_Part2(t *testing.T) {
 			got, err := s.Part2(tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)
+
 				return
 			}
 

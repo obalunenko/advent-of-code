@@ -3,16 +3,16 @@ package puzzles
 
 import (
 	"bytes"
+	"errors"
+	"fmt"
 	"io"
 	"sort"
 	"sync"
 	"testing"
-
-	"github.com/pkg/errors"
 )
 
 var (
-	// ErrNotImplemented signal that puzzle in not implemented yet
+	// ErrNotImplemented signal that puzzle in not implemented yet.
 	ErrNotImplemented = errors.New("not implemented")
 )
 
@@ -86,7 +86,7 @@ func GetSolver(name string) (Solver, error) {
 	s, exist := solvers[name]
 
 	if !exist {
-		return nil, errors.Errorf("unknown puzzle name [%s]", name)
+		return nil, fmt.Errorf("unknown puzzle name [%s]", name)
 	}
 
 	return s, nil
@@ -106,24 +106,26 @@ func Run(solver Solver, input io.Reader) (Result, error) {
 	)
 
 	res := Result{
-		Name: solver.Name(),
+		Name:  solver.Name(),
+		Part1: "",
+		Part2: "",
 	}
 
 	var buf bytes.Buffer
 	if _, err = buf.ReadFrom(input); err != nil {
-		return Result{}, errors.Wrap(err, "failed to read")
+		return Result{}, fmt.Errorf("failed to read: %w", err)
 	}
 
 	b := buf.Bytes()
 
 	res.Part1, err = solver.Part1(bytes.NewReader(b))
-	if err != nil && errors.Cause(err) != ErrNotImplemented {
-		return Result{}, errors.Wrap(err, "failed to solve Part1")
+	if err != nil && !errors.Is(err, ErrNotImplemented) {
+		return Result{}, fmt.Errorf("failed to solve Part1: %w", err)
 	}
 
 	res.Part2, err = solver.Part2(bytes.NewReader(b))
-	if err != nil && errors.Cause(err) != ErrNotImplemented {
-		return Result{}, errors.Wrap(err, "failed to solve Part2")
+	if err != nil && !errors.Is(err, ErrNotImplemented) {
+		return Result{}, fmt.Errorf("failed to solve Part2: %w", err)
 	}
 
 	return res, nil

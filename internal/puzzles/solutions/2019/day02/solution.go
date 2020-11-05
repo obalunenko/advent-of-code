@@ -7,8 +7,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/oleg-balunenko/advent-of-code/puzzles"
-	"github.com/oleg-balunenko/advent-of-code/puzzles/utils/intcomputer"
+	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
+	"github.com/oleg-balunenko/advent-of-code/internal/puzzles/utils/intcomputer"
 )
 
 func init() {
@@ -48,6 +48,8 @@ func (s solution) Part2(input io.Reader) (string, error) {
 		return "", errors.Wrap(err, "failed to init computer")
 	}
 
+	const expected = 19690720
+
 	for i := 0; i <= 99; i++ {
 		for j := 0; j <= 99; j++ {
 			c.Reset()
@@ -59,7 +61,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 				return "", errors.Wrap(err, "failed to calc")
 			}
 
-			if res == 19690720 {
+			if res == expected {
 				return strconv.Itoa(nounVerb(i, j)), nil
 			}
 		}

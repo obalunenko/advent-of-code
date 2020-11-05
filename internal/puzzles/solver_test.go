@@ -1,7 +1,6 @@
 package puzzles_test
 
 import (
-	"fmt"
 	"io"
 	"strings"
 	"testing"
@@ -9,17 +8,17 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/oleg-balunenko/advent-of-code/puzzles"
+	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
 )
 
 type mockSolver struct{}
 
-func (m mockSolver) Part1(input io.Reader) (string, error) {
-	return fmt.Sprint("part 1 of mockSolver"), nil
+func (m mockSolver) Part1(_ io.Reader) (string, error) {
+	return "part 1 of mockSolver", nil
 }
 
-func (m mockSolver) Part2(input io.Reader) (string, error) {
-	return fmt.Sprint("part 2 of mockSolver"), nil
+func (m mockSolver) Part2(_ io.Reader) (string, error) {
+	return "part 2 of mockSolver", nil
 }
 
 func (m mockSolver) Name() string {
@@ -28,12 +27,12 @@ func (m mockSolver) Name() string {
 
 type anotherMockSolver struct{}
 
-func (a anotherMockSolver) Part1(input io.Reader) (string, error) {
-	return fmt.Sprint("part 1 of anotherMockSolver"), nil
+func (a anotherMockSolver) Part1(_ io.Reader) (string, error) {
+	return "part 1 of anotherMockSolver", nil
 }
 
-func (a anotherMockSolver) Part2(input io.Reader) (string, error) {
-	return fmt.Sprint("part 2 of anotherMockSolver"), nil
+func (a anotherMockSolver) Part2(_ io.Reader) (string, error) {
+	return "part 2 of anotherMockSolver", nil
 }
 
 func (a anotherMockSolver) Name() string {
@@ -120,6 +119,7 @@ func TestRun(t *testing.T) {
 			got, err := puzzles.Run(tt.args.solver, tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)
+
 				return
 			}
 
