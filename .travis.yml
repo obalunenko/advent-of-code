@@ -15,8 +15,6 @@ jobs:
         - 1.15.x
       os:
         - linux
-      before_script:
-        - go mod tidy -v
       script:
         - echo "Run unit tests..."
         - go vet $(go list ./...)
@@ -30,7 +28,6 @@ jobs:
       os:
         - linux
       before_script:
-        - go mod tidy -v
         - export GOVERSION=$(go version | awk '{print $3;}')
       script:
         - echo "Build stage"

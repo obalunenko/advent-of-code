@@ -22,7 +22,6 @@ help:
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 .PHONY: help
 
-
 ## app compile
 compile:
 	./scripts/compile.sh
@@ -38,7 +37,7 @@ lint:
 	./scripts/run-linters.sh
 .PHONY: lint
 
-## lint-ci runs linters for ci.
+## Lint in CI
 lint-ci:
 	./scripts/run-linters-ci.sh
 .PHONY: lint-ci
@@ -58,7 +57,7 @@ test-cover:
 	./scripts/coverage.sh
 .PHONY: test-cover
 
-## new-version releases new version with new tag
+## Increase version number
 new-version: lint test compile
 	./scripts/version.sh
 .PHONY: new-version
@@ -73,15 +72,34 @@ imports:
 	./scripts/fix-imports.sh
 .PHONY: imports
 
-## dependencies - fetch all dependencies for sripts
+## fetch all dependencies for scripts
 dependencies:
 	./scripts/get-dependencies.sh
 .PHONY: dependencies
 
-## vendor-sync checks if all dependencies are correct in go.mod file and if vendor directory is up to date.
-vendor-sync:
-	./scripts/sync-vendor.sh
-.PHONY: vendor-sync
+## Sync vendor
+gomod:
+	${call colored, gomod is running...}
+	go mod tidy -v
+	go mod verify
+	go mod download
+	go mod vendor
+.PHONY: gomod
+
+## Update dependencies
+gomod-update:
+	${call colored, gomod is running...}
+	go get -u -v ./...
+	make gomod
+.PHONY: gomod-update
+
+## Recreate generated files
+generate:
+	${call colored, generate is running...}
+	./scripts/generate.sh
+.PHONY: generate
+
+.DEFAULT_GOAL := test
 
 ## vendor-check if dependencies were not changed.
 vendor-check:
