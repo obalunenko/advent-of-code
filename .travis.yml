@@ -12,11 +12,9 @@ jobs:
   include:
     - stage: Unit Tests, Vet
       go:
-        - 1.13.x
+        - 1.15.x
       os:
         - linux
-      before_script:
-      - go mod tidy -v
       script:
         - echo "Run unit tests..."
         - go vet $(go list ./...)
@@ -26,11 +24,10 @@ jobs:
 
     - stage: Build
       go:
-        - 1.13.x
+        - 1.15.x
       os:
         - linux
       before_script:
-        - go mod tidy -v
         - export GOVERSION=$(go version | awk '{print $3;}')
       script:
         - echo "Build stage"
