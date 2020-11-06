@@ -2,14 +2,15 @@ package main
 
 import (
 	"bytes"
-	"flag"
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/manifoldco/promptui"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
+	"github.com/urfave/cli"
 
 	"github.com/oleg-balunenko/advent-of-code/internal/input"
 	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
@@ -19,37 +20,95 @@ import (
 )
 
 const (
-	exit = "exit"
-	back = "back"
+	exit     = "exit"
+	back     = "back"
+	pageSize = 10
+	abort    = "^C"
 )
 
-var (
-	logLevel = flag.String("log_level", "INFO", "Set level of output logs")
-)
+var errExit = errors.New("exit is chosen")
 
 func main() {
 	defer func() {
 		fmt.Println("Exiting...")
 	}()
 
-	flag.Parse()
+	app := cli.NewApp()
+	app.Name = "aoc-cli"
 
-	printVersion()
+	app.Description = "Solutions of puzzles for Advent Of Code (https://adventofcode.com/)\n" +
+		"This command line tool contains solutions for puzzles and cli tool to run solutions to get " +
+		"answers for input on site."
+	app.Usage = `a command line tool for get solution for Advent of Code puzzles`
+	app.Author = "Oleg Balunenko"
+	app.Version = versionInfo()
+	app.Email = "oleg.balunenko@gmail.com"
+	app.Flags = globalFlags()
+	app.Action = menu
 
-	setLogger()
+	if err := app.Run(os.Args); err != nil {
+		if errors.Is(err, errExit) {
+			return
+		}
 
-	if err := menu(); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func menu() error {
+func globalFlags() []cli.Flag {
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:        "log_level",
+			Usage:       "Level of output logs",
+			EnvVar:      "",
+			FilePath:    "",
+			Required:    false,
+			Hidden:      false,
+			TakesFile:   false,
+			Value:       log.InfoLevel.String(),
+			Destination: nil,
+		},
+	}
+}
+
+func setLogger(ctx *cli.Context) {
+	formatter := log.TextFormatter{
+		ForceColors:               true,
+		DisableColors:             false,
+		ForceQuote:                false,
+		DisableQuote:              false,
+		EnvironmentOverrideColors: false,
+		DisableTimestamp:          false,
+		FullTimestamp:             true,
+		TimestampFormat:           "2006-01-02 15:04:05",
+		DisableSorting:            false,
+		SortingFunc:               nil,
+		DisableLevelTruncation:    false,
+		PadLevelText:              false,
+		QuoteEmptyFields:          true,
+		FieldMap:                  nil,
+		CallerPrettyfier:          nil,
+	}
+
+	log.SetFormatter(&formatter)
+
+	lvl, err := log.ParseLevel(ctx.GlobalString("log_level"))
+	if err != nil {
+		lvl = log.InfoLevel
+	}
+
+	log.SetLevel(lvl)
+}
+
+func menu(ctx *cli.Context) error {
+	setLogger(ctx)
+
 	years := puzzles.GetYears()
 
 	prompt := promptui.Select{
-		Label:             nil,
+		Label:             "Years menu (exit' for exit)",
 		Items:             append(years, exit),
-		Size:              0,
+		Size:              pageSize,
 		CursorPos:         0,
 		IsVimMode:         false,
 		HideHelp:          false,
@@ -70,6 +129,10 @@ func handleYearChoices(opt promptui.Select) error {
 	for {
 		_, choice, err := opt.Run()
 		if err != nil {
+			if isAbort(err) {
+				return nil
+			}
+
 			return errors.Wrap(err, "prompt failed")
 		}
 
@@ -78,11 +141,11 @@ func handleYearChoices(opt promptui.Select) error {
 		}
 
 		err = menuPuzzle(choice)
-		if errors.Is(err, errExit) {
-			return nil
-		}
-
 		if err != nil {
+			if errors.Is(err, errExit) {
+				return nil
+			}
+
 			log.Error(err)
 
 			continue
@@ -90,38 +153,8 @@ func handleYearChoices(opt promptui.Select) error {
 	}
 }
 
-func setLogger() {
-	l, err := log.ParseLevel(*logLevel)
-	if err != nil {
-		l = log.InfoLevel
-	}
-
-	log.SetLevel(l)
-
-	formatter := &log.TextFormatter{
-		ForceColors:               true,
-		DisableColors:             false,
-		ForceQuote:                false,
-		DisableQuote:              false,
-		EnvironmentOverrideColors: false,
-		DisableTimestamp:          true,
-		FullTimestamp:             false,
-		TimestampFormat:           "",
-		DisableSorting:            false,
-		SortingFunc:               nil,
-		DisableLevelTruncation:    true,
-		PadLevelText:              false,
-		QuoteEmptyFields:          true,
-		FieldMap:                  nil,
-		CallerPrettyfier:          nil,
-	}
-	log.SetFormatter(formatter)
-}
-
 func menuPuzzle(year string) error {
 	solvers := puzzles.NamesByYear(year)
-
-	pageSize := 20
 
 	prompt := promptui.Select{
 		Label:             "Puzzles menu (exit' for exit; back - to return to year selection)",
@@ -147,6 +180,10 @@ func handlePuzzleChoices(year string, opt promptui.Select) error {
 	for {
 		_, choice, err := opt.Run()
 		if err != nil {
+			if isAbort(err) {
+				return errExit
+			}
+
 			return errors.Wrap(err, "prompt failed")
 		}
 
@@ -178,11 +215,13 @@ func isExit(input string) bool {
 	return strings.EqualFold(exit, input)
 }
 
+func isAbort(err error) bool {
+	return strings.HasSuffix(err.Error(), abort)
+}
+
 func isBack(input string) bool {
 	return strings.EqualFold(back, input)
 }
-
-var errExit = errors.New("exit is chosen")
 
 func run(year string, name string) (puzzles.Result, error) {
 	s, err := puzzles.GetSolver(year, name)
