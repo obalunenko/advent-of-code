@@ -11,10 +11,8 @@ import (
 	"testing"
 )
 
-var (
-	// ErrNotImplemented signal that puzzle in not implemented yet.
-	ErrNotImplemented = errors.New("not implemented")
-)
+// ErrNotImplemented signal that puzzle in not implemented yet.
+var ErrNotImplemented = errors.New("not implemented")
 
 // Solver represents solutions for puzzles methods.
 type Solver interface {
@@ -62,6 +60,7 @@ func UnregisterAllSolvers(tb testing.TB) {
 	if tb == nil {
 		panic("UnregisterAllSolvers should be called only inside tests")
 	}
+
 	solversMu.Lock()
 	defer solversMu.Unlock()
 
@@ -98,7 +97,6 @@ func GetYears() []string {
 	sort.Strings(list)
 
 	return list
-
 }
 
 // GetSolver returns registered solver by passed puzzle name.
@@ -138,9 +136,7 @@ type Result struct {
 
 // Run uses solver of puzzle and path to input.
 func Run(solver Solver, input io.Reader) (Result, error) {
-	var (
-		err error
-	)
+	var err error
 
 	res := Result{
 		Year:  solver.Year(),

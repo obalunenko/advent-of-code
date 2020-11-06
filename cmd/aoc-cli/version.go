@@ -13,11 +13,7 @@ var ( // build info
 	goversion = unset
 )
 
-func printVersion() {
-	fmt.Printf("Go version: %s \n", goversion)
-	fmt.Printf("Version info: %s \n", version)
-	fmt.Printf("Build date: %s \n", date)
-	fmt.Printf("commit: %s \n", commit)
-
-	fmt.Println()
+// versionInfo returns stringed version info.
+func versionInfo() string {
+	return fmt.Sprintf("GO-%s: %s-%s-%s \n", goversion, version, commit, date)
 }
