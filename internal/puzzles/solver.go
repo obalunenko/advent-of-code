@@ -21,17 +21,21 @@ type Solver interface {
 	Part1(input io.Reader) (string, error)
 	Part2(input io.Reader) (string, error)
 	Name() string
+	Year() string
 }
 
 var (
 	solversMu sync.RWMutex
-	solvers   = make(map[string]Solver)
+	solvers   = make(map[string]map[string]Solver)
 )
 
 // Register makes a puzzle solver available by the provided name.
 // If Register is called twice with the same name or if solver is nil,
 // it panics.
-func Register(name string, solver Solver) {
+func Register(solver Solver) {
+	year := solver.Year()
+	name := solver.Name()
+
 	solversMu.Lock()
 	defer solversMu.Unlock()
 
@@ -39,33 +43,39 @@ func Register(name string, solver Solver) {
 		panic("puzzle: Register solver is nil")
 	}
 
-	if _, dup := solvers[name]; dup {
-		panic("puzzle: Register called twice for solver " + name)
+	yearSolvers, exist := solvers[year]
+	if !exist {
+		solvers[year] = make(map[string]Solver)
+		yearSolvers = solvers[year]
 	}
 
-	solvers[name] = solver
+	if _, dup := yearSolvers[name]; dup {
+		panic(fmt.Errorf("puzzle: Register called twice for solver [%s:%s]", year, name))
+	}
+
+	yearSolvers[name] = solver
+	solvers[year] = yearSolvers
 }
 
 // UnregisterAllSolvers cleans up registered solvers. Use for testing only.
 func UnregisterAllSolvers(tb testing.TB) {
 	if tb == nil {
-		panic("could not be called outside of tests")
+		panic("UnregisterAllSolvers should be called only inside tests")
 	}
-
 	solversMu.Lock()
 	defer solversMu.Unlock()
 
-	solvers = make(map[string]Solver)
+	solvers = make(map[string]map[string]Solver)
 }
 
-// Solvers returns a sorted list of the names of the registered puzzle solvers.
-func Solvers() []string {
+// NamesByYear returns a sorted list of the names of the registered puzzle solvers for passed year.
+func NamesByYear(year string) []string {
 	solversMu.RLock()
 	defer solversMu.RUnlock()
 
-	list := make([]string, 0, len(solvers))
+	list := make([]string, 0, len(solvers[year]))
 
-	for name := range solvers {
+	for name := range solvers[year] {
 		list = append(list, name)
 	}
 
@@ -74,8 +84,29 @@ func Solvers() []string {
 	return list
 }
 
+// GetYears returns list of available years for solvers.
+func GetYears() []string {
+	solversMu.RLock()
+	defer solversMu.RUnlock()
+
+	list := make([]string, 0, len(solvers))
+
+	for year := range solvers {
+		list = append(list, year)
+	}
+
+	sort.Strings(list)
+
+	return list
+
+}
+
 // GetSolver returns registered solver by passed puzzle name.
-func GetSolver(name string) (Solver, error) {
+func GetSolver(year string, name string) (Solver, error) {
+	if year == "" {
+		return nil, errors.New("empty puzzle year")
+	}
+
 	if name == "" {
 		return nil, errors.New("empty puzzle name")
 	}
@@ -83,8 +114,13 @@ func GetSolver(name string) (Solver, error) {
 	solversMu.Lock()
 	defer solversMu.Unlock()
 
-	s, exist := solvers[name]
+	solversYaer, exist := solvers[year]
 
+	if !exist {
+		return nil, fmt.Errorf("unknown puzzle year [%s]", year)
+	}
+
+	s, exist := solversYaer[name]
 	if !exist {
 		return nil, fmt.Errorf("unknown puzzle name [%s]", name)
 	}
@@ -94,6 +130,7 @@ func GetSolver(name string) (Solver, error) {
 
 // Result represents puzzle solution result.
 type Result struct {
+	Year  string
 	Name  string
 	Part1 string
 	Part2 string
@@ -106,6 +143,7 @@ func Run(solver Solver, input io.Reader) (Result, error) {
 	)
 
 	res := Result{
+		Year:  solver.Year(),
 		Name:  solver.Name(),
 		Part1: "",
 		Part2: "",

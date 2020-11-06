@@ -35,7 +35,7 @@ jobs:
       script:
         - echo "Build stage"
         - make compile
-      after_success:
+      after_success: true
       deploy:
         skip_cleanup: true
         provider: script
