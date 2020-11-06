@@ -80,10 +80,12 @@ loop:
 			}
 		case optAbort:
 			result, err = c.abort()
+
 			break loop
 		default:
 			result = -1
 			err = errors.Errorf("not supported opt code [%d] at pos [%d]", opt, i)
+
 			break loop
 		}
 	}

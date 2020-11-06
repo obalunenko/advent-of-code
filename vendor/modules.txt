@@ -2,6 +2,8 @@
 github.com/chzyer/readline
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
+# github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00
+## explicit
 # github.com/juju/ansiterm v0.0.0-20180109212912-720a0952cc2a
 github.com/juju/ansiterm
 github.com/juju/ansiterm/tabwriter
@@ -26,6 +28,10 @@ github.com/pmezard/go-difflib/difflib
 # github.com/sirupsen/logrus v1.7.0
 ## explicit
 github.com/sirupsen/logrus
+# github.com/smartystreets/assertions v1.2.0
+## explicit
+# github.com/smartystreets/goconvey v1.6.4
+## explicit
 # github.com/stretchr/testify v1.6.1
 ## explicit
 github.com/stretchr/testify/assert
@@ -35,5 +41,7 @@ github.com/stretchr/testify/require
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
+# golang.org/x/tools v0.0.0-20201105220310-78b158585360
+## explicit
 # gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 gopkg.in/yaml.v3

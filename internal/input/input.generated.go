@@ -224,7 +224,7 @@ func bindataData2019Day05Txt() (*asset, error) {
 		size: 2545,
 		md5checksum: "",
 		mode: os.FileMode(420),
-		modTime: time.Unix(1604578945, 0),
+		modTime: time.Unix(1604580438, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}

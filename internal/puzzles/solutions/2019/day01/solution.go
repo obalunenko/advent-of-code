@@ -12,17 +12,23 @@ import (
 	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
 )
 
+const (
+	puzzleName = "day01"
+	year       = "2019"
+)
+
 type solution struct {
+	year string
 	name string
 }
 
-func init() {
-	puzzleName, err := puzzles.MakeName("2019", "day01")
-	if err != nil {
-		panic(err)
-	}
+func (s solution) Year() string {
+	return s.year
+}
 
-	puzzles.Register(puzzleName, solution{
+func init() {
+	puzzles.Register(solution{
+		year: year,
 		name: puzzleName,
 	})
 }
