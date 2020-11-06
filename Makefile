@@ -58,7 +58,7 @@ test-cover:
 .PHONY: test-cover
 
 ## Increase version number
-new-version: lint test compile
+new-version: vet test compile
 	./scripts/version.sh
 .PHONY: new-version
 
@@ -106,6 +106,7 @@ vendor-check:
 	./scripts/check-vendor.sh
 .PHONY: vendor-check
 
+## vet project
 vet:
 	./scripts/vet.sh
 .PHONY: vet
