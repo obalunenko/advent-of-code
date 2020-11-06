@@ -12,19 +12,25 @@ import (
 	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
 )
 
-func init() {
-	puzzleName, err := puzzles.MakeName("2019", "day04")
-	if err != nil {
-		panic(err)
-	}
+const (
+	puzzleName = "day04"
+	year       = "2019"
+)
 
-	puzzles.Register(puzzleName, solution{
+func init() {
+	puzzles.Register(solution{
+		year: year,
 		name: puzzleName,
 	})
 }
 
 type solution struct {
+	year string
 	name string
+}
+
+func (s solution) Year() string {
+	return s.year
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
@@ -45,8 +51,10 @@ func run(input io.Reader, criteria isPwdFunc) (string, error) {
 		return "", errors.Wrap(err, "failed to read")
 	}
 
+	const limitsNum = 2
+
 	limits := strings.Split(buf.String(), "-") // should be 2: low and high
-	if len(limits) != 2 {
+	if len(limits) != limitsNum {
 		return "", errors.New("invalid number of limits")
 	}
 

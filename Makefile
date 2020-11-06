@@ -1,26 +1,14 @@
 NAME=aoc-cli
 BIN_DIR=./bin
 
-# COLORS
-GREEN  := $(shell tput -Txterm setaf 2)
-YELLOW := $(shell tput -Txterm setaf 3)
-WHITE  := $(shell tput -Txterm setaf 7)
-RESET  := $(shell tput -Txterm sgr0)
-
-
 TARGET_MAX_CHAR_NUM=20
-
-
-define colored
-	@echo '${GREEN}$1${RESET}'
-endef
 
 ## Show help
 help:
 	${call colored, help is running...}
 	@echo ''
 	@echo 'Usage:'
-	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
+	@echo '  make <target>'
 	@echo ''
 	@echo 'Targets:'
 	@awk '/^[a-zA-Z\-\_0-9]+:/ { \
@@ -28,32 +16,29 @@ help:
 		if (helpMessage) { \
 			helpCommand = substr($$1, 0, index($$1, ":")-1); \
 			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
-			printf "  ${YELLOW}%-$(TARGET_MAX_CHAR_NUM)s${RESET} ${GREEN}%s${RESET}\n", helpCommand, helpMessage; \
+			printf "  %-$(TARGET_MAX_CHAR_NUM)s %s\n", helpCommand, helpMessage; \
 		} \
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
+.PHONY: help
 
 ## app compile
 compile:
-	${call colored, compile is running...}
 	./scripts/compile.sh
 .PHONY: compile
 
 ## Cross os compile
 cross-compile:
-	${call colored, compile is running...}
 	./scripts/cross-compile.sh
 .PHONY: cross-compile
 
 ## lint project
 lint:
-	${call colored, lint is running...}
 	./scripts/run-linters.sh
 .PHONY: lint
 
 ## Lint in CI
 lint-ci:
-	${call colored, lint_ci is running...}
 	./scripts/run-linters-ci.sh
 .PHONY: lint-ci
 
@@ -64,37 +49,31 @@ pretty-markdown:
 
 ## Test all packages
 test:
-	${call colored, test is running...}
 	./scripts/run-tests.sh
 .PHONY: test
 
 ## Test coverage
 test-cover:
-	${call colored, test-cover is running...}
 	./scripts/coverage.sh
 .PHONY: test-cover
 
 ## Increase version number
 new-version: lint test compile
-	${call colored, new version is running...}
 	./scripts/version.sh
 .PHONY: new-version
 
 ## Release
 release:
-	${call colored, release is running...}
 	./scripts/release.sh
 .PHONY: release
 
 ## Fix imports sorting
 imports:
-	${call colored, sort and group imports...}
 	./scripts/fix-imports.sh
 .PHONY: imports
 
 ## fetch all dependencies for scripts
 dependencies:
-	${call colored, dependensies is running...}
 	./scripts/get-dependencies.sh
 .PHONY: dependencies
 
@@ -119,5 +98,16 @@ generate:
 	${call colored, generate is running...}
 	./scripts/generate.sh
 .PHONY: generate
+
+.DEFAULT_GOAL := test
+
+## vendor-check if dependencies were not changed.
+vendor-check:
+	./scripts/check-vendor.sh
+.PHONY: vendor-check
+
+vet:
+	./scripts/vet.sh
+.PHONY: vet
 
 .DEFAULT_GOAL := test

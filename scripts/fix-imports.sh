@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 if [[ -f "$(go env GOPATH)/bin/gci" ]] || [[ -f "/usr/local/bin/gci" ]]; then
   gci -w -local=github.com/oleg-balunenko/  $(find . -type f -name "*.go" | grep -v "vendor/" | grep -v ".git")

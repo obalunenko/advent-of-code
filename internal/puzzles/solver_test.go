@@ -11,7 +11,14 @@ import (
 	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
 )
 
-type mockSolver struct{}
+type mockSolver struct {
+	year string
+	name string
+}
+
+func (m mockSolver) Year() string {
+	return m.year
+}
 
 func (m mockSolver) Part1(_ io.Reader) (string, error) {
 	return "part 1 of mockSolver", nil
@@ -22,10 +29,17 @@ func (m mockSolver) Part2(_ io.Reader) (string, error) {
 }
 
 func (m mockSolver) Name() string {
-	return "mockSolver"
+	return m.name
 }
 
-type anotherMockSolver struct{}
+type anotherMockSolver struct {
+	year string
+	name string
+}
+
+func (a anotherMockSolver) Year() string {
+	return a.year
+}
 
 func (a anotherMockSolver) Part1(_ io.Reader) (string, error) {
 	return "part 1 of anotherMockSolver", nil
@@ -36,43 +50,66 @@ func (a anotherMockSolver) Part2(_ io.Reader) (string, error) {
 }
 
 func (a anotherMockSolver) Name() string {
-	return "anotherMockSolver"
+	return a.name
 }
 
-func TestSolver(t *testing.T) {
-	puzzles.UnregisterAllSolvers(t)
-	defer puzzles.UnregisterAllSolvers(t)
-
-	solvers := map[string]puzzles.Solver{
-		"mock":        mockSolver{},
-		"anotherMock": anotherMockSolver{},
+func makeAndRegisterSolvers(tb testing.TB) func() {
+	solvers := map[string]map[string]puzzles.Solver{
+		"2019": {
+			"mock": mockSolver{
+				year: "2019",
+				name: "mock",
+			},
+			"anotherMock": anotherMockSolver{
+				year: "2019",
+				name: "anotherMock",
+			},
+		},
+		"2017": {
+			"mock1": mockSolver{
+				year: "2017",
+				name: "mock1",
+			},
+		},
 	}
 
-	solversList := make([]string, 0, len(solvers))
-
-	for name, solver := range solvers {
-		puzzles.Register(name, solver)
-		solversList = append(solversList, name)
+	for _, solversYear := range solvers {
+		for _, solver := range solversYear {
+			puzzles.Register(solver)
+		}
 	}
+
+	return func() { puzzles.UnregisterAllSolvers(tb) }
+}
+
+func TestGetSolver(t *testing.T) {
+	teardown := makeAndRegisterSolvers(t)
+	defer teardown()
 
 	// get existing solver
-	gotSolver, err := puzzles.GetSolver("mock")
+	gotSolver, err := puzzles.GetSolver("2019", "mock")
 	assert.NoError(t, err)
 	assert.IsType(t, mockSolver{}, gotSolver)
 
 	// get existing solver
-	gotSolver, err = puzzles.GetSolver("anotherMock")
+	gotSolver, err = puzzles.GetSolver("2017", "mock1")
+	assert.NoError(t, err)
+	assert.IsType(t, mockSolver{}, gotSolver)
+
+	// get existing solver
+	gotSolver, err = puzzles.GetSolver("2019", "anotherMock")
 	assert.NoError(t, err)
 	assert.IsType(t, anotherMockSolver{}, gotSolver)
 
 	// get not existing solver
-	gotSolver, err = puzzles.GetSolver("not-existed")
+	gotSolver, err = puzzles.GetSolver("2018", "not-existed")
 	assert.Error(t, err)
 	assert.IsType(t, nil, gotSolver)
 
-	// get solvers list
-	gotList := puzzles.Solvers()
-	assert.ElementsMatch(t, solversList, gotList)
+	// get not existing solver
+	gotSolver, err = puzzles.GetSolver("2018", "not-existed")
+	assert.Error(t, err)
+	assert.IsType(t, nil, gotSolver)
 
 	assert.Panics(t, func() {
 		puzzles.UnregisterAllSolvers(nil)
@@ -80,10 +117,13 @@ func TestSolver(t *testing.T) {
 }
 
 func TestRun(t *testing.T) {
-	puzzles.Register("mockSolver", mockSolver{})
+	puzzles.Register(mockSolver{
+		year: "2019",
+		name: "mockSolver",
+	})
 	defer puzzles.UnregisterAllSolvers(t)
 
-	s, err := puzzles.GetSolver("mockSolver")
+	s, err := puzzles.GetSolver("2019", "mockSolver")
 	require.NoError(t, err)
 
 	type args struct {
@@ -104,6 +144,7 @@ func TestRun(t *testing.T) {
 				input:  strings.NewReader("testdata"),
 			},
 			want: puzzles.Result{
+				Year:  "2019",
 				Name:  "mockSolver",
 				Part1: "part 1 of mockSolver",
 				Part2: "part 2 of mockSolver",
@@ -127,4 +168,31 @@ func TestRun(t *testing.T) {
 			assert.Equal(t, tt.want, got)
 		})
 	}
+}
+
+func TestSolversYears(t *testing.T) {
+	teardown := makeAndRegisterSolvers(t)
+	defer teardown()
+
+	expectedYears := []string{"2019", "2017"}
+	years := puzzles.GetYears()
+
+	assert.ElementsMatch(t, expectedYears, years)
+}
+
+func TestSolversByYear(t *testing.T) {
+	puzzles.UnregisterAllSolvers(t)
+	defer puzzles.UnregisterAllSolvers(t)
+
+	makeAndRegisterSolvers(t)
+
+	solvers := puzzles.NamesByYear("2019")
+	expectedSolvers := []string{"mock", "anotherMock"}
+
+	assert.ElementsMatch(t, expectedSolvers, solvers)
+
+	solvers = puzzles.NamesByYear("2017")
+	expectedSolvers = []string{"mock1"}
+
+	assert.ElementsMatch(t, expectedSolvers, solvers)
 }
