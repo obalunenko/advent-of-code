@@ -27,7 +27,7 @@ linters-settings:
   lll:
     line-length: 120
   goimports:
-    local-prefixes: github.com/oleg-balunenko/advent-of-code/
+    local-prefixes: github.com/obalunenko/advent-of-code/
   unparam:
     algo: cha
     check-exported: false

@@ -4,7 +4,7 @@ set -e
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 APP="aoc-cli"
-MODULE="github.com/oleg-balunenko/advent-of-code"
+MODULE="github.com/obalunenko/advent-of-code"
 VERSION=$(git describe --tags "$(git rev-list --tags --max-count=1)")"-local"
 COMMIT_HASH=$(git rev-parse --short HEAD 2>/dev/null)
 DATE=$(date "+%Y-%m-%d")
