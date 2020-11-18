@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
+	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
 type mockSolver struct {

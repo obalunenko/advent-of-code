@@ -12,11 +12,11 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 
-	"github.com/oleg-balunenko/advent-of-code/internal/input"
-	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
+	"github.com/obalunenko/advent-of-code/internal/input"
+	"github.com/obalunenko/advent-of-code/internal/puzzles"
 
 	// register all solutions.
-	_ "github.com/oleg-balunenko/advent-of-code/internal/puzzles/solutions"
+	_ "github.com/obalunenko/advent-of-code/internal/puzzles/solutions"
 )
 
 const (

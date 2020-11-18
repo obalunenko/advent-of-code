@@ -3,29 +3,35 @@ package day05
 import (
 	"io"
 
-	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
+	"github.com/obalunenko/advent-of-code/internal/puzzles"
+)
+
+const (
+	puzzleName = "day05"
+	year       = "2019"
 )
 
 func init() {
-	puzzleName, err := puzzles.MakeName("2019", "day05")
-	if err != nil {
-		panic(err)
-	}
-
-	puzzles.Register(puzzleName, solution{
+	puzzles.Register(solution{
+		year: year,
 		name: puzzleName,
 	})
 }
 
 type solution struct {
 	name string
+	year string
 }
 
-func (s solution) Part1(input io.Reader) (string, error) {
+func (s solution) Year() string {
+	return s.year
+}
+
+func (s solution) Part1(_ io.Reader) (string, error) {
 	return "", puzzles.ErrNotImplemented
 }
 
-func (s solution) Part2(input io.Reader) (string, error) {
+func (s solution) Part2(_ io.Reader) (string, error) {
 	return "", puzzles.ErrNotImplemented
 }
 

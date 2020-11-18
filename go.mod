@@ -1,4 +1,4 @@
-module github.com/oleg-balunenko/advent-of-code
+module github.com/obalunenko/advent-of-code
 
 go 1.15
 

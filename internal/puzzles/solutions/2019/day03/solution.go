@@ -10,7 +10,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/oleg-balunenko/advent-of-code/internal/puzzles"
+	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
 const (
