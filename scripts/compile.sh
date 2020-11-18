@@ -10,7 +10,7 @@ GOVERSION=$(go version | awk '{print $3;}')
 GO_BUILD_LDFLAGS="-s -w -X 'main.commit=${COMMIT_HASH}' -X 'main.date=${DATE}' -X 'main.version=${VERSION}' -X 'main.goversion=${GOVERSION}'"
 
 APP="aoc-cli"
-MODULE="github.com/oleg-balunenko/advent-of-code"
+MODULE="github.com/obalunenko/advent-of-code"
 
 GO_BUILD_PACKAGE="${MODULE}/cmd/aoc-cli/."
 
