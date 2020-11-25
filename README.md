@@ -1,9 +1,9 @@
 # advent-of-code
 
-![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/oleg-balunenko/advent-of-code)
-[![Build Status](https://travis-ci.com/oleg-balunenko/advent-of-code.svg?branch=master)](https://travis-ci.com/oleg-balunenko/advent-of-code)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/obalunenko/advent-of-code)
+[![Build Status](https://travis-ci.com/obalunenko/advent-of-code.svg?branch=master)](https://travis-ci.com/obalunenko/advent-of-code)
 [![Go Report Card](https://goreportcard.com/badge/github.com/obalunenko/advent-of-code)](https://goreportcard.com/report/github.com/obalunenko/advent-of-code)
-[![codecov](https://codecov.io/gh/oleg-balunenko/advent-of-code/branch/master/graph/badge.svg)](https://codecov.io/gh/oleg-balunenko/advent-of-code)
+[![codecov](https://codecov.io/gh/obalunenko/advent-of-code/branch/master/graph/badge.svg)](https://codecov.io/gh/obalunenko/advent-of-code)
 [![GoDoc](https://godoc.org/github.com/obalunenko/advent-of-code?status.svg)](https://godoc.org/github.com/obalunenko/advent-of-code)
 
 My solutions of puzzles for [Advent Of Code](https://adventofcode.com/)
