@@ -7,7 +7,6 @@
 
 package input
 
-
 import (
 	"bytes"
 	"compress/gzip"
@@ -39,7 +38,6 @@ func bindataRead(data []byte, name string) ([]byte, error) {
 
 	return buf.Bytes(), nil
 }
-
 
 type asset struct {
 	bytes []byte
@@ -90,8 +88,6 @@ func bindataData2019Day01TxtBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataData2019Day01Txt() (*asset, error) {
 	bytes, err := bindataData2019Day01TxtBytes()
 	if err != nil {
@@ -99,11 +95,11 @@ func bindataData2019Day01Txt() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "data/2019/day01.txt",
-		size: 654,
+		name:        "data/2019/day01.txt",
+		size:        654,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1604578965, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1605738493, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -120,8 +116,6 @@ func bindataData2019Day02TxtBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataData2019Day02Txt() (*asset, error) {
 	bytes, err := bindataData2019Day02TxtBytes()
 	if err != nil {
@@ -129,11 +123,11 @@ func bindataData2019Day02Txt() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "data/2019/day02.txt",
-		size: 305,
+		name:        "data/2019/day02.txt",
+		size:        305,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1604578965, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1605738493, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -150,8 +144,6 @@ func bindataData2019Day03TxtBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataData2019Day03Txt() (*asset, error) {
 	bytes, err := bindataData2019Day03TxtBytes()
 	if err != nil {
@@ -159,11 +151,11 @@ func bindataData2019Day03Txt() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "data/2019/day03.txt",
-		size: 2942,
+		name:        "data/2019/day03.txt",
+		size:        2942,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1604578965, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1605738493, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -180,8 +172,6 @@ func bindataData2019Day04TxtBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataData2019Day04Txt() (*asset, error) {
 	bytes, err := bindataData2019Day04TxtBytes()
 	if err != nil {
@@ -189,18 +179,17 @@ func bindataData2019Day04Txt() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "data/2019/day04.txt",
-		size: 13,
+		name:        "data/2019/day04.txt",
+		size:        13,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1604578965, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1605738493, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
 
 	return a, nil
 }
-
 
 //
 // Asset loads and returns the asset for the given name.
@@ -295,18 +284,18 @@ func AssetDir(name string) ([]string, error) {
 			node = node.Children[p]
 			if node == nil {
 				return nil, &os.PathError{
-					Op: "open",
+					Op:   "open",
 					Path: name,
-					Err: os.ErrNotExist,
+					Err:  os.ErrNotExist,
 				}
 			}
 		}
 	}
 	if node.Func != nil {
 		return nil, &os.PathError{
-			Op: "open",
+			Op:   "open",
 			Path: name,
-			Err: os.ErrNotExist,
+			Err:  os.ErrNotExist,
 		}
 	}
 	rv := make([]string, 0, len(node.Children))
@@ -315,7 +304,6 @@ func AssetDir(name string) ([]string, error) {
 	}
 	return rv, nil
 }
-
 
 type bintree struct {
 	Func     func() (*asset, error)
