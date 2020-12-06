@@ -227,6 +227,7 @@ github.com/shazow/go-diff/difflib
 # github.com/shuLhan/go-bindata v4.0.0+incompatible
 ## explicit
 github.com/shuLhan/go-bindata
+github.com/shuLhan/go-bindata/cmd/go-bindata
 # github.com/sirupsen/logrus v1.7.0
 github.com/sirupsen/logrus
 # github.com/sonatard/noctx v0.0.1
