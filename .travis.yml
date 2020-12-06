@@ -16,7 +16,7 @@ jobs:
       os:
         - linux
       before_script:
-        - make dependencies
+        - make install-tools
       script:
         - echo "Run unit tests..."
         - go vet $(go list ./...)
@@ -30,7 +30,7 @@ jobs:
       os:
         - linux
       before_script:
-        - make dependencies
+        - make install-tools
         - export GOVERSION=$(go version | awk '{print $3;}')
       script:
         - echo "Build stage"
