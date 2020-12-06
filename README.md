@@ -24,4 +24,4 @@ Run it and follow instructions
 
 ### Demo
 
-![cli demo](./.assets/demo.png)
+![cli demo](assets/images/demo.png)
