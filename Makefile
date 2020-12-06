@@ -27,6 +27,10 @@ compile: generate
 	./scripts/compile.sh
 .PHONY: compile
 
+build-ci:
+	./scripts/compile.sh
+.PHONY: build-ci
+
 ## Cross os compile
 cross-compile: generate
 	./scripts/cross-compile.sh
