@@ -67,7 +67,7 @@ new-version: vet test compile
 .PHONY: new-version
 
 ## Release
-release: generate
+release:
 	./scripts/release.sh
 .PHONY: release
 
