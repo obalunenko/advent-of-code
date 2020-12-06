@@ -11,7 +11,11 @@
 [![GoDoc](https://godoc.org/github.com/obalunenko/advent-of-code?status.svg)](https://godoc.org/github.com/obalunenko/advent-of-code)
 
 
-[**Advent of Code**](http://adventofcode.com/) is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like. People use them as a [speed contest](https://adventofcode.com/2019/leaderboard), interview prep, company training, university coursework, practice problems, or to [challenge each other](https://www.reddit.com/r/adventofcode/search?q=flair%3Aupping&restrict_sr=on).
+[**Advent of Code**](http://adventofcode.com/) is an Advent calendar of small programming puzzles for a 
+variety of skill sets and skill levels that can be solved in any programming language you like. 
+People use them as a [speed contest](https://adventofcode.com/2019/leaderboard), interview prep, company training, 
+university coursework, practice problems, 
+or to [challenge each other](https://www.reddit.com/r/adventofcode/search?q=flair%3Aupping&restrict_sr=on).
 
 This repository contains solutions for puzzles and cli tool to run solutions to get answers for input on site.
 
@@ -196,4 +200,5 @@ Run it and follow instructions
 
 ### Demo
 
-![cli demo](assets/images/demo.png)
+![cli demo_step_1](assets/images/demo_1.png)
+![cli demo_step_2](assets/images/demo_2.png)
