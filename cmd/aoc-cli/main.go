@@ -14,7 +14,6 @@ import (
 
 	"github.com/obalunenko/advent-of-code/internal/input"
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
-
 	// register all solutions.
 	_ "github.com/obalunenko/advent-of-code/internal/puzzles/solutions"
 )

@@ -71,30 +71,38 @@ release:
 	./scripts/release.sh
 .PHONY: release
 
-## Fix imports sorting
+## Fix imports sorting.
 imports:
+	${call colored, fix-imports is running...}
 	./scripts/fix-imports.sh
 .PHONY: imports
 
+## Format code.
+fmt:
+	${call colored, fmt is running...}
+	./scripts/fmt.sh
+.PHONY: fmt
+
+## Format code and sort imports.
+format-project: fmt imports
+.PHONY: format-project
+
 ## fetch all dependencies for scripts
-dependencies:
+install-tools:
 	./scripts/get-dependencies.sh
-.PHONY: dependencies
+.PHONY: install-tools
 
 ## Sync vendor
-gomod:
+sync-vendor:
 	${call colored, gomod is running...}
-	go mod tidy -v
-	go mod verify
-	go mod download
-	go mod vendor
-.PHONY: gomod
+	./scripts/sync-vendor.sh
+.PHONY: sync-vendor
 
 ## Update dependencies
 gomod-update:
 	${call colored, gomod is running...}
 	go get -u -v ./...
-	make gomod
+	make sync-vendor
 .PHONY: gomod-update
 
 ## Recreate generated files
