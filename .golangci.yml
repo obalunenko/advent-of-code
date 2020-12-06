@@ -86,6 +86,7 @@ linters-settings:
 run:
   skip-dirs:
     - vendor/
+    - internal/input/
 
 output:
   format: colored-line-number
@@ -100,3 +101,15 @@ issues:
         - funlen
         - dupl
         - gosec
+    - path: .generated.go
+      linters:
+        - gocyclo
+        - funlen
+        - godot
+        - godox
+        - dupl
+        - gofmt
+        - gci
+        - gofumpt
+        - goimports
+        - gosimple
