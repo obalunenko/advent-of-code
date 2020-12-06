@@ -23,12 +23,12 @@ help:
 .PHONY: help
 
 ## app compile
-compile:
+compile: generate
 	./scripts/compile.sh
 .PHONY: compile
 
 ## Cross os compile
-cross-compile:
+cross-compile: generate
 	./scripts/cross-compile.sh
 .PHONY: cross-compile
 
@@ -63,7 +63,7 @@ new-version: vet test compile
 .PHONY: new-version
 
 ## Release
-release:
+release: generate
 	./scripts/release.sh
 .PHONY: release
 

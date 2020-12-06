@@ -4,8 +4,10 @@
 // data/2019/day02.txt
 // data/2019/day03.txt
 // data/2019/day04.txt
+// data/2020/day01.txt
 
 package input
+
 
 import (
 	"bytes"
@@ -38,6 +40,7 @@ func bindataRead(data []byte, name string) ([]byte, error) {
 
 	return buf.Bytes(), nil
 }
+
 
 type asset struct {
 	bytes []byte
@@ -88,6 +91,8 @@ func bindataData2019Day01TxtBytes() ([]byte, error) {
 	)
 }
 
+
+
 func bindataData2019Day01Txt() (*asset, error) {
 	bytes, err := bindataData2019Day01TxtBytes()
 	if err != nil {
@@ -95,11 +100,11 @@ func bindataData2019Day01Txt() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name:        "data/2019/day01.txt",
-		size:        654,
+		name: "data/2019/day01.txt",
+		size: 654,
 		md5checksum: "",
-		mode:        os.FileMode(420),
-		modTime:     time.Unix(1605738493, 0),
+		mode: os.FileMode(420),
+		modTime: time.Unix(1605738493, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -116,6 +121,8 @@ func bindataData2019Day02TxtBytes() ([]byte, error) {
 	)
 }
 
+
+
 func bindataData2019Day02Txt() (*asset, error) {
 	bytes, err := bindataData2019Day02TxtBytes()
 	if err != nil {
@@ -123,11 +130,11 @@ func bindataData2019Day02Txt() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name:        "data/2019/day02.txt",
-		size:        305,
+		name: "data/2019/day02.txt",
+		size: 305,
 		md5checksum: "",
-		mode:        os.FileMode(420),
-		modTime:     time.Unix(1605738493, 0),
+		mode: os.FileMode(420),
+		modTime: time.Unix(1605738493, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -144,6 +151,8 @@ func bindataData2019Day03TxtBytes() ([]byte, error) {
 	)
 }
 
+
+
 func bindataData2019Day03Txt() (*asset, error) {
 	bytes, err := bindataData2019Day03TxtBytes()
 	if err != nil {
@@ -151,11 +160,11 @@ func bindataData2019Day03Txt() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name:        "data/2019/day03.txt",
-		size:        2942,
+		name: "data/2019/day03.txt",
+		size: 2942,
 		md5checksum: "",
-		mode:        os.FileMode(420),
-		modTime:     time.Unix(1605738493, 0),
+		mode: os.FileMode(420),
+		modTime: time.Unix(1605738493, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -172,6 +181,8 @@ func bindataData2019Day04TxtBytes() ([]byte, error) {
 	)
 }
 
+
+
 func bindataData2019Day04Txt() (*asset, error) {
 	bytes, err := bindataData2019Day04TxtBytes()
 	if err != nil {
@@ -179,17 +190,48 @@ func bindataData2019Day04Txt() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name:        "data/2019/day04.txt",
-		size:        13,
+		name: "data/2019/day04.txt",
+		size: 13,
 		md5checksum: "",
-		mode:        os.FileMode(420),
-		modTime:     time.Unix(1605738493, 0),
+		mode: os.FileMode(420),
+		modTime: time.Unix(1605738493, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
 
 	return a, nil
 }
+
+var _bindataData2020Day01Txt = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x24\x93\xc9\x15\x84\x30\x0c\x43\xef\xae\x06\xc5\x7b\xff\x8d\xcd\xfb\x9e\x0b\x2f\x84\x44\xd6\x86\x22\xca\x34\xeb\xa6\x79\x6d\xca\x4a\x53\xbf\xb1\xd8\x36\xc5\x57\xa6\xad\xcf\xb4\xc3\x2a\xf8\xe8\x32\xed\x4b\x53\xe6\x67\x9a\x90\xa9\x67\x4d\x9b\xcf\x54\xfa\x4c\xf5\xb1\xd7\x00\x7f\x63\x1a\x3d\xd3\x78\x98\x22\x03\xf4\xb5\x14\x03\x97\xb7\xcf\x4d\x39\x0d\xc8\x98\x6a\xb9\x9f\x69\x8a\x3e\x4e\xcf\x14\xde\xa6\x7a\x65\x8a\x38\x52\x9f\xc9\xb7\x4c\xad\x23\xfb\x99\xa2\xd6\xe4\x00\x4c\x87\xa9\x42\x96\x02\xae\x02\x9e\xcc\xff\x3e\x4b\x88\xe4\x77\xbc\x78\x64\xb3\xe2\x63\x38\xfc\xcb\x54\x3d\x98\x80\xe2\x46\x67\x9c\xc4\x36\xed\x77\x77\x19\x3d\xce\xa3\x20\xc1\x61\x87\x04\x7a\x16\x67\x4a\x6b\x4a\x1e\x83\x83\x5d\x98\x1a\x03\x1e\x0e\x0e\x2e\xbc\xb2\x55\xd8\xfb\x80\xcb\x49\x53\xe1\xce\xf8\x51\x59\x68\xb3\xf7\xb1\x6a\x8e\x9c\x44\x9c\x69\xd2\xaa\x33\xf5\x2d\xce\x60\x74\x3d\xf8\x20\xf4\x03\x1d\x28\x3f\x2d\xe7\xf6\xf1\x59\xa0\xa0\x1c\x24\xe5\x0d\xa9\xcb\x11\x47\x82\xd9\x4d\xa0\x7e\x6e\x03\x3c\xac\xde\xcd\xe6\x3e\x48\x43\x02\x09\x81\xbc\xb8\xe9\xcc\x99\xdc\xf0\x69\x27\xae\xd3\x98\x0e\x51\xbc\x98\xb5\x26\xc6\x20\xd0\x92\x23\x19\x24\x38\xf5\xbb\x3d\x02\xc5\xc6\x4a\xf1\xf5\xf2\x7d\x46\x03\x15\x70\x5a\x56\xcb\xad\x25\xe3\x49\x99\x1e\xe1\x67\x5e\xb5\xa8\x46\x31\x90\x32\xf6\xc0\x98\xf6\x05\x89\x36\x56\x6c\x5f\x7a\x82\x3b\x87\x2f\xa4\x93\x4c\x7b\x16\xbb\x13\x67\xea\x0a\x7f\x61\x12\x70\xf7\x23\x2e\xf6\x2e\xef\x7b\xc5\xc6\x21\xcc\x7f\x93\xd0\x38\x75\xbc\x51\xf0\x5d\x4d\xf9\x09\xf0\xac\x61\x55\x97\x43\x31\x7c\xb0\xbb\x10\x43\xe0\x4b\x4d\x67\x9e\xed\x32\xf1\x5c\x41\x55\x09\x4c\x8a\x7c\xc6\xcd\xfd\x4e\x27\xed\x92\xe2\xb5\xef\xdc\x22\xe3\x5f\x51\x6a\x76\xf1\xad\xdb\x0d\x4c\xbf\xaa\xf8\x2f\x00\x00\xff\xff\x58\x22\x09\xb6\xdd\x03\x00\x00")
+
+func bindataData2020Day01TxtBytes() ([]byte, error) {
+	return bindataRead(
+		_bindataData2020Day01Txt,
+		"data/2020/day01.txt",
+	)
+}
+
+
+
+func bindataData2020Day01Txt() (*asset, error) {
+	bytes, err := bindataData2020Day01TxtBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{
+		name: "data/2020/day01.txt",
+		size: 989,
+		md5checksum: "",
+		mode: os.FileMode(420),
+		modTime: time.Unix(1607267608, 0),
+	}
+
+	a := &asset{bytes: bytes, info: info}
+
+	return a, nil
+}
+
 
 //
 // Asset loads and returns the asset for the given name.
@@ -258,6 +300,7 @@ var _bindata = map[string]func() (*asset, error){
 	"data/2019/day02.txt": bindataData2019Day02Txt,
 	"data/2019/day03.txt": bindataData2019Day03Txt,
 	"data/2019/day04.txt": bindataData2019Day04Txt,
+	"data/2020/day01.txt": bindataData2020Day01Txt,
 }
 
 //
@@ -284,18 +327,18 @@ func AssetDir(name string) ([]string, error) {
 			node = node.Children[p]
 			if node == nil {
 				return nil, &os.PathError{
-					Op:   "open",
+					Op: "open",
 					Path: name,
-					Err:  os.ErrNotExist,
+					Err: os.ErrNotExist,
 				}
 			}
 		}
 	}
 	if node.Func != nil {
 		return nil, &os.PathError{
-			Op:   "open",
+			Op: "open",
 			Path: name,
-			Err:  os.ErrNotExist,
+			Err: os.ErrNotExist,
 		}
 	}
 	rv := make([]string, 0, len(node.Children))
@@ -304,6 +347,7 @@ func AssetDir(name string) ([]string, error) {
 	}
 	return rv, nil
 }
+
 
 type bintree struct {
 	Func     func() (*asset, error)
@@ -317,6 +361,9 @@ var _bintree = &bintree{Func: nil, Children: map[string]*bintree{
 			"day02.txt": {Func: bindataData2019Day02Txt, Children: map[string]*bintree{}},
 			"day03.txt": {Func: bindataData2019Day03Txt, Children: map[string]*bintree{}},
 			"day04.txt": {Func: bindataData2019Day04Txt, Children: map[string]*bintree{}},
+		}},
+		"2020": {Func: nil, Children: map[string]*bintree{
+			"day01.txt": {Func: bindataData2020Day01Txt, Children: map[string]*bintree{}},
 		}},
 	}},
 }}
