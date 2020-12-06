@@ -34,7 +34,7 @@ jobs:
         - export GOVERSION=$(go version | awk '{print $3;}')
       script:
         - echo "Build stage"
-        - make compile
+        - make build-ci
       after_success: true
       deploy:
         skip_cleanup: true
