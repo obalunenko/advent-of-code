@@ -8,9 +8,6 @@ env:
     - MYEMAIL=oleg.balunenko@gmail.com
     - GOPROXY=https://gocenter.io
 
-before_script:
-  - make dependencies
-  - make generate
 jobs:
   include:
     - stage: Unit Tests, Vet
@@ -18,6 +15,8 @@ jobs:
         - 1.15.x
       os:
         - linux
+      before_script:
+        - make dependencies
       script:
         - echo "Run unit tests..."
         - go vet $(go list ./...)
@@ -31,6 +30,7 @@ jobs:
       os:
         - linux
       before_script:
+        - make dependencies
         - export GOVERSION=$(go version | awk '{print $3;}')
       script:
         - echo "Build stage"
