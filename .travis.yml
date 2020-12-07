@@ -14,7 +14,7 @@ addons:
 
 jobs:
   include:
-    - stage: Unit Tests, Vet
+    - stage: Unit Tests, vet, lint
       go:
         - 1.15.x
       os:
@@ -25,21 +25,12 @@ jobs:
         - echo "Run unit tests..."
         - go vet $(go list ./...)
         - make test-cover
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
-        
-    - stage: Linting
-      go:
-        - 1.15.x
-      os:
-        - linux
-      before_script:
-        - make install-tools
-      script:
-        - echo "Linters running..."
         - make lint-ci
         - sonar-scanner -Dsonar.projectVersion=${TRAVIS_TAG}
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
 
+  
     - stage: Build
       go:
         - 1.15.x
