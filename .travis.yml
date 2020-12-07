@@ -7,6 +7,10 @@ env:
     - MYAPP=advent-of-code
     - MYEMAIL=oleg.balunenko@gmail.com
     - GOPROXY=https://gocenter.io
+addons:
+  sonarcloud:
+    organization: oleg-balunenko-github
+    token: "$SONAR_TOKEN"
 
 jobs:
   include:
@@ -23,6 +27,18 @@ jobs:
         - make test-cover
       after_success:
         - bash <(curl -s https://codecov.io/bash)
+        
+    - stage: Linting
+      go:
+        - 1.15.x
+      os:
+        - linux
+      before_script:
+        - make install-tools
+      script:
+        - echo "Linters running..."
+        - make lint-ci
+        - sonar-scanner -Dsonar.projectVersion=${TRAVIS_TAG}
 
     - stage: Build
       go:
