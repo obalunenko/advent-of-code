@@ -183,7 +183,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
   <summary>2020</summary>  
     
   - [x] Day 1: Report Repair
-  - [ ] Day 2: Password Philosophy
+  - [x] Day 2: Password Philosophy
   - [ ] Day 3: Toboggan Trajectory
   - [ ] Day 4: Passport Processing
   - [ ] Day 5: Binary Boarding

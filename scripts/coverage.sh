@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 go test -race -coverpkg=./... -v -coverprofile coverage.out.tmp ./...
 # shellcheck disable=SC2002
 cat coverage.out.tmp | grep -v "cmd/aoc-cli" > coverage.out
