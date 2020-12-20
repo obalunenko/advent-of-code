@@ -61,8 +61,6 @@ func Test_solution_Part1(t *testing.T) {
 }
 
 func Test_solution_Part2(t *testing.T) {
-	t.Skip("not implemented yet")
-
 	type fields struct {
 		year string
 		name string
@@ -86,9 +84,9 @@ func Test_solution_Part2(t *testing.T) {
 				name: puzzleName,
 			},
 			args: args{
-				input: strings.NewReader(""),
+				input: strings.NewReader("1-3 a: abcde\n1-3 b: cdefg\n2-9 c: ccccccccc"),
 			},
-			want:    "",
+			want:    "1",
 			wantErr: false,
 		},
 	}

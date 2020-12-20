@@ -40,17 +40,28 @@ var (
 	pwdRegex = regexp.MustCompile(`(?s)(\d{1,2})-(\d{1,2}) ([a-zA-Z]): ([[:word:]]+)`)
 )
 
-const (
-	_ int = iota // full match - not needed
-	matchMin
-	matchMax
-	matchChar
-	matchPwd
-
-	totalmatches = 5
-)
-
 func (s solution) Part1(input io.Reader) (string, error) {
+	const (
+		_ int = iota // full match - not needed
+		matchMin
+		matchMax
+		matchChar
+		matchPwd
+
+		totalmatches = 5
+	)
+
+	type passwordParams struct {
+		min  int
+		max  int
+		char string
+	}
+
+	type inparams struct {
+		pwd       string
+		pwdParams passwordParams
+	}
+
 	var count int
 
 	scanner := bufio.NewScanner(input)
@@ -59,7 +70,17 @@ func (s solution) Part1(input io.Reader) (string, error) {
 	reschan := make(chan bool)
 	donechan := make(chan struct{})
 
-	go calcPart1(inchan, reschan, donechan)
+	go func(in chan inparams, res chan bool, done chan struct{}) {
+		for d := range in {
+			go func(in inparams, res chan bool, done chan struct{}) {
+				count := strings.Count(in.pwd, in.pwdParams.char)
+
+				res <- count >= in.pwdParams.min && count <= in.pwdParams.max
+
+				done <- struct{}{}
+			}(d, res, done)
+		}
+	}(inchan, reschan, donechan)
 
 	var operations int
 
@@ -124,29 +145,114 @@ loop:
 	return strconv.Itoa(count), nil
 }
 
-type passwordParams struct {
-	min  int
-	max  int
-	char string
-}
-
-type inparams struct {
-	pwd       string
-	pwdParams passwordParams
-}
-
-func calcPart1(in chan inparams, res chan bool, done chan struct{}) {
-	for d := range in {
-		go func(in inparams, res chan bool, done chan struct{}) {
-			count := strings.Count(in.pwd, in.pwdParams.char)
-
-			res <- count >= in.pwdParams.min && count <= in.pwdParams.max
-
-			done <- struct{}{}
-		}(d, res, done)
-	}
-}
-
 func (s solution) Part2(input io.Reader) (string, error) {
-	return "", fmt.Errorf("[%s:%s]: part2: %w", s.year, s.name, puzzles.ErrNotImplemented)
+	const (
+		_ int = iota // full match - not needed
+		matchFirstPos
+		matchSecondPos
+		matchChar
+		matchPwd
+
+		totalmatches = 5
+	)
+
+	type passwordParams struct {
+		firstPos  int
+		secondPos int
+		char      string
+	}
+
+	type inparams struct {
+		pwd       string
+		pwdParams passwordParams
+	}
+
+	var count int
+
+	scanner := bufio.NewScanner(input)
+
+	inchan := make(chan inparams)
+	reschan := make(chan bool)
+	donechan := make(chan struct{})
+
+	go func(in chan inparams, res chan bool, done chan struct{}) {
+		for d := range in {
+			go func(in inparams, res chan bool, done chan struct{}) {
+				var found int
+				if in.pwdParams.char == string([]rune(in.pwd)[in.pwdParams.firstPos-1]) {
+					found++
+				}
+
+				if in.pwdParams.char == string([]rune(in.pwd)[in.pwdParams.secondPos-1]) {
+					found++
+				}
+
+				res <- found > 0 && found < 2
+
+				done <- struct{}{}
+			}(d, res, done)
+		}
+	}(inchan, reschan, donechan)
+
+	var operations int
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		submatch := pwdRegex.FindStringSubmatch(line)
+
+		if len(submatch) != totalmatches {
+			return "", fmt.Errorf("wrong matches[%d] for line[%s], should be [%d]",
+				len(submatch), line, totalmatches)
+		}
+
+		pwd := submatch[matchPwd]
+
+		firstPos, err := strconv.Atoi(submatch[matchFirstPos])
+		if err != nil {
+			return "", fmt.Errorf("failed to parse first pos[%s]: %w", submatch[matchFirstPos], err)
+		}
+
+		secondPos, err := strconv.Atoi(submatch[matchSecondPos])
+		if err != nil {
+			return "", fmt.Errorf("failed to parse second pos[%s]: %w", submatch[matchSecondPos], err)
+		}
+
+		params := passwordParams{
+			firstPos:  firstPos,
+			secondPos: secondPos,
+			char:      submatch[matchChar],
+		}
+
+		in := inparams{
+			pwd:       pwd,
+			pwdParams: params,
+		}
+
+		inchan <- in
+
+		operations++
+	}
+
+	close(inchan)
+
+loop:
+	for {
+		select {
+		case isMatch := <-reschan:
+			if isMatch {
+				count++
+
+			}
+		case <-donechan:
+			operations--
+		}
+		if operations == 0 {
+			break loop
+		}
+	}
+
+	close(reschan)
+	close(donechan)
+
+	return strconv.Itoa(count), nil
 }
