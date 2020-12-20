@@ -198,7 +198,7 @@ func data2020Day02Txt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "data/2020/day02.txt", size: 20637, mode: os.FileMode(420), modTime: time.Unix(1608388212, 0)}
+	info := bindataFileInfo{name: "data/2020/day02.txt", size: 20637, mode: os.FileMode(420), modTime: time.Unix(1608429239, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
