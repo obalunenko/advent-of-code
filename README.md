@@ -150,31 +150,31 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 <details>
   <summary>2019</summary>  
     
-  - [x] Day 1: The Tyranny of the Rocket Equation
-  - [x] Day 2: 1202 Program Alarm
-  - [x] Day 3: Crossed Wires
-  - [x] Day 4: Secure Container
-  - [ ] Day 5: Sunny with a Chance of Asteroids
-  - [ ] Day 6: Universal Orbit Map
-  - [ ] Day 7: Amplification Circuit
-  - [ ] Day 8: Space Image Format
-  - [ ] Day 9: Sensor Boost
-  - [ ] Day 10: Monitoring Station
-  - [ ] Day 11: Space Police
-  - [ ] Day 12: The N-Body Problem
-  - [ ] Day 13: Care Package
-  - [ ] Day 14: Space Stoichiometry
-  - [ ] Day 15: Oxygen System
-  - [ ] Day 16: Flawed Frequency Transmission
-  - [ ] Day 17: Set and Forget
-  - [ ] Day 18: Many-Worlds Interpretation
-  - [ ] Day 19: Tractor Beam
-  - [ ] Day 20: Donut Maze
-  - [ ] Day 21: Springdroid Adventure
-  - [ ] Day 22: Slam Shuffle
-  - [ ] Day 23: Category Six
-  - [ ] Day 24: Planet of Discord
-  - [ ] Day 25: Cryostasis
+  - [x] [Day 1: The Tyranny of the Rocket Equation](https://adventofcode.com/2019/day/1)
+  - [x] [Day 2: 1202 Program Alarm](https://adventofcode.com/2019/day/2)
+  - [x] [Day 3: Crossed Wires](https://adventofcode.com/2019/day/3)
+  - [x] [Day 4: Secure Container](https://adventofcode.com/2019/day/4)
+  - [ ] [Day 5: Sunny with a Chance of Asteroids](https://adventofcode.com/2019/day/5)
+  - [ ] [Day 6: Universal Orbit Map](https://adventofcode.com/2019/day/6)
+  - [ ] [Day 7: Amplification Circuit](https://adventofcode.com/2019/day/7)
+  - [ ] [Day 8: Space Image Format](https://adventofcode.com/2019/day/8)
+  - [ ] [Day 9: Sensor Boost](https://adventofcode.com/2019/day/9)
+  - [ ] [Day 10: Monitoring Station](https://adventofcode.com/2019/day/10)
+  - [ ] [Day 11: Space Police](https://adventofcode.com/2019/day/11)
+  - [ ] [Day 12: The N-Body Problem](https://adventofcode.com/2019/day/12)
+  - [ ] [Day 13: Care Package](https://adventofcode.com/2019/day/13)
+  - [ ] [Day 14: Space Stoichiometry](https://adventofcode.com/2019/day/14)
+  - [ ] [Day 15: Oxygen System](https://adventofcode.com/2019/day/15)
+  - [ ] [Day 16: Flawed Frequency Transmission](https://adventofcode.com/2019/day/16)
+  - [ ] [Day 17: Set and Forget](https://adventofcode.com/2019/day/17)
+  - [ ] [Day 18: Many-Worlds Interpretation](https://adventofcode.com/2019/day/18)
+  - [ ] [Day 19: Tractor Beam](https://adventofcode.com/2019/day/19)
+  - [ ] [Day 20: Donut Maze](https://adventofcode.com/2019/day/20)
+  - [ ] [Day 21: Springdroid Adventure](https://adventofcode.com/2019/day/21)
+  - [ ] [Day 22: Slam Shuffle](https://adventofcode.com/2019/day/22)
+  - [ ] [Day 23: Category Six](https://adventofcode.com/2019/day/23)
+  - [ ] [Day 24: Planet of Discord](https://adventofcode.com/2019/day/24)
+  - [ ] [Day 25: Cryostasis](https://adventofcode.com/2019/day/25)
     
 </details>
 
