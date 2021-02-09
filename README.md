@@ -118,31 +118,31 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 <details>
   <summary>2018</summary>  
     
-  - [ ] Day 1: Chronal Calibration
-  - [ ] Day 2: Inventory Management System
-  - [ ] Day 3: No Matter How You Slice It
-  - [ ] Day 4: Repose Record
-  - [ ] Day 5: Alchemical Reduction
-  - [ ] Day 6: Chronal Coordinates
-  - [ ] Day 7: The Sum of Its Parts
-  - [ ] Day 8: Memory Maneuver
-  - [ ] Day 9: Marble Mania
-  - [ ] Day 10: The Stars Align
-  - [ ] Day 11: Chronal Charge
-  - [ ] Day 12: Subterranean Sustainability
-  - [ ] Day 13: Mine Cart Madness
-  - [ ] Day 14: Chocolate Charts
-  - [ ] Day 15: Beverage Bandits
-  - [ ] Day 16: Chronal Classification
-  - [ ] Day 17: Reservoir Research
-  - [ ] Day 18: Settlers of The North Pole
-  - [ ] Day 19: Go With The Flow
-  - [ ] Day 20: A Regular Map
-  - [ ] Day 21: Chronal Conversion
-  - [ ] Day 22: Mode Maze
-  - [ ] Day 23: Experimental Emergency Teleportation
-  - [ ] Day 24: Immune System Simulator 20XX
-  - [ ] Day 25: Four-Dimensional Adventure
+  - [ ] [Day 1: Chronal Calibration](https://adventofcode.com/2018/day/1)
+  - [ ] [Day 2: Inventory Management System](https://adventofcode.com/2018/day/2)
+  - [ ] [Day 3: No Matter How You Slice It](https://adventofcode.com/2018/day/3)
+  - [ ] [Day 4: Repose Record](https://adventofcode.com/2018/day/4)
+  - [ ] [Day 5: Alchemical Reduction](https://adventofcode.com/2018/day/5)
+  - [ ] [Day 6: Chronal Coordinates](https://adventofcode.com/2018/day/6)
+  - [ ] [Day 7: The Sum of Its Parts](https://adventofcode.com/2018/day/7)
+  - [ ] [Day 8: Memory Maneuver](https://adventofcode.com/2018/day/8)
+  - [ ] [Day 9: Marble Mania](https://adventofcode.com/2018/day/9)
+  - [ ] [Day 10: The Stars Align](https://adventofcode.com/2018/day/10)
+  - [ ] [Day 11: Chronal Charge](https://adventofcode.com/2018/day/11)
+  - [ ] [Day 12: Subterranean Sustainability](https://adventofcode.com/2018/day/12)
+  - [ ] [Day 13: Mine Cart Madness](https://adventofcode.com/2018/day/13)
+  - [ ] [Day 14: Chocolate Charts](https://adventofcode.com/2018/day/14)
+  - [ ] [Day 15: Beverage Bandits](https://adventofcode.com/2018/day/15)
+  - [ ] [Day 16: Chronal Classification](https://adventofcode.com/2018/day/16)
+  - [ ] [Day 17: Reservoir Research](https://adventofcode.com/2018/day/17)
+  - [ ] [Day 18: Settlers of The North Pole](https://adventofcode.com/2018/day/18)
+  - [ ] [Day 19: Go With The Flow](https://adventofcode.com/2018/day/19)
+  - [ ] [Day 20: A Regular Map](https://adventofcode.com/2018/day/20)
+  - [ ] [Day 21: Chronal Conversion](https://adventofcode.com/2018/day/21)
+  - [ ] [Day 22: Mode Maze](https://adventofcode.com/2018/day/22)
+  - [ ] [Day 23: Experimental Emergency Teleportation](https://adventofcode.com/2018/day/23)
+  - [ ] [Day 24: Immune System Simulator 20XX](https://adventofcode.com/2018/day/24)
+  - [ ] [Day 25: Four-Dimensional Adventure](https://adventofcode.com/2018/day/25)
   
 </details>
 
