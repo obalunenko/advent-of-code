@@ -20,43 +20,6 @@ type solution struct {
 	name string
 }
 
-const (
-	up   = "("
-	down = ")"
-)
-
-func (s solution) Part1(in io.Reader) (string, error) {
-	reader := bufio.NewReader(in)
-
-	var floor int
-
-	for {
-		r, _, err := reader.ReadRune()
-		if err != nil {
-			if errors.Is(err, io.EOF) {
-				break
-			}
-
-			return "", fmt.Errorf("read rune: %w", err)
-		}
-
-		s := string(r)
-
-		switch s {
-		case up:
-			floor++
-		case down:
-			floor--
-		}
-	}
-
-	return strconv.Itoa(floor), nil
-}
-
-func (s solution) Part2(_ io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
-}
-
 func (s solution) Name() string {
 	return s.name
 }
@@ -70,4 +33,50 @@ func init() {
 		year: year,
 		name: puzzleName,
 	})
+}
+
+func (s solution) Part1(in io.Reader) (string, error) {
+	reader := bufio.NewReader(in)
+
+	e := newElevator()
+
+	for {
+		r, _, err := reader.ReadRune()
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+
+			return "", fmt.Errorf("read rune: %w", err)
+		}
+
+		e.Move(move(r))
+	}
+
+	return strconv.Itoa(e.Floor()), nil
+}
+
+func (s solution) Part2(in io.Reader) (string, error) {
+	reader := bufio.NewReader(in)
+
+	e := newElevator()
+
+	var pos int
+
+	for e.Floor() != basement {
+		r, _, err := reader.ReadRune()
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+
+			return "", fmt.Errorf("read rune: %w", err)
+		}
+
+		pos++
+
+		e.Move(move(r))
+	}
+
+	return strconv.Itoa(pos), nil
 }
