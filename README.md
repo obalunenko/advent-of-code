@@ -87,31 +87,31 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 <details>
   <summary>2017</summary>  
     
-  - [ ] Day 1: Inverse Captcha
-  - [ ] Day 2: Corruption Checksum
-  - [ ] Day 3: Spiral Memory
-  - [ ] Day 4: High-Entropy Passphrases
-  - [ ] Day 5: A Maze of Twisty Trampolines, All Alike
-  - [ ] Day 6: Memory Reallocation
-  - [ ] Day 7: Recursive Circus
-  - [ ] Day 8: I Heard You Like Registers
-  - [ ] Day 9: Stream Processing
-  - [ ] Day 10: Knot Hash
-  - [ ] Day 11: Hex Ed
-  - [ ] Day 12: Digital Plumber
-  - [ ] Day 13: Packet Scanners
-  - [ ] Day 14: Disk Defragmentation
-  - [ ] Day 15: Dueling Generators
-  - [ ] Day 16: Permutation Promenade
-  - [ ] Day 17: Spinlock
-  - [ ] Day 18: Duet
-  - [ ] Day 19: A Series of Tubes
-  - [ ] Day 20: Particle Swarm
-  - [ ] Day 21: Fractal Art
-  - [ ] Day 22: Sporifica Virus
-  - [ ] Day 23: Coprocessor Conflagration
-  - [ ] Day 24: Electromagnetic Moat
-  - [ ] Day 25: The Halting Problem
+  - [ ] [Day 1: Inverse Captcha](https://adventofcode.com/2017/day/1)
+  - [ ] [Day 2: Corruption Checksum](https://adventofcode.com/2017/day/2)
+  - [ ] [Day 3: Spiral Memory](https://adventofcode.com/2017/day/3)
+  - [ ] [Day 4: High-Entropy Passphrases](https://adventofcode.com/2017/day/4)
+  - [ ] [Day 5: A Maze of Twisty Trampolines, All Alike](https://adventofcode.com/2017/day/5)
+  - [ ] [Day 6: Memory Reallocation](https://adventofcode.com/2017/day/6)
+  - [ ] [Day 7: Recursive Circus](https://adventofcode.com/2017/day/7)
+  - [ ] [Day 8: I Heard You Like Registers](https://adventofcode.com/2017/day/8)
+  - [ ] [Day 9: Stream Processing](https://adventofcode.com/2017/day/9)
+  - [ ] [Day 10: Knot Hash](https://adventofcode.com/2017/day/10)
+  - [ ] [Day 11: Hex Ed](https://adventofcode.com/2017/day/11)
+  - [ ] [Day 12: Digital Plumber](https://adventofcode.com/2017/day/12)
+  - [ ] [Day 13: Packet Scanners](https://adventofcode.com/2017/day/13)
+  - [ ] [Day 14: Disk Defragmentation](https://adventofcode.com/2017/day/14)
+  - [ ] [Day 15: Dueling Generators](https://adventofcode.com/2017/day/15)
+  - [ ] [Day 16: Permutation Promenade](https://adventofcode.com/2017/day/16)
+  - [ ] [Day 17: Spinlock](https://adventofcode.com/2017/day/17)
+  - [ ] [Day 18: Duet](https://adventofcode.com/2017/day/18)
+  - [ ] [Day 19: A Series of Tubes](https://adventofcode.com/2017/day/19)
+  - [ ] [Day 20: Particle Swarm](https://adventofcode.com/2017/day/20)
+  - [ ] [Day 21: Fractal Art](https://adventofcode.com/2017/day/21)
+  - [ ] [Day 22: Sporifica Virus](https://adventofcode.com/2017/day/22)
+  - [ ] [Day 23: Coprocessor Conflagration](https://adventofcode.com/2017/day/23)
+  - [ ] [Day 24: Electromagnetic Moat](https://adventofcode.com/2017/day/24)
+  - [ ] [Day 25: The Halting Problem](https://adventofcode.com/2017/day/25)
     
 </details>
 
