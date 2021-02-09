@@ -53,7 +53,7 @@ func (s solution) Part1(in io.Reader) (string, error) {
 		e.Move(move(r))
 	}
 
-	return strconv.Itoa(e.Floor()), nil
+	return strconv.Itoa(int(e.Floor())), nil
 }
 
 func (s solution) Part2(in io.Reader) (string, error) {

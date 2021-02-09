@@ -5,17 +5,22 @@ type move string
 const (
 	up   move = "("
 	down move = ")"
+)
 
-	basement = -1
+type floor int
+
+const (
+	ground   floor = 0
+	basement floor = -1
 )
 
 type elevator struct {
-	floor int
+	floor floor
 }
 
 func newElevator() *elevator {
 	return &elevator{
-		floor: 0,
+		floor: ground,
 	}
 }
 
@@ -27,7 +32,7 @@ func (e *elevator) Down() {
 	e.floor--
 }
 
-func (e elevator) Floor() int {
+func (e elevator) Floor() floor {
 	return e.floor
 }
 
