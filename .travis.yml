@@ -12,7 +12,7 @@ jobs:
   include:
     - stage: Unit Tests, vet, lint
       go:
-        - 1.15.x
+        - 1.16.x
       os:
         - linux
       before_script:
@@ -28,7 +28,7 @@ jobs:
   
     - stage: Build
       go:
-        - 1.15.x
+        - 1.16.x
       os:
         - linux
       before_script:
