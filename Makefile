@@ -71,6 +71,12 @@ release:
 	./scripts/release.sh
 .PHONY: release
 
+## Release local snapshot
+release-local-snapshot:
+	${call colored, release is running...}
+	./scripts/local-snapshot-release.sh
+.PHONY: release-local-snapshot
+
 ## Fix imports sorting.
 imports:
 	${call colored, fix-imports is running...}
