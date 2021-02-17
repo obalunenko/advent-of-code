@@ -224,10 +224,6 @@ github.com/securego/gosec/v2
 github.com/securego/gosec/v2/rules
 # github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 github.com/shazow/go-diff/difflib
-# github.com/shuLhan/go-bindata v4.0.0+incompatible
-## explicit
-github.com/shuLhan/go-bindata
-github.com/shuLhan/go-bindata/cmd/go-bindata
 # github.com/sirupsen/logrus v1.7.0
 github.com/sirupsen/logrus
 # github.com/sonatard/noctx v0.0.1
