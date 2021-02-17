@@ -13,15 +13,12 @@ builds:
     goarch:
       - amd64
       - arm
+    mod_timestamp: '{{ .CommitTimestamp }}'
     env:
       - CGO_ENABLED=0
     main: ./cmd/aoc-cli
     ldflags:
-      - -s -w
-      - -X main.version={{.Version}}
-      - -X main.commit={{.ShortCommit}}
-      - -X main.date={{.Date}}
-      - -X main.goversion={{.Env.GOVERSION}}
+      - -s -w -X main.version={{ .Version }} -X main.commit={{ .ShortCommit }} -X main.date={{ .Date }} -X main.goversion={{.Env.GOVERSION}}
 
 archives:
   - id: cli
