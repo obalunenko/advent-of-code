@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/manifoldco/promptui"
@@ -14,6 +13,7 @@ import (
 
 	"github.com/obalunenko/advent-of-code/internal/input"
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
+
 	// register all solutions.
 	_ "github.com/obalunenko/advent-of-code/internal/puzzles/solutions"
 )
@@ -233,8 +233,7 @@ func run(year string, name string) (puzzles.Result, error) {
 		return puzzles.Result{}, fmt.Errorf("failed to make full name: %w", err)
 	}
 
-	asset, err := input.Asset(filepath.Clean(
-		filepath.Join(input.InputDir, fmt.Sprintf("%s.txt", fullName))))
+	asset, err := input.Asset(fmt.Sprintf("%s.txt", fullName))
 	if err != nil {
 		return puzzles.Result{}, errors.Wrap(err, "failed to open input data")
 	}
