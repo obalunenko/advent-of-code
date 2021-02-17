@@ -43,3 +43,4 @@ run_go_install_in_parallel \
 "./vendor/github.com/axw/gocov/gocov" \
 "./vendor/github.com/matm/gocov-html" \
 "./vendor/github.com/golangci/golangci-lint/cmd/golangci-lint" \
+"./vendor/github.com/goreleaser/goreleaser" \
