@@ -46,11 +46,9 @@ jobs:
           bash <(curl -s https://codecov.io/bash)
           
       - name: Run GoReleaser snapshot
-        uses: goreleaser/goreleaser-action@v2
         if: success()
-        with:
-          version: latest
-          args: --snapshot --skip-publish --rm-dist
+        run: |
+          make release-local-snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GOVERSION: $(go version | awk '{print $3;}')
