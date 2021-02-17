@@ -10,4 +10,4 @@ echo ${latestTag}
 
 export GOVERSION=$(go version | awk '{print $3;}')
 
-curl -sL https://git.io/goreleaser | bash
+goreleaser release --rm-dist
