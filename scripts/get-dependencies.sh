@@ -39,7 +39,6 @@ run_go_install_in_parallel \
 "./vendor/golang.org/x/tools/cmd/cover" \
 "./vendor/github.com/mattn/goveralls" \
 "./vendor/github.com/vasi-stripe/gogroup/cmd/gogroup" \
-"./vendor/golang.org/x/tools/cmd/stringer" \
 "./vendor/github.com/axw/gocov/gocov" \
 "./vendor/github.com/matm/gocov-html" \
 "./vendor/github.com/golangci/golangci-lint/cmd/golangci-lint" \
