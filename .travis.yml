@@ -7,6 +7,10 @@ env:
     - MYAPP=advent-of-code
     - MYEMAIL=oleg.balunenko@gmail.com
     - GOPROXY=https://gocenter.io
+addons:
+  sonarcloud:
+    organization: oleg-balunenko-github
+    token: "$SONAR_TOKEN"
 
 jobs:
   include:
@@ -22,6 +26,7 @@ jobs:
         - make vet
         - make test-cover
         - make lint-ci
+        - sonar-scanner -Dsonar.projectVersion=${TRAVIS_TAG}
       after_success:
         - bash <(curl -s https://codecov.io/bash)
 
