@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build & Test
+    name: Lint & Test & Build & Release
     steps:
       - name: Set up go
         uses: actions/setup-go@v2
