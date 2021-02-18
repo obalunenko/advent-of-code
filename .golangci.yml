@@ -3,9 +3,20 @@ linters:
   disable:
     - gochecknoglobals
     - gochecknoinits
+    - godot
+    - paralleltest
+    - gci
+    - gofumpt
 
 linters-settings:
   errcheck:
+    # report about not checking of errors in type assetions: `a := b.(MyStruct)`;
+    # default is false: such cases aren't reported by default.
+    check-type-assertions: true
+    
+    # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`;
+    # default is false: such cases aren't reported by default.
+    check-blank: true
 
   gofmt:
     simplify: true
@@ -39,7 +50,7 @@ linters-settings:
     settings:
       mnd:
         # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
-        checks: case,condition,operation,return
+        checks: [case,condition,operation,return]
   gocritic:
     enabled-checks:
       - docStub
@@ -86,6 +97,12 @@ linters-settings:
 run:
   skip-dirs:
     - vendor/
+    - internal/input/
+  issues-exit-code: 0
+  tests: true
+  skip-files:
+    - \.pb\.go$
+
 
 output:
   format: colored-line-number
@@ -100,3 +117,16 @@ issues:
         - funlen
         - dupl
         - gosec
+    - path: internal/input/
+      linters:
+        - gocyclo
+        - funlen
+        - godot
+        - godox
+        - dupl
+        - gofmt
+        - gci
+        - gofumpt
+        - goimports
+        - gosimple
+

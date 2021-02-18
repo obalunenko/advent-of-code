@@ -27,6 +27,10 @@ compile:
 	./scripts/compile.sh
 .PHONY: compile
 
+build-ci:
+	./scripts/compile.sh
+.PHONY: build-ci
+
 ## Cross os compile
 cross-compile:
 	./scripts/cross-compile.sh
@@ -58,7 +62,7 @@ test-cover:
 .PHONY: test-cover
 
 ## Increase version number
-new-version: lint test compile
+new-version: vet test compile
 	./scripts/version.sh
 .PHONY: new-version
 
@@ -67,37 +71,46 @@ release:
 	./scripts/release.sh
 .PHONY: release
 
-## Fix imports sorting
+## Release local snapshot
+release-local-snapshot:
+	${call colored, release is running...}
+	./scripts/local-snapshot-release.sh
+.PHONY: release-local-snapshot
+
+## Fix imports sorting.
 imports:
+	${call colored, fix-imports is running...}
 	./scripts/fix-imports.sh
 .PHONY: imports
 
+## Format code.
+fmt:
+	${call colored, fmt is running...}
+	./scripts/fmt.sh
+.PHONY: fmt
+
+## Format code and sort imports.
+format-project: fmt imports
+.PHONY: format-project
+
 ## fetch all dependencies for scripts
-dependencies:
+install-tools:
 	./scripts/get-dependencies.sh
-.PHONY: dependencies
+.PHONY: install-tools
 
 ## Sync vendor
-gomod:
+sync-vendor:
 	${call colored, gomod is running...}
-	go mod tidy -v
-	go mod verify
-	go mod download
-	go mod vendor
-.PHONY: gomod
+	./scripts/sync-vendor.sh
+.PHONY: sync-vendor
 
 ## Update dependencies
 gomod-update:
 	${call colored, gomod is running...}
 	go get -u -v ./...
-	make gomod
+	make sync-vendor
 .PHONY: gomod-update
 
-## Recreate generated files
-generate:
-	${call colored, generate is running...}
-	./scripts/generate.sh
-.PHONY: generate
 
 .DEFAULT_GOAL := test
 
@@ -106,6 +119,7 @@ vendor-check:
 	./scripts/check-vendor.sh
 .PHONY: vendor-check
 
+## vet project
 vet:
 	./scripts/vet.sh
 .PHONY: vet
