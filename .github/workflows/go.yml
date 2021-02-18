@@ -28,6 +28,8 @@ jobs:
         run: |
           make install-tools
           go env
+        env:
+          GOBIN: $(go env GOPATH)/bin
       
       - name: Vet
         run: |
