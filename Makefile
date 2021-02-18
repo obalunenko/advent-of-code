@@ -23,7 +23,7 @@ help:
 .PHONY: help
 
 ## app compile
-compile: generate
+compile:
 	./scripts/compile.sh
 .PHONY: compile
 
@@ -32,7 +32,7 @@ build-ci:
 .PHONY: build-ci
 
 ## Cross os compile
-cross-compile: generate
+cross-compile:
 	./scripts/cross-compile.sh
 .PHONY: cross-compile
 
@@ -111,11 +111,6 @@ gomod-update:
 	make sync-vendor
 .PHONY: gomod-update
 
-## Recreate generated files
-generate:
-	${call colored, generate is running...}
-	./scripts/generate.sh
-.PHONY: generate
 
 .DEFAULT_GOAL := test
 
