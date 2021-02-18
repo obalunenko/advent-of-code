@@ -20,3 +20,12 @@ func Asset(name string) ([]byte, error) {
 	return content.ReadFile(filepath.Clean(
 		filepath.Join(dir, name)))
 }
+
+func MustAsset(name string) []byte {
+	res, err := Asset(name)
+	if err != nil {
+		panic(err)
+	}
+
+	return res
+}
