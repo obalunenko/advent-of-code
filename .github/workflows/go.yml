@@ -27,6 +27,7 @@ jobs:
       - name: Install tools
         run: |
           make install-tools
+          go env
       
       - name: Vet
         run: |
