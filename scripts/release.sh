@@ -2,7 +2,7 @@
 set -e
 
 # Get new tags from the remote
-git fetch --tags
+git fetch --tags -f
 
 # Get the latest tag name
 latestTag=$(git describe --tags $(git rev-list --tags --max-count=1))
