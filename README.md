@@ -220,5 +220,5 @@ Run it and follow instructions
 
 ### Demo
 
-![cli demo_step_1](assets/images/demo_1.png)
-![cli demo_step_2](assets/images/demo_2.png)
+![cli demo_step_1](.github/images/demo_1.png)
+![cli demo_step_2](.github/images/demo_2.png)
