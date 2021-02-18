@@ -2,9 +2,13 @@ package ruleguard
 
 import (
 	"bytes"
+	"fmt"
 	"go/ast"
 	"go/printer"
 	"io/ioutil"
+	"path/filepath"
+	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/quasilyte/go-ruleguard/internal/mvdan.cc/gogrep"
@@ -16,13 +20,24 @@ type rulesRunner struct {
 
 	filename string
 	src      []byte
+
+	fileFilterParams fileFilterParams
+	nodeFilterParams nodeFilterParams
 }
 
 func newRulesRunner(ctx *Context, rules *GoRuleSet) *rulesRunner {
-	return &rulesRunner{
+	rr := &rulesRunner{
 		ctx:   ctx,
 		rules: rules,
+		fileFilterParams: fileFilterParams{
+			ctx: ctx,
+		},
+		nodeFilterParams: nodeFilterParams{
+			ctx: ctx,
+		},
 	}
+	rr.nodeFilterParams.nodeText = rr.nodeText
+	return rr
 }
 
 func (rr *rulesRunner) nodeText(n ast.Node) []byte {
@@ -61,6 +76,8 @@ func (rr *rulesRunner) run(f *ast.File) error {
 	// TODO(quasilyte): run local rules as well.
 
 	rr.filename = rr.ctx.Fset.Position(f.Pos()).Filename
+	rr.fileFilterParams.filename = rr.filename
+	rr.collectImports(f)
 
 	for _, rule := range rr.rules.universal.uncategorized {
 		rule.pat.Match(f, func(m gogrep.MatchData) {
@@ -87,55 +104,77 @@ func (rr *rulesRunner) run(f *ast.File) error {
 	return nil
 }
 
-func (rr *rulesRunner) handleMatch(rule goRule, m gogrep.MatchData) bool {
+func (rr *rulesRunner) reject(rule goRule, reason string, m gogrep.MatchData) {
+	// Note: we accept reason and sub args instead of formatted or
+	// concatenated string so it's cheaper for us to call this
+	// function is debugging is not enabled.
+
+	if rule.group != rr.ctx.Debug {
+		return // This rule is not being debugged
+	}
+
+	pos := rr.ctx.Fset.Position(m.Node.Pos())
+	rr.ctx.DebugPrint(fmt.Sprintf("%s:%d: [%s:%d] rejected by %s",
+		pos.Filename, pos.Line, filepath.Base(rule.filename), rule.line, reason))
+
+	type namedNode struct {
+		name string
+		node ast.Node
+	}
+	values := make([]namedNode, 0, len(m.Values))
 	for name, node := range m.Values {
-		expr, ok := node.(ast.Expr)
-		if !ok {
+		values = append(values, namedNode{name: name, node: node})
+	}
+	sort.Slice(values, func(i, j int) bool {
+		return values[i].name < values[j].name
+	})
+
+	for _, v := range values {
+		name := v.name
+		node := v.node
+		var expr ast.Expr
+		switch node := node.(type) {
+		case ast.Expr:
+			expr = node
+		case *ast.ExprStmt:
+			expr = node.X
+		default:
 			continue
 		}
-		filter, ok := rule.filters[name]
-		if !ok {
+
+		typ := rr.ctx.Types.TypeOf(expr)
+		typeString := "<unknown>"
+		if typ != nil {
+			typeString = typ.String()
+		}
+		s := strings.ReplaceAll(sprintNode(rr.ctx.Fset, expr), "\n", `\n`)
+		rr.ctx.DebugPrint(fmt.Sprintf("  $%s %s: %s", name, typeString, s))
+	}
+}
+
+func (rr *rulesRunner) handleMatch(rule goRule, m gogrep.MatchData) bool {
+	for _, f := range rule.filter.fileFilters {
+		if !f.pred(&rr.fileFilterParams) {
+			rr.reject(rule, f.src, m)
+			return false
+		}
+	}
+
+	for name, node := range m.Values {
+		var expr ast.Expr
+		switch node := node.(type) {
+		case ast.Expr:
+			expr = node
+		case *ast.ExprStmt:
+			expr = node.X
+		default:
 			continue
 		}
-		if filter.typePred != nil {
-			typ := rr.ctx.Types.TypeOf(expr)
-			q := typeQuery{x: typ, ctx: rr.ctx}
-			if !filter.typePred(q) {
-				return false
-			}
-		}
-		if filter.textPred != nil {
-			if !filter.textPred(string(rr.nodeText(expr))) {
-				return false
-			}
-		}
-		switch filter.addressable {
-		case bool3true:
-			if !isAddressable(rr.ctx.Types, expr) {
-				return false
-			}
-		case bool3false:
-			if isAddressable(rr.ctx.Types, expr) {
-				return false
-			}
-		}
-		switch filter.pure {
-		case bool3true:
-			if !isPure(rr.ctx.Types, expr) {
-				return false
-			}
-		case bool3false:
-			if isPure(rr.ctx.Types, expr) {
-				return false
-			}
-		}
-		switch filter.constant {
-		case bool3true:
-			if !isConstant(rr.ctx.Types, expr) {
-				return false
-			}
-		case bool3false:
-			if isConstant(rr.ctx.Types, expr) {
+
+		rr.nodeFilterParams.n = expr
+		for _, f := range rule.filter.subFilters[name] {
+			if !f.pred(&rr.nodeFilterParams) {
+				rr.reject(rule, f.src, m)
 				return false
 			}
 		}
@@ -163,6 +202,17 @@ func (rr *rulesRunner) handleMatch(rule goRule, m gogrep.MatchData) bool {
 	}
 	rr.ctx.Report(info, node, message, suggestion)
 	return true
+}
+
+func (rr *rulesRunner) collectImports(f *ast.File) {
+	rr.fileFilterParams.imports = make(map[string]struct{}, len(f.Imports))
+	for _, spec := range f.Imports {
+		s, err := strconv.Unquote(spec.Path.Value)
+		if err != nil {
+			continue
+		}
+		rr.fileFilterParams.imports[s] = struct{}{}
+	}
 }
 
 func (rr *rulesRunner) renderMessage(msg string, n ast.Node, nodes map[string]ast.Node, truncate bool) string {

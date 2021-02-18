@@ -245,6 +245,7 @@ type LintersSettings struct {
 				Version string `mapstructure:"version"`
 				Reason  string `mapstructure:"reason"`
 			} `mapstructure:"versions"`
+			LocalReplaceDirectives bool `mapstructure:"local_replace_directives"`
 		} `mapstructure:"blocked"`
 	}
 
@@ -266,6 +267,11 @@ type LintersSettings struct {
 	Exhaustive  ExhaustiveSettings
 	Gofumpt     GofumptSettings
 	ErrorLint   ErrorLintSettings
+	Makezero    MakezeroSettings
+	Thelper     ThelperSettings
+	Forbidigo   ForbidigoSettings
+	Ifshort     IfshortSettings
+	Predeclared PredeclaredSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -386,6 +392,37 @@ type ErrorLintSettings struct {
 	Errorf bool `mapstructure:"errorf"`
 }
 
+type MakezeroSettings struct {
+	Always bool
+}
+
+type ThelperSettings struct {
+	Test struct {
+		First bool `mapstructure:"first"`
+		Name  bool `mapstructure:"name"`
+		Begin bool `mapstructure:"begin"`
+	} `mapstructure:"test"`
+	Benchmark struct {
+		First bool `mapstructure:"first"`
+		Name  bool `mapstructure:"name"`
+		Begin bool `mapstructure:"begin"`
+	} `mapstructure:"benchmark"`
+}
+
+type IfshortSettings struct {
+	MaxDeclLines int `mapstructure:"max-decl-lines"`
+	MaxDeclChars int `mapstructure:"max-decl-chars"`
+}
+
+type ForbidigoSettings struct {
+	Forbid []string `mapstructure:"forbid"`
+}
+
+type PredeclaredSettings struct {
+	Ignore    string `mapstructure:"ignore"`
+	Qualified bool   `mapstructure:"q"`
+}
+
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -445,6 +482,10 @@ var defaultLintersSettings = LintersSettings{
 	},
 	ErrorLint: ErrorLintSettings{
 		Errorf: true,
+	},
+	Predeclared: PredeclaredSettings{
+		Ignore:    "",
+		Qualified: false,
 	},
 }
 

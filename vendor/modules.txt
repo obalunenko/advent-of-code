@@ -11,6 +11,10 @@ github.com/juju/ansiterm/tabwriter
 # github.com/lunixbochs/vtclean v1.0.0
 ## explicit
 github.com/lunixbochs/vtclean
+# github.com/magefile/mage v1.11.0
+## explicit
+github.com/magefile/mage/mg
+github.com/magefile/mage/sh
 # github.com/manifoldco/promptui v0.8.0
 ## explicit
 github.com/manifoldco/promptui
@@ -29,7 +33,7 @@ github.com/pmezard/go-difflib/difflib
 # github.com/russross/blackfriday/v2 v2.1.0
 ## explicit
 github.com/russross/blackfriday/v2
-# github.com/sirupsen/logrus v1.7.0
+# github.com/sirupsen/logrus v1.8.0
 ## explicit
 github.com/sirupsen/logrus
 # github.com/stretchr/testify v1.2.2
@@ -39,7 +43,7 @@ github.com/stretchr/testify/require
 # github.com/urfave/cli v1.22.5
 ## explicit
 github.com/urfave/cli
-# golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c
+# golang.org/x/sys v0.0.0-20210217105451-b926d437f341
 ## explicit
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
