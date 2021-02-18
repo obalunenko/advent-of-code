@@ -26,6 +26,7 @@ jobs:
       
       - name: Install tools
         run: |
+          go env
           make install-tools
           echo "${GOBIN}" >> $GITHUB_PATH
         env:
