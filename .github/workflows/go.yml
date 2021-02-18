@@ -1,4 +1,4 @@
-name: Go Build & Test
+name: Lint & Test & Build
 on:
   push:
     branches:
