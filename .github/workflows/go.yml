@@ -27,7 +27,7 @@ jobs:
       - name: Install tools
         run: |
           make install-tools
-          go env
+          echo "${GOBIN}" >> $GITHUB_PATH
         env:
           GOBIN: $(go env GOPATH)/bin
       
