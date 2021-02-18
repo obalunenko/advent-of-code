@@ -1,6 +1,6 @@
 module tools
 
-go 1.15
+go 1.16
 
 require (
 	github.com/Djarvur/go-err113 v0.1.0 // indirect
