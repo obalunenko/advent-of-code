@@ -8,54 +8,67 @@ on:
       - "!*"
 
 jobs:
-  goreleaser:
+  build:
     runs-on: ubuntu-latest
+    name: Build & Test
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2.3.4
-        with:
-          fetch-depth: 0
-      -
-        name: Set up Go
+      - name: Set up go
         uses: actions/setup-go@v2
         with:
           go-version: '1.16'
-      -
-        name: Cache Go modules
-        uses: actions/cache@v2.1.4
+      
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
         with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-      -
-        name: Make Setup
+          fetch-depth: 0
+      
+      - name: Install tools
         run: |
+          export GOBIN=$(go env GOPATH)/bin
+          go env
           make install-tools
-      -
-        name: Upload coverage
-        uses: codecov/codecov-action@v1.2.1
+          echo "${GOBIN}" >> $GITHUB_PATH
+      
+      - name: Vet
+        run: |
+          make vet
+      
+      - name: Lint
+        uses: golangci/golangci-lint-action@v2.4.0
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.txt
-      -
-        name: Check
+          # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
+          version: latest
+          # Optional: working directory, useful for monorepos
+          # working-directory: somedir
+        
+          # Optional: golangci-lint command line arguments.
+          args: --issues-exit-code=0
+        
+          # Optional: show only new issues if it's a pull request. The default value is `false`.
+          only-new-issues: true
+        
+          # Optional: if set to true then the action will use pre-installed Go.
+          skip-go-installation: true
+        
+          # Optional: if set to true then the action don't cache or restore ~/go/pkg.
+          skip-pkg-cache: true
+        
+          # Optional: if set to true then the action don't cache or restore ~/.cache/go-build.
+          skip-build-cache: true
+      
+      - name: Test
         run: |
-          ./goreleaser check
-      -
-        name: GoReleaser
+          make test
+      
+      - name: Install GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          version: latest
+          install-only: true
+      
+      - name: Run GoReleaser snapshot
         if: success()
+        run: |
+          make release
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: |
-          if [[ $GITHUB_REF == refs/tags/v* ]]; then
-            ./goreleaser
-          elif [[ $GITHUB_REF == refs/heads/master ]]; then
-            ./goreleaser --snapshot
-          fi
-      -
-        name: Clear
-        if: always() && startsWith(github.ref, 'refs/tags/v')
-        run: |
-          rm -f ${HOME}/.docker/config.json
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
