@@ -1,9 +1,11 @@
-name: Lint & Test & Build
+name: Test & Build
 on:
   push:
     branches:
       - 'main'
+      - 'master'
   pull_request:
+    types: [opened, synchronize, reopened]
     branches:
       - '*'
 jobs:
@@ -14,7 +16,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macOS-latest]
     runs-on: ${{ matrix.os }}
-    name: Lint & Test & Build
+    name: Test & Build
     steps:
       - name: Set up go
         uses: actions/setup-go@v2
@@ -37,7 +39,7 @@ jobs:
         run: |
           make vet
           
-      - name: Lint
+      - name: Golangci-lint
         uses: golangci/golangci-lint-action@v2.4.0
         with:
           # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
