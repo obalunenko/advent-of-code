@@ -1,0 +1,17 @@
+version = 1
+
+[[analyzers]]
+name = "go"
+enabled = true
+
+  [analyzers.meta]
+  import_paths = ["https://github.com/obalunenko/advent-of-code/"]
+
+[[analyzers]]
+name = "docker"
+enabled = false
+
+
+[[transformers]]
+name = "gofmt"
+enabled = true
