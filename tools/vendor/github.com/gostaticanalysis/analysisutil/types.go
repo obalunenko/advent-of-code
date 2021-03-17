@@ -132,7 +132,7 @@ func HasField(s *types.Struct, f *types.Var) bool {
 }
 
 // Field returns field of the struct type.
-// If the type is not struct or has not the field, 
+// If the type is not struct or has not the field,
 // Field returns -1, nil.
 // If the type is a named type or a pointer type,
 // Field calls itself recursively with
