@@ -5,12 +5,12 @@ name = "go"
 enabled = true
 
   [analyzers.meta]
-  import_paths = ["https://github.com/obalunenko/advent-of-code/"]
+  import_paths = ["github.com/obalunenko/advent-of-code"]
+  dependencies_vendored = true
 
 [[analyzers]]
-name = "docker"
-enabled = false
-
+name = "shell"
+enabled = true
 
 [[transformers]]
 name = "gofmt"
