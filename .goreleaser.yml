@@ -3,6 +3,24 @@ release:
     owner: obalunenko
     name: advent-of-code
 
+gomod:
+  proxy: true
+    # If proxy is true, use these environment variables when running `go mod` commands (namely, `go mod tidy`).
+  # Defaults to `os.Environ()`.
+  env:
+    - GOPROXY=https://proxy.golang.org,direct
+    - GOSUMDB=sum.golang.org
+    - GOPRIVATE=example.com/blah
+  # Which Go binary to use.
+  # Defaults to `go`.
+  gobinary: go
+env:
+  - GO111MODULE=on
+  - GOPROXY=https://goproxy.io
+before:
+  hooks:
+    - go mod tidy -v
+
 builds:
   - id: cli
     binary: aoc-cli

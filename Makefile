@@ -95,7 +95,7 @@ format-project: fmt imports
 
 ## fetch all dependencies for scripts
 install-tools:
-	./scripts/get-dependencies.sh
+	./scripts/install-tools.sh
 .PHONY: install-tools
 
 ## Sync vendor
