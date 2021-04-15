@@ -5,7 +5,6 @@ set -Eeuo pipefail
 function cleanup() {
   trap - SIGINT SIGTERM ERR EXIT
   echo "cleanup running"
-  rm -rf coverage.out.tmp
 }
 
 trap cleanup SIGINT SIGTERM ERR EXIT
@@ -16,12 +15,11 @@ REPO_ROOT="$(cd ${SCRIPT_DIR} && git rev-parse --show-toplevel)"
 
 echo "${SCRIPT_NAME} is running... "
 
+cd ${REPO_ROOT}/tools || exit 1
 
-go test -race -coverpkg=./... -coverprofile coverage.out.tmp ./...
+go generate -tags=tools
 
-# shellcheck disable=SC2002
-cat coverage.out.tmp | grep -v "cmd/" >coverage.out
-gocov convert coverage.out >coverage.out.json
-gocov report coverage.out.json
-gocov-html coverage.out.json > coverage.out.html
-go tool cover -html=coverage.out
+cd - || exit 1
+
+
+echo "${SCRIPT_NAME} Done."
