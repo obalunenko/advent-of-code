@@ -1,8 +1,20 @@
 #!/usr/bin/env bash
 
-set -e
+set -Eeuo pipefail
 
-REPO_ROOT=$(git rev-parse --show-toplevel)
+function cleanup() {
+  trap - SIGINT SIGTERM ERR EXIT
+  echo "cleanup running"
+}
+
+trap cleanup SIGINT SIGTERM ERR EXIT
+
+SCRIPT_NAME="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)"
+REPO_ROOT="$(cd ${SCRIPT_DIR} && git rev-parse --show-toplevel)"
+
+echo "${SCRIPT_NAME} is running... "
+
 APP="aoc-cli"
 MODULE="github.com/obalunenko/advent-of-code"
 VERSION=$(git describe --tags "$(git rev-list --tags --max-count=1)")"-local"
