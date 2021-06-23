@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -45,6 +46,10 @@ func (s solution) Part1(input io.Reader) (string, error) {
 
 	c := newCab()
 
+	go func() {
+		c.n.start()
+	}()
+
 	cmds := strings.Split(buf.String(), ", ")
 	for _, cmd := range cmds {
 		t, s, err := splitCommand(cmd)
@@ -57,13 +62,46 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		}
 	}
 
-	l := c.Pos().manhattan()
+	c.n.stop()
+
+	l := c.n.Pos().manhattan()
 
 	return strconv.Itoa(l), nil
 }
 
 func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	buf := new(bytes.Buffer)
+	if _, err := buf.ReadFrom(input); err != nil {
+		return "", fmt.Errorf("failed to read input: %w", err)
+	}
+
+	c := newCab()
+
+	go c.n.start()
+
+	cmds := strings.Split(buf.String(), ", ")
+	for _, cmd := range cmds {
+		t, s, err := splitCommand(cmd)
+		if err != nil {
+			return "", fmt.Errorf("split command: %w", err)
+		}
+
+		if err = c.Move(t, s); err != nil {
+			return "", fmt.Errorf("move: %w", err)
+		}
+	}
+
+	c.n.stop()
+
+	rl := c.n.revisitedList()
+	if len(rl) == 0 {
+		return "", errors.New("no revisited points")
+	}
+
+	// get first
+	l := rl[0].manhattan()
+
+	return strconv.Itoa(l), nil
 }
 
 type turn string
@@ -73,14 +111,16 @@ const (
 	rightTurn = "R"
 )
 
-func tunrFromstring(s string) (turn, error) {
+var errInvalidTurn = errors.New("invalid turn value")
+
+func turnFromstring(s string) (turn, error) {
 	switch s {
 	case leftTurn:
 		return leftTurn, nil
 	case rightTurn:
 		return rightTurn, nil
 	default:
-		return "", errors.New("invalid turn value")
+		return "", errInvalidTurn
 	}
 }
 
@@ -156,41 +196,92 @@ func (d direction) strikeTo(t turn) direction {
 }
 
 type cab struct {
-	pos    position
 	curDir direction
+	n      navigator
 }
 
 func newCab() cab {
 	return cab{
-		pos: position{
-			x: 0,
-			y: 0,
-		},
 		curDir: northDirection,
+		n:      newNavigator(),
 	}
 }
+
+var errInvalidDirect = errors.New("invalid direction")
+
+const (
+	step = 1
+)
+
 func (c *cab) Move(t turn, steps int) error {
 	c.curDir = c.curDir.strikeTo(t)
 	if !c.curDir.isValid() {
-		return errors.New("invalid direction")
+		return errInvalidDirect
 	}
 
 	switch c.curDir {
 	case northDirection:
-		c.pos.addY(steps)
+		c.n.moveNorth(steps)
 	case eastDirection:
-		c.pos.addX(steps)
+		c.n.moveEast(steps)
 	case southDirection:
-		c.pos.subY(steps)
+		c.n.moveSouth(steps)
 	case westDirection:
-		c.pos.subX(steps)
+		c.n.moveWest(steps)
 	}
 
 	return nil
 }
 
-func (c cab) Pos() position {
-	return c.pos
+func (n *navigator) moveNorth(steps int) {
+	for i := 0; i < steps; i++ {
+		n.mu.Lock()
+		n.pos.addY(step)
+		n.mu.Unlock()
+
+		n.record <- n.Pos()
+	}
+}
+
+func (n *navigator) moveEast(steps int) {
+	for i := 0; i < steps; i++ {
+		n.mu.Lock()
+		n.pos.addX(step)
+		n.mu.Unlock()
+
+		n.record <- n.Pos()
+	}
+}
+
+func (n *navigator) moveSouth(steps int) {
+	for i := 0; i < steps; i++ {
+		n.mu.Lock()
+		n.pos.subY(step)
+		n.mu.Unlock()
+
+		n.record <- n.Pos()
+	}
+}
+
+func (n *navigator) moveWest(steps int) {
+	for i := 0; i < steps; i++ {
+		n.mu.Lock()
+		n.pos.subX(step)
+		n.mu.Unlock()
+
+		n.record <- n.Pos()
+	}
+}
+
+func (c *cab) Track() track {
+	return c.n.track
+}
+
+func (n navigator) Pos() position {
+	n.mu.Lock()
+	defer n.mu.Unlock()
+
+	return n.pos
 }
 
 // Example: L4, R5
@@ -204,20 +295,93 @@ const (
 	totalMatchesNum = 3
 )
 
+var errInvalidCMD = errors.New("invalid command")
+
 func splitCommand(cmd string) (turn, int, error) {
 	parts := re.FindStringSubmatch(cmd)
 	if len(parts) != totalMatchesNum {
-		return "", 0, errors.New("invalid command")
+		return "", 0, errInvalidCMD
 	}
 
-	t, err := tunrFromstring(parts[turnPos])
+	t, err := turnFromstring(parts[turnPos])
 	if err != nil {
-		return "", 0, errors.New("invalid turn")
+		return "", 0, fmt.Errorf("turnFromstring: %w", err)
 	}
 	s, err := strconv.Atoi(parts[stepsPos])
 	if err != nil {
-		return "", 0, errors.New("invalid steps num")
+		return "", 0, fmt.Errorf("invalid steps num: %w", err)
 	}
 
 	return t, s, nil
+}
+
+type navigator struct {
+	record    chan position
+	pos       position
+	track     track
+	mu        *sync.Mutex
+	wg        *sync.WaitGroup
+	revisited []position
+}
+
+func (n *navigator) recordTrack(p position) {
+	n.mu.Lock()
+
+	defer func() {
+		n.mu.Unlock()
+	}()
+
+	if n.track.isVisited(p) {
+		n.revisited = append(n.revisited, p)
+	}
+
+	n.track.record(p)
+}
+
+func (n *navigator) start() {
+	n.wg.Add(1)
+
+	for p := range n.record {
+		n.recordTrack(p)
+	}
+
+	n.wg.Done()
+}
+
+func (n *navigator) stop() {
+	close(n.record)
+
+	n.wg.Wait()
+}
+
+func (n navigator) revisitedList() []position {
+	return n.revisited
+}
+
+func newNavigator() navigator {
+	return navigator{
+		record: make(chan position),
+		pos: position{
+			x: 0,
+			y: 0,
+		},
+		track:     newTrack(),
+		mu:        &sync.Mutex{},
+		wg:        &sync.WaitGroup{},
+		revisited: []position{},
+	}
+}
+
+type track map[position]bool
+
+func newTrack() track {
+	return make(track)
+}
+
+func (t track) record(p position) {
+	t[p] = true
+}
+
+func (t track) isVisited(p position) bool {
+	return t[p]
 }
