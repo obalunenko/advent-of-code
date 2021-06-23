@@ -21,7 +21,6 @@ tail -q -n +2 ./coverage/*.cov
 gocov convert ./coverage/full.cov > ./coverage/full.json
 gocov report ./coverage/full.json
 gocov-html ./coverage/full.json >./coverage/full.html
-cp ./coverage/full.cov coverage.out
 # open ./coverage/full.html
 
 # go tool cover -html=./coverage/full.cov
