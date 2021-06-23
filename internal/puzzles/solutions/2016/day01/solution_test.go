@@ -65,6 +65,7 @@ func Test_solution_Part1(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			s := solution{
 				name: tt.fields.name,
+				year: year,
 			}
 
 			got, err := s.Part1(tt.args.input)
