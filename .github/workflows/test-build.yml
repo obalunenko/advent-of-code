@@ -69,7 +69,7 @@ jobs:
       - name: Cover report
         if: success()
         run: |
-          bash <(curl -s https://codecov.io/bash)
+          bash <(curl -s https://codecov.io/bash) -f ./coverage/full.cov
           
       - name: Install GoReleaser
         uses: goreleaser/goreleaser-action@v2
