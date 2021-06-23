@@ -1,25 +1,28 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -Eeuo pipefail
+set -eu
 
-function cleanup() {
-  trap - SIGINT SIGTERM ERR EXIT
-  echo "cleanup running"
-  rm -rf coverage.out.tmp
-}
-
-trap cleanup SIGINT SIGTERM ERR EXIT
-
-SCRIPT_NAME="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
+SCRIPT_NAME="$(basename "$0")"
 
 echo "${SCRIPT_NAME} is running... "
 
+rm -rf coverage
+mkdir -p coverage
 
-go test -race -coverpkg=./... -coverprofile coverage.out.tmp ./...
+# go test --count=1 -tags=integration_test -coverprofile ./coverage/integration.cov -covermode=atomic ./...
+go test --count=1 -coverprofile ./coverage/unit.cov -covermode=atomic ./...
 
-# shellcheck disable=SC2002
-cat coverage.out.tmp | grep -v "cmd/" >coverage.out
-gocov convert coverage.out >coverage.out.json
-gocov report coverage.out.json
-gocov-html coverage.out.json > coverage.out.html
-go tool cover -html=coverage.out
+
+{
+echo "mode: atomic"
+tail -q -n +2 ./coverage/*.cov
+} >> ./coverage/full.cov
+
+gocov convert ./coverage/full.cov > ./coverage/full.json
+gocov report ./coverage/full.json
+gocov-html ./coverage/full.json >./coverage/full.html
+# open ./coverage/full.html
+
+# go tool cover -html=./coverage/full.cov
+
+echo "${SCRIPT_NAME} done."
