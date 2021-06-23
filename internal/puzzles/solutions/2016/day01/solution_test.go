@@ -82,8 +82,6 @@ func Test_solution_Part1(t *testing.T) {
 }
 
 func Test_solution_Part2(t *testing.T) {
-	t.Skip()
-
 	type fields struct {
 		name string
 	}
@@ -99,7 +97,17 @@ func Test_solution_Part2(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{},
+		{
+			name: "",
+			fields: fields{
+				name: "",
+			},
+			args: args{
+				input: strings.NewReader("R8, R4, R4, R8"),
+			},
+			want:    "4",
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {
