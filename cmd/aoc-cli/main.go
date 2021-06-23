@@ -11,9 +11,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 
-	"github.com/obalunenko/advent-of-code/internal/input"
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
-
+	"github.com/obalunenko/advent-of-code/internal/puzzles/input"
 	// register all solutions.
 	_ "github.com/obalunenko/advent-of-code/internal/puzzles/solutions"
 )
