@@ -1,6 +1,9 @@
 NAME=aoc-cli
 BIN_DIR=./bin
 
+SHELL := env VERSION=$(VERSION) $(SHELL)
+VERSION ?= $(shell git describe --tags $(git rev-list --tags --max-count=1))
+
 TARGET_MAX_CHAR_NUM=20
 
 ## Show help
@@ -20,108 +23,106 @@ help:
 		} \
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
-.PHONY: help
 
-## app compile
-compile:
-	./scripts/compile.sh
-.PHONY: compile
 
-build-ci:
-	./scripts/compile.sh
-.PHONY: build-ci
 
-## Cross os compile
-cross-compile:
-	./scripts/cross-compile.sh
-.PHONY: cross-compile
+build: compile-aoc-cli
+.PHONY: build
 
-## lint project
-lint:
-	./scripts/run-linters.sh
-.PHONY: lint
+compile-aoc-cli:
+	./scripts/build/aoc-cli.sh
+.PHONY: compile-spamassassin-parser-be
 
-## Lint in CI
-lint-ci:
-	./scripts/run-linters-ci.sh
-.PHONY: lint-ci
-
-## format markdown files in project
-pretty-markdown:
-	find . -name '*.md' -not -wholename './vendor/*' | xargs prettier --write
-.PHONY: pretty-markdown
-
-## Test all packages
-test:
-	./scripts/run-tests.sh
-.PHONY: test
-
-## Test coverage
+## Test coverage report.
 test-cover:
-	./scripts/coverage.sh
+	${call colored, test-cover is running...}
+	./scripts/tests/coverage.sh
 .PHONY: test-cover
 
-## Increase version number
-new-version: vet test compile
-	./scripts/version.sh
-.PHONY: new-version
+## Open coverage report.
+open-cover-report: test-cover
+	./scripts/open-coverage-report.sh
+.PHONY: open-cover-report
 
-## Release
-release:
-	./scripts/release.sh
-.PHONY: release
+update-readme-cover: build test-cover
+	./scripts/update-readme-coverage.sh
+.PHONY: update-readme-cover
 
-## Release local snapshot
-release-local-snapshot:
-	${call colored, release is running...}
-	./scripts/local-snapshot-release.sh
-.PHONY: release-local-snapshot
+test:
+	./scripts/tests/run.sh
+.PHONY: test
+
+
+configure: sync-vendor
+
+sync-vendor:
+	./scripts/sync-vendor.sh
+.PHONY: sync-vendor
 
 ## Fix imports sorting.
 imports:
 	${call colored, fix-imports is running...}
-	./scripts/fix-imports.sh
+	./scripts/style/fix-imports.sh
 .PHONY: imports
 
-## Format code.
+## Format code with go fmt.
 fmt:
 	${call colored, fmt is running...}
-	./scripts/fmt.sh
+	./scripts/style/fmt.sh
 .PHONY: fmt
 
 ## Format code and sort imports.
 format-project: fmt imports
 .PHONY: format-project
 
-## fetch all dependencies for scripts
 install-tools:
-	./scripts/install-tools.sh
+	./scripts/install/vendored-tools.sh
 .PHONY: install-tools
-
-## Sync vendor
-sync-vendor:
-	${call colored, gomod is running...}
-	./scripts/sync-vendor.sh
-.PHONY: sync-vendor
-
-## Update dependencies
-gomod-update:
-	${call colored, gomod is running...}
-	go get -u -v ./...
-	make sync-vendor
-.PHONY: gomod-update
-
-
-.DEFAULT_GOAL := test
-
-## vendor-check if dependencies were not changed.
-vendor-check:
-	./scripts/check-vendor.sh
-.PHONY: vendor-check
 
 ## vet project
 vet:
-	./scripts/vet.sh
+	${call colored, vet is running...}
+	./scripts/linting/run-vet.sh
 .PHONY: vet
 
-.DEFAULT_GOAL := test
+## Run full linting
+lint-full:
+	./scripts/linting/run-linters.sh
+.PHONY: lint-full
+
+## Run linting for build pipeline
+lint-pipeline:
+	./scripts/linting/run-linters-pipeline.sh
+.PHONY: lint-pipeline
+
+## recreate all generated code and swagger documentation.
+codegen:
+	${call colored, codegen is running...}
+	./scripts/codegen/go-generate.sh
+.PHONY: codegen
+
+## recreate all generated code and swagger documentation and format code.
+generate: codegen format-project vet
+.PHONY: generate
+
+## Release
+release:
+	./scripts/release/release.sh
+.PHONY: release
+
+## Release local snapshot
+release-local-snapshot:
+	${call colored, release is running...}
+	./scripts/release/local-snapshot-release.sh
+.PHONY: release-local-snapshot
+
+## Issue new release.
+new-version: vet test build
+	./scripts/release/new-version.sh
+.PHONY: new-release
+
+open-advent-homepage:
+	./scripts/browser-opener.sh -u 'https://adventofcode.com/'
+
+.DEFAULT_GOAL := help
+

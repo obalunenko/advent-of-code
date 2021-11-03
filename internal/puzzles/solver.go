@@ -7,8 +7,10 @@ import (
 	"fmt"
 	"io"
 	"sort"
+	"strings"
 	"sync"
 	"testing"
+	"text/tabwriter"
 )
 
 // ErrNotImplemented signal that puzzle in not implemented yet.
@@ -112,13 +114,13 @@ func GetSolver(year string, name string) (Solver, error) {
 	solversMu.Lock()
 	defer solversMu.Unlock()
 
-	solversYaer, exist := solvers[year]
+	solversYear, exist := solvers[year]
 
 	if !exist {
 		return nil, fmt.Errorf("unknown puzzle year [%s]", year)
 	}
 
-	s, exist := solversYaer[name]
+	s, exist := solversYear[name]
 	if !exist {
 		return nil, fmt.Errorf("unknown puzzle name [%s]", name)
 	}
@@ -134,6 +136,48 @@ type Result struct {
 	Part2 string
 }
 
+const (
+	unsolved = "not solved"
+	unknown  = "unknown"
+)
+
+func (r Result) String() string {
+	if r.Part1 == "" {
+		r.Part1 = unsolved
+	}
+
+	if r.Part2 == "" {
+		r.Part2 = unsolved
+	}
+
+	if r.Name == "" {
+		r.Name = unknown
+	}
+
+	if r.Year == "" {
+		r.Year = unknown
+	}
+
+	var buf strings.Builder
+
+	w := tabwriter.NewWriter(&buf, 0, 0, 1, ' ', tabwriter.TabIndent)
+
+	_, err := fmt.Fprintf(w, `
+%s/%s puzzle answer:
+| part1:	%s	|
+| part2:	%s	|
+`, r.Year, r.Name, r.Part1, r.Part2)
+	if err != nil {
+		panic(err)
+	}
+
+	if err := w.Flush(); err != nil {
+		panic(err)
+	}
+
+	return buf.String()
+}
+
 // Run uses solver of puzzle and path to input.
 func Run(solver Solver, input io.Reader) (Result, error) {
 	var err error
@@ -141,11 +185,12 @@ func Run(solver Solver, input io.Reader) (Result, error) {
 	res := Result{
 		Year:  solver.Year(),
 		Name:  solver.Name(),
-		Part1: "",
-		Part2: "",
+		Part1: unsolved,
+		Part2: unsolved,
 	}
 
 	var buf bytes.Buffer
+
 	if _, err = buf.ReadFrom(input); err != nil {
 		return Result{}, fmt.Errorf("failed to read: %w", err)
 	}

@@ -2,10 +2,10 @@
 package day02
 
 import (
+	"errors"
+	"fmt"
 	"io"
 	"strconv"
-
-	"github.com/pkg/errors"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 	"github.com/obalunenko/advent-of-code/internal/puzzles/utils/intcomputer"
@@ -35,14 +35,14 @@ func (s solution) Year() string {
 func (s solution) Part1(input io.Reader) (string, error) {
 	c, err := intcomputer.New(input)
 	if err != nil {
-		return "", errors.Wrap(err, "failed to init computer")
+		return "", fmt.Errorf("failed to init computer: %w", err)
 	}
 
 	c.Input(12, 2)
 
 	res, err := c.Execute()
 	if err != nil {
-		return "", errors.Wrap(err, "failed to calc")
+		return "", fmt.Errorf("failed to calc: %w", err)
 	}
 
 	return strconv.Itoa(res), nil
@@ -51,7 +51,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 func (s solution) Part2(input io.Reader) (string, error) {
 	c, err := intcomputer.New(input)
 	if err != nil {
-		return "", errors.Wrap(err, "failed to init computer")
+		return "", fmt.Errorf("failed to init computer: %w", err)
 	}
 
 	const expected = 19690720
@@ -64,7 +64,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 
 			res, err := c.Execute()
 			if err != nil {
-				return "", errors.Wrap(err, "failed to calc")
+				return "", fmt.Errorf("failed to calc: %w", err)
 			}
 
 			if res == expected {
