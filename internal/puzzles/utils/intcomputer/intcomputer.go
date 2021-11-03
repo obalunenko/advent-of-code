@@ -10,11 +10,11 @@ package intcomputer
 
 import (
 	"bytes"
+	"errors"
+	"fmt"
 	"io"
 	"strconv"
 	"strings"
-
-	"github.com/pkg/errors"
 )
 
 // IntComputer represents inctomputer instance.
@@ -37,7 +37,7 @@ func New(intcode io.Reader) (IntComputer, error) {
 
 	buf := new(bytes.Buffer)
 	if _, err := buf.ReadFrom(intcode); err != nil {
-		return c, errors.Wrap(err, "failed to read")
+		return c, fmt.Errorf("failed to read: %w", err)
 	}
 
 	nums := strings.Split(buf.String(), ",")
@@ -47,7 +47,7 @@ func New(intcode io.Reader) (IntComputer, error) {
 	for i, num := range nums {
 		n, err := strconv.Atoi(num)
 		if err != nil {
-			return c, errors.Wrap(err, "failed to convert string to int")
+			return c, fmt.Errorf("failed to convert string to int: %w", err)
 		}
 
 		c.initial[i] = n
@@ -70,13 +70,13 @@ loop:
 		switch opt {
 		case optAdd:
 			if err = c.add(aPos, bPos, resPos); err != nil {
-				return 0, errors.Wrapf(err, "failed to add pos[%d]: [intcode:%d %d %d %d]",
-					i, opt, aPos, bPos, resPos)
+				return 0, fmt.Errorf("failed to add pos[%d]: [intcode:%d %d %d %d]: %w",
+					i, opt, aPos, bPos, resPos, err)
 			}
 		case optMult:
 			if err = c.mult(aPos, bPos, resPos); err != nil {
-				return 0, errors.Wrapf(err, "failed to mult pos[%d]: [intcode:%d %d %d %d]",
-					i, opt, aPos, bPos, resPos)
+				return 0, fmt.Errorf("failed to mult pos[%d]: [intcode:%d %d %d %d]: %w",
+					i, opt, aPos, bPos, resPos, err)
 			}
 		case optAbort:
 			result, err = c.abort()
@@ -84,7 +84,7 @@ loop:
 			break loop
 		default:
 			result = -1
-			err = errors.Errorf("not supported opt code [%d] at pos [%d]", opt, i)
+			err = fmt.Errorf("not supported opt code [%d] at pos [%d]", opt, i)
 
 			break loop
 		}
@@ -96,12 +96,12 @@ loop:
 func (c *IntComputer) add(aPos, bPos, resPos int) error {
 	a, ok := c.memory[aPos]
 	if !ok {
-		return errors.Errorf("value not exist [apos:%d]", aPos)
+		return fmt.Errorf("value not exist [apos:%d]", aPos)
 	}
 
 	b, ok := c.memory[bPos]
 	if !ok {
-		return errors.Errorf("value not exist [bpos:%d]", bPos)
+		return fmt.Errorf("value not exist [bpos:%d]", bPos)
 	}
 
 	res := a + b

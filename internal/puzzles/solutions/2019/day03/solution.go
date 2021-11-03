@@ -3,12 +3,12 @@ package day03
 
 import (
 	"bufio"
+	"errors"
+	"fmt"
 	"io"
 	"sort"
 	"strconv"
 	"strings"
-
-	"github.com/pkg/errors"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -215,7 +215,7 @@ func runWires(input io.Reader) ([]map[pos]int, error) {
 
 		w := makeWire()
 		if err := w.run(line); err != nil {
-			return nil, errors.Wrap(err, "failed to run wire")
+			return nil, fmt.Errorf("failed to run wire: %w", err)
 		}
 
 		res = append(res, w.m)
