@@ -78,8 +78,8 @@ jobs:
       - run: |
           go version
 
-       - name: Install tools
-         run: |
+      - name: Install tools
+        run: |
            make install-tools
 
       - name: Prepare test coverage
