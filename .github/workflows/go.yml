@@ -56,6 +56,7 @@ jobs:
           make lint-pipeline
 
   reports:
+    needs: testing
     strategy:
       fail-fast: true
       max-parallel: 1
@@ -130,6 +131,7 @@ jobs:
 
 
   build:
+    needs: testing
     strategy:
       fail-fast: false
       max-parallel: 2
