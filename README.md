@@ -90,7 +90,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 <details>
   <summary>2017</summary>  
     
-  - [ ] [Day 1: Inverse Captcha](https://adventofcode.com/2017/day/1)
+  - [x] [Day 1: Inverse Captcha](https://adventofcode.com/2017/day/1)
   - [ ] [Day 2: Corruption Checksum](https://adventofcode.com/2017/day/2)
   - [ ] [Day 3: Spiral Memory](https://adventofcode.com/2017/day/3)
   - [ ] [Day 4: High-Entropy Passphrases](https://adventofcode.com/2017/day/4)
