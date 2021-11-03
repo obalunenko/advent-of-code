@@ -21,6 +21,7 @@ on:
 
 jobs:
   linting:
+    needs: testing
     strategy:
       fail-fast: false
       max-parallel: 2
