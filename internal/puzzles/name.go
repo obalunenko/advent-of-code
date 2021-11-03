@@ -2,7 +2,7 @@ package puzzles
 
 import (
 	"errors"
-	"os"
+	"path/filepath"
 )
 
 var (
@@ -22,5 +22,5 @@ func MakeName(year string, puzzle string) (string, error) {
 		return "", ErrInvalidYear
 	}
 
-	return year + string(os.PathSeparator) + puzzle, nil
+	return filepath.Join(year, puzzle), nil
 }
