@@ -16,6 +16,5 @@
 
 bin/
 dist/
-release/
 .DS_Store
 coverage/

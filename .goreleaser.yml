@@ -11,15 +11,14 @@ gomod:
     - GOPROXY=https://proxy.golang.org,direct
     - GOSUMDB=sum.golang.org
     - GOPRIVATE=example.com/blah
+    - CGO_ENABLED=0
   # Which Go binary to use.
   # Defaults to `go`.
   gobinary: go
-env:
-  - GO111MODULE=on
-  - GOPROXY=https://goproxy.io
+
 before:
   hooks:
-    - go mod tidy -v
+    - go mod verify
 
 builds:
   - id: cli
@@ -40,7 +39,7 @@ builds:
     flags:
       - -trimpath
     ldflags:
-      - -s -w -X main.version={{ .Version }} -X main.commit={{ .ShortCommit }} -X main.date={{ .Date }} -X main.goversion={{ .Env.GOVERSION }}
+      - "{{ .Env.GO_BUILD_LDFLAGS }}"
 
 archives:
   - id: cli

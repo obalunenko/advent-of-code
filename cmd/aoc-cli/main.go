@@ -1,14 +1,18 @@
+// aoc-cli is a tool to run solutions to get answers for input on advent-of-code site.
 package main
 
 import (
 	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
 
 	"github.com/manifoldco/promptui"
-	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
+	log "github.com/obalunenko/logger"
+	"github.com/obalunenko/version"
 	"github.com/urfave/cli"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
@@ -27,9 +31,7 @@ const (
 var errExit = errors.New("exit is chosen")
 
 func main() {
-	defer func() {
-		fmt.Println("Exiting...")
-	}()
+	ctx := context.Background()
 
 	app := cli.NewApp()
 	app.Name = "aoc-cli"
@@ -39,91 +41,54 @@ func main() {
 		"answers for input on site."
 	app.Usage = `a command line tool for get solution for Advent of Code puzzles`
 	app.Author = "Oleg Balunenko"
-	app.Version = versionInfo()
+	app.Version = version.GetVersion()
 	app.Email = "oleg.balunenko@gmail.com"
-	app.Flags = globalFlags()
-	app.Action = menu
+
+	app.Action = menu(ctx)
+	app.Before = printVersion
+	app.After = onExit
 
 	if err := app.Run(os.Args); err != nil {
 		if errors.Is(err, errExit) {
 			return
 		}
 
-		log.Fatal(err)
+		log.WithError(ctx, err).Fatal("Run failed")
 	}
 }
 
-func globalFlags() []cli.Flag {
-	return []cli.Flag{
-		cli.StringFlag{
-			Name:        "log_level",
-			Usage:       "Level of output logs",
-			EnvVar:      "",
-			FilePath:    "",
-			Required:    false,
-			Hidden:      false,
-			TakesFile:   false,
-			Value:       log.InfoLevel.String(),
-			Destination: nil,
-		},
+func onExit(_ *cli.Context) error {
+	fmt.Println("Exit...")
+
+	return nil
+}
+
+func menu(ctx context.Context) cli.ActionFunc {
+	return func(c *cli.Context) error {
+		years := puzzles.GetYears()
+
+		prompt := promptui.Select{
+			Label:             "Years menu (exit' for exit)",
+			Items:             append(years, exit),
+			Size:              pageSize,
+			CursorPos:         0,
+			IsVimMode:         false,
+			HideHelp:          false,
+			HideSelected:      false,
+			Templates:         nil,
+			Keys:              nil,
+			Searcher:          nil,
+			StartInSearchMode: false,
+			Pointer:           nil,
+			Stdin:             nil,
+			Stdout:            nil,
+		}
+
+		return handleYearChoices(ctx, prompt)
 	}
 }
 
-func setLogger(ctx *cli.Context) {
-	formatter := log.TextFormatter{
-		ForceColors:               true,
-		DisableColors:             false,
-		ForceQuote:                false,
-		DisableQuote:              false,
-		EnvironmentOverrideColors: false,
-		DisableTimestamp:          false,
-		FullTimestamp:             true,
-		TimestampFormat:           "2006-01-02 15:04:05",
-		DisableSorting:            false,
-		SortingFunc:               nil,
-		DisableLevelTruncation:    false,
-		PadLevelText:              false,
-		QuoteEmptyFields:          true,
-		FieldMap:                  nil,
-		CallerPrettyfier:          nil,
-	}
-
-	log.SetFormatter(&formatter)
-
-	lvl, err := log.ParseLevel(ctx.GlobalString("log_level"))
-	if err != nil {
-		lvl = log.InfoLevel
-	}
-
-	log.SetLevel(lvl)
-}
-
-func menu(ctx *cli.Context) error {
-	setLogger(ctx)
-
-	years := puzzles.GetYears()
-
-	prompt := promptui.Select{
-		Label:             "Years menu (exit' for exit)",
-		Items:             append(years, exit),
-		Size:              pageSize,
-		CursorPos:         0,
-		IsVimMode:         false,
-		HideHelp:          false,
-		HideSelected:      false,
-		Templates:         nil,
-		Keys:              nil,
-		Searcher:          nil,
-		StartInSearchMode: false,
-		Pointer:           nil,
-		Stdin:             nil,
-		Stdout:            nil,
-	}
-
-	return handleYearChoices(prompt)
-}
-
-func handleYearChoices(opt promptui.Select) error {
+func handleYearChoices(ctx context.Context, opt promptui.Select) error {
 	for {
 		_, choice, err := opt.Run()
 		if err != nil {
@@ -131,27 +96,27 @@ func handleYearChoices(opt promptui.Select) error {
 				return nil
 			}
 
-			return errors.Wrap(err, "prompt failed")
+			return fmt.Errorf("prompt failed: %w", err)
 		}
 
 		if isExit(choice) {
 			return nil
 		}
 
-		err = menuPuzzle(choice)
+		err = menuPuzzle(ctx, choice)
 		if err != nil {
 			if errors.Is(err, errExit) {
 				return nil
 			}
 
-			log.Error(err)
+			log.WithError(ctx, err).Error("Puzzle menu failed")
 
 			continue
 		}
 	}
 }
 
-func menuPuzzle(year string) error {
+func menuPuzzle(ctx context.Context, year string) error {
 	solvers := puzzles.NamesByYear(year)
 
 	prompt := promptui.Select{
@@ -171,10 +136,10 @@ func menuPuzzle(year string) error {
 		Stdout:            nil,
 	}
 
-	return handlePuzzleChoices(year, prompt)
+	return handlePuzzleChoices(ctx, year, prompt)
 }
 
-func handlePuzzleChoices(year string, opt promptui.Select) error {
+func handlePuzzleChoices(ctx context.Context, year string, opt promptui.Select) error {
 	for {
 		_, choice, err := opt.Run()
 		if err != nil {
@@ -182,7 +147,7 @@ func handlePuzzleChoices(year string, opt promptui.Select) error {
 				return errExit
 			}
 
-			return errors.Wrap(err, "prompt failed")
+			return fmt.Errorf("prompt failed: %w", err)
 		}
 
 		if isExit(choice) {
@@ -195,18 +160,33 @@ func handlePuzzleChoices(year string, opt promptui.Select) error {
 
 		res, err := run(year, choice)
 		if err != nil {
-			log.Error(err)
+			log.WithError(ctx, err).Error("Puzzle run failed")
 
 			continue
 		}
 
-		log.WithFields(log.Fields{
-			"year":  res.Year,
-			"name":  res.Name,
-			"part1": res.Part1,
-			"part2": res.Part2,
-		}).Info("Puzzle answers")
+		fmt.Println(res.String())
 	}
+}
+
+// PrettyPrint appends to passed struct indents and returns a human-readable form of struct.
+// Each element of JSON object will start from indent with prefix.
+func PrettyPrint(v interface{}, prefix string, indent string) (string, error) {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal: %w", err)
+	}
+
+	var out bytes.Buffer
+	if err := json.Indent(&out, b, prefix, indent); err != nil {
+		return "", fmt.Errorf("failed to indent: %w", err)
+	}
+
+	if _, err := out.WriteString("\n"); err != nil {
+		return "", fmt.Errorf("failed to write string: %w", err)
+	}
+
+	return out.String(), nil
 }
 
 func isExit(input string) bool {
@@ -224,7 +204,7 @@ func isBack(input string) bool {
 func run(year string, name string) (puzzles.Result, error) {
 	s, err := puzzles.GetSolver(year, name)
 	if err != nil {
-		return puzzles.Result{}, errors.Wrap(err, "failed to get solver")
+		return puzzles.Result{}, fmt.Errorf("failed to get solver: %w", err)
 	}
 
 	fullName, err := puzzles.MakeName(s.Year(), s.Name())
@@ -234,12 +214,12 @@ func run(year string, name string) (puzzles.Result, error) {
 
 	asset, err := input.Asset(fmt.Sprintf("%s.txt", fullName))
 	if err != nil {
-		return puzzles.Result{}, errors.Wrap(err, "failed to open input data")
+		return puzzles.Result{}, fmt.Errorf("failed to open input data: %w", err)
 	}
 
 	res, err := puzzles.Run(s, bytes.NewReader(asset))
 	if err != nil {
-		return puzzles.Result{}, errors.Wrapf(err, "failed to run [%s]", s.Name())
+		return puzzles.Result{}, fmt.Errorf("failed to run [%s]: %w", s.Name(), err)
 	}
 
 	return res, nil
