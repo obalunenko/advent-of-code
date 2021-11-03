@@ -66,12 +66,12 @@ jobs:
     name: Sonar cloud
     steps:
       - name: Checkout
-        uses: actions/checkout@2.3.5
+        uses: actions/checkout@v2.3.5
         with:
           fetch-depth: 0
 
       - name: Set up go
-        uses: actions/setup-go@2.1.4
+        uses: actions/setup-go@v2.1.4
         with:
           stable: 'true'
           go-version: ${{ matrix.go }}
