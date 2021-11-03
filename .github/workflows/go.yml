@@ -55,7 +55,7 @@ jobs:
         run: |
           make lint-pipeline
 
-  sonar:
+  reports:
     strategy:
       fail-fast: true
       max-parallel: 1
@@ -85,8 +85,13 @@ jobs:
       - name: Prepare test coverage
         run: |
           make test-cover
+          
+      - name: Cover report
+        if: success()
+        run: |
+          bash <(curl -s https://codecov.io/bash) -f ./coverage/full.cov    
 
-      - name: SonarCloud Scan
+      - name: SonarCloud Scan report
         uses: sonarsource/sonarcloud-github-action@v1.6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
