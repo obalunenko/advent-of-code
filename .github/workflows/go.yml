@@ -1,0 +1,160 @@
+name: Go [lint, test]
+
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+    branches:
+      - '*'
+    paths:
+      - 'scripts/**'
+      - 'tools/**'
+      - '**/*.go'
+      - '**/*.gohtml'
+      - '**/*.proto'
+      - 'go.mod'
+      - 'go.sum'
+      - 'Makefile'
+      - '!**.*md'
+
+jobs:
+  linting:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ 'ubuntu-20.04' ]
+        go: [ '1.17' ]
+    runs-on: ${{ matrix.os }}
+    name: Run linters
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.5
+        with:
+          fetch-depth: 0
+
+      - name: Set up go
+        uses: actions/setup-go@v2.1.4
+        with:
+          stable: 'true'
+          go-version: ${{ matrix.go }}
+      - run: |
+          go version
+
+      - name: Vet
+        run: |
+          make vet
+
+      - name: Install tools
+        run: |
+          make install-tools
+
+      - name: Lint
+        run: |
+          make lint-pipeline
+
+  sonar:
+    strategy:
+      fail-fast: true
+      max-parallel: 1
+      matrix:
+        os: [ 'ubuntu-20.04' ]
+        go: [ '1.17' ]
+    runs-on: ${{ matrix.os }}
+    name: Sonar cloud
+    steps:
+      - name: Checkout
+        uses: actions/checkout@2.3.5
+        with:
+          fetch-depth: 0
+
+      - name: Set up go
+        uses: actions/setup-go@2.1.4
+        with:
+          stable: 'true'
+          go-version: ${{ matrix.go }}
+      - run: |
+          go version
+
+       - name: Install tools
+         run: |
+           make install-tools
+
+      - name: Prepare test coverage
+        run: |
+          make test-cover
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v1.6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  testing:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ 'ubuntu-20.04' ]
+        go: [ '1.17' ]
+    runs-on: ${{ matrix.os }}
+    name: Run Tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.5
+        with:
+          fetch-depth: 0
+
+      - name: Set up go
+        uses: actions/setup-go@v2.1.4
+        with:
+          stable: 'true'
+          go-version: ${{ matrix.go }}
+      - run: |
+          go version
+
+      - name: Install tools
+        run: |
+          make install-tools
+
+      - name: Test
+        run: |
+          make test
+
+
+  build:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ 'ubuntu-20.04' ]
+        go: [ '1.17' ]
+    runs-on: ${{ matrix.os }}
+    name: Build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.5
+        with:
+          fetch-depth: 0
+
+      - name: Set up go
+        uses: actions/setup-go@v2.1.4
+        with:
+          stable: 'true'
+          go-version: ${{ matrix.go }}
+      - run: |
+          go version
+
+      - name: Install tools
+        run: |
+          make install-tools
+
+      - name: Build
+        run: |
+          make build
+
+      - name: Check release
+        run: |
+          make release-local-snapshot

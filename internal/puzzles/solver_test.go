@@ -53,7 +53,7 @@ func (a anotherMockSolver) Name() string {
 	return a.name
 }
 
-func makeAndRegisterSolvers(tb testing.TB) func() {
+func makeAndRegisterSolvers(tb testing.TB) {
 	solvers := map[string]map[string]puzzles.Solver{
 		"2019": {
 			"mock": mockSolver{
@@ -79,12 +79,13 @@ func makeAndRegisterSolvers(tb testing.TB) func() {
 		}
 	}
 
-	return func() { puzzles.UnregisterAllSolvers(tb) }
+	tb.Cleanup(func() {
+		puzzles.UnregisterAllSolvers(tb)
+	})
 }
 
 func TestGetSolver(t *testing.T) {
-	teardown := makeAndRegisterSolvers(t)
-	defer teardown()
+	makeAndRegisterSolvers(t)
 
 	// get existing solver
 	gotSolver, err := puzzles.GetSolver("2019", "mock")
@@ -171,8 +172,7 @@ func TestRun(t *testing.T) {
 }
 
 func TestSolversYears(t *testing.T) {
-	teardown := makeAndRegisterSolvers(t)
-	defer teardown()
+	makeAndRegisterSolvers(t)
 
 	expectedYears := []string{"2019", "2017"}
 	years := puzzles.GetYears()

@@ -7,8 +7,6 @@ import (
 	"io"
 	"strconv"
 
-	"github.com/pkg/errors"
-
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
@@ -100,7 +98,7 @@ func calc(input io.Reader, calcFn calcFunc) (string, error) {
 	close(in)
 
 	if err = scanner.Err(); err != nil {
-		return "", errors.Wrap(err, "scanner error")
+		return "", fmt.Errorf("scanner error: %w", err)
 	}
 
 	for lines > 0 {

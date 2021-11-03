@@ -3,11 +3,11 @@ package day04
 
 import (
 	"bytes"
+	"errors"
+	"fmt"
 	"io"
 	"strconv"
 	"strings"
-
-	"github.com/pkg/errors"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -48,7 +48,7 @@ func (s solution) Name() string {
 func run(input io.Reader, criteria isPwdFunc) (string, error) {
 	buf := new(bytes.Buffer)
 	if _, err := buf.ReadFrom(input); err != nil {
-		return "", errors.Wrap(err, "failed to read")
+		return "", fmt.Errorf("failed to read: %w", err)
 	}
 
 	const limitsNum = 2
@@ -60,7 +60,7 @@ func run(input io.Reader, criteria isPwdFunc) (string, error) {
 
 	passwords, err := findPasswords(limits[0], limits[1], criteria)
 	if err != nil {
-		return "", errors.Wrap(err, "failed to find passwords")
+		return "", fmt.Errorf("failed to find passwords: %w", err)
 	}
 
 	return strconv.Itoa(passwords), nil
@@ -71,12 +71,12 @@ type isPwdFunc func(n int) bool
 func findPasswords(low, high string, criteria isPwdFunc) (int, error) {
 	lowd, err := strconv.Atoi(low)
 	if err != nil {
-		return -1, errors.Wrap(err, "failed to convert low to int")
+		return -1, fmt.Errorf("failed to convert low to int: %w", err)
 	}
 
 	highd, err := strconv.Atoi(high)
 	if err != nil {
-		return -1, errors.Wrap(err, "failed to convert high to int")
+		return -1, fmt.Errorf("failed to convert high to int: %w", err)
 	}
 
 	pwds := make([]int, 0, highd-lowd)
