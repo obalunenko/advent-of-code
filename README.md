@@ -1,13 +1,14 @@
 
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/obalunenko/advent-of-code)
 [![GoDoc](https://godoc.org/github.com/obalunenko/advent-of-code?status.svg)](https://godoc.org/github.com/obalunenko/advent-of-code)
+[![Latest release artifacts](https://img.shields.io/github/v/release/obalunenko/advent-of-code)](https://github.com/obalunenko/advent-of-code/releases/latest)
 ![Lint & Test & Build & Release](https://github.com/obalunenko/advent-of-code/workflows/Lint%20&%20Test%20&%20Build%20&%20Release/badge.svg)
 ![Lint](https://github.com/obalunenko/advent-of-code/workflows/Lint/badge.svg)
 ![Test & Build](https://github.com/obalunenko/advent-of-code/workflows/Test%20&%20Build/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/obalunenko/advent-of-code)](https://goreportcard.com/report/github.com/obalunenko/advent-of-code)
 [![codecov](https://codecov.io/gh/obalunenko/advent-of-code/branch/master/graph/badge.svg)](https://codecov.io/gh/obalunenko/advent-of-code)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=obalunenko_advent-of-code&metric=alert_status)](https://sonarcloud.io/dashboard?id=obalunenko_advent-of-code)
-[![Latest release artifacts](https://img.shields.io/github/v/release/obalunenko/advent-of-code)](https://github.com/obalunenko/advent-of-code/releases/latest)
+
 
 
 # advent-of-code
