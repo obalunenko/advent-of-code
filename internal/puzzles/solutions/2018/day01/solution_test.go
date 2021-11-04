@@ -32,7 +32,7 @@ func Test_solution_Part1(t *testing.T) {
 				year: "2018",
 			},
 			args: args{
-				input: strings.NewReader("+1, +1, +1"),
+				input: strings.NewReader("+1\n+1\n+1"),
 			},
 			want:    "3",
 			wantErr: false,
@@ -44,19 +44,19 @@ func Test_solution_Part1(t *testing.T) {
 				year: "2018",
 			},
 			args: args{
-				input: strings.NewReader("+1, +1, -2"),
+				input: strings.NewReader("+1\n+1\n-2"),
 			},
 			want:    "0",
 			wantErr: false,
 		},
 		{
-			name: "`1, -2, -3` results in `-6`",
+			name: "`-1, -2, -3` results in `-6`",
 			fields: fields{
 				name: "day01",
 				year: "2018",
 			},
 			args: args{
-				input: strings.NewReader("1, -2, -3"),
+				input: strings.NewReader("-1\n-2\n-3"),
 			},
 			want:    "-6",
 			wantErr: false,
@@ -67,9 +67,9 @@ func Test_solution_Part1(t *testing.T) {
 				name: "",
 			},
 			args: args{
-				input: strings.NewReader("+1, -2, +3, +1"),
+				input: strings.NewReader("+1\n-2\n+3\n+1"),
 			},
-			want:    "12",
+			want:    "3",
 			wantErr: false,
 		},
 	}
@@ -113,16 +113,64 @@ func Test_solution_Part2(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{ // TODO(@obalunenko): Fill the tests
-			name: "",
+		{
+			name: "`+1, -2, +3, +1` results in `2`",
 			fields: fields{
 				name: "2018",
 				year: "day01",
 			},
 			args: args{
-				input: strings.NewReader(""),
+				input: strings.NewReader("+1\n-2\n+3\n+1"),
 			},
-			want:    "",
+			want:    "2",
+			wantErr: false,
+		},
+		{
+			name: "`+1, -1` first reaches `0` twice.",
+			fields: fields{
+				name: "2018",
+				year: "day01",
+			},
+			args: args{
+				input: strings.NewReader("+1\n-1"),
+			},
+			want:    "0",
+			wantErr: false,
+		},
+		{
+			name: "`+3, +3, +4, -2, -4` first reaches `10` twice.",
+			fields: fields{
+				name: "2018",
+				year: "day01",
+			},
+			args: args{
+				input: strings.NewReader("+3\n+3\n+4\n-2\n-4"),
+			},
+			want:    "10",
+			wantErr: false,
+		},
+		{
+			name: "`-6, +3, +8, +5, -6` first reaches `5` twice.",
+			fields: fields{
+				name: "2018",
+				year: "day01",
+			},
+			args: args{
+				input: strings.NewReader("-6\n+3\n+8\n+5\n-6"),
+			},
+			want:    "5",
+			wantErr: false,
+		},
+		{
+			name: "`+7, +7, -2, -7, -4` first reaches `14` twice.",
+			fields: fields{
+				name: "2018",
+				year: "day01",
+			},
+			args: args{
+				input: strings.NewReader("+7\n+7\n-2\n-7\n-4"),
+			},
+			want:    "14",
 			wantErr: false,
 		},
 	}
