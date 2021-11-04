@@ -40,6 +40,10 @@ builds:
       - -trimpath
     ldflags:
       - "{{ .Env.GO_BUILD_LDFLAGS }}"
+      -
+universal_binaries:
+  - id: cli
+    replace: true
 
 archives:
   - id: cli

@@ -17,6 +17,11 @@ import (
 	// register day01 solution.
 	_ "github.com/obalunenko/advent-of-code/internal/puzzles/solutions/2017/day01"
 	/*
+		2018 solutions.
+	*/
+	// register day01 solution.
+	_ "github.com/obalunenko/advent-of-code/internal/puzzles/solutions/2018/day01"
+	/*
 		2019 solutions.
 	*/
 	// register day01 solution.
