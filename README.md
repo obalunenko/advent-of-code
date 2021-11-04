@@ -1,8 +1,3 @@
-# advent-of-code
-<p align="center">
-    <img src="https://user-images.githubusercontent.com/16360374/49324718-7954f100-f4e8-11e8-8ef6-1b701afc504f.png" width="225"/>
-</p>  
-
 
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/obalunenko/advent-of-code)
 [![GoDoc](https://godoc.org/github.com/obalunenko/advent-of-code?status.svg)](https://godoc.org/github.com/obalunenko/advent-of-code)
@@ -12,6 +7,12 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/obalunenko/advent-of-code)](https://goreportcard.com/report/github.com/obalunenko/advent-of-code)
 [![codecov](https://codecov.io/gh/obalunenko/advent-of-code/branch/master/graph/badge.svg)](https://codecov.io/gh/obalunenko/advent-of-code)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=obalunenko_advent-of-code&metric=alert_status)](https://sonarcloud.io/dashboard?id=obalunenko_advent-of-code)
+
+
+# advent-of-code
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/16360374/49324718-7954f100-f4e8-11e8-8ef6-1b701afc504f.png" width="225"/>
+</p>  
 
 
 [**Advent of Code**](http://adventofcode.com/) is an Advent calendar of small programming puzzles for a 
