@@ -4,7 +4,6 @@ package main
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -167,26 +166,6 @@ func handlePuzzleChoices(ctx context.Context, year string, opt promptui.Select) 
 
 		fmt.Println(res.String())
 	}
-}
-
-// PrettyPrint appends to passed struct indents and returns a human-readable form of struct.
-// Each element of JSON object will start from indent with prefix.
-func PrettyPrint(v interface{}, prefix string, indent string) (string, error) {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return "", fmt.Errorf("failed to marshal: %w", err)
-	}
-
-	var out bytes.Buffer
-	if err := json.Indent(&out, b, prefix, indent); err != nil {
-		return "", fmt.Errorf("failed to indent: %w", err)
-	}
-
-	if _, err := out.WriteString("\n"); err != nil {
-		return "", fmt.Errorf("failed to write string: %w", err)
-	}
-
-	return out.String(), nil
 }
 
 func isExit(input string) bool {
