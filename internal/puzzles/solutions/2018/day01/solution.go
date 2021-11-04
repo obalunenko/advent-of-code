@@ -7,6 +7,7 @@ import (
 	"io"
 	"regexp"
 	"strconv"
+	"sync"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -59,7 +60,7 @@ const (
 func part1(in io.Reader) (string, error) {
 	scanner := bufio.NewScanner(in)
 
-	var curfreq int
+	fdevice := newDevice()
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -69,19 +70,14 @@ func part1(in io.Reader) (string, error) {
 			return "", err
 		}
 
-		switch delta.sign {
-		case "+":
-			curfreq += delta.d
-		case "-":
-			curfreq -= delta.d
-		}
+		fdevice.Apply(delta)
 	}
 
 	if err := scanner.Err(); err != nil {
 		return "", fmt.Errorf("scanner error: %w", err)
 	}
 
-	return strconv.Itoa(curfreq), nil
+	return strconv.Itoa(fdevice.CurFreq()), nil
 }
 
 func part2(in io.Reader) (string, error) {
@@ -93,19 +89,14 @@ func part2(in io.Reader) (string, error) {
 
 	b := buf.Bytes()
 
-	seenfreqs := make(map[int]bool)
-
 	var (
-		curfreq int
-		loops   int
-		found   bool
+		loops int
+		found bool
 	)
 
-	for !found {
-		if len(seenfreqs) == 0 {
-			seenfreqs[curfreq] = true
-		}
+	fdevice := newDevice()
 
+	for !found {
 		scanner := bufio.NewScanner(bytes.NewReader(b))
 
 		for scanner.Scan() {
@@ -113,23 +104,16 @@ func part2(in io.Reader) (string, error) {
 
 			delta, err := getFreqDelta(line)
 			if err != nil {
-				return "", err
+				return "", fmt.Errorf("get frequency delta: %w", err)
 			}
 
-			switch delta.sign {
-			case "+":
-				curfreq += delta.d
-			case "-":
-				curfreq -= delta.d
-			}
+			fdevice.Apply(delta)
 
-			if seenfreqs[curfreq] {
+			if fdevice.SeenFreq(fdevice.CurFreq()) {
 				found = true
 
 				break
 			}
-
-			seenfreqs[curfreq] = true
 		}
 
 		if err := scanner.Err(); err != nil {
@@ -139,7 +123,50 @@ func part2(in io.Reader) (string, error) {
 		loops++
 	}
 
-	return strconv.Itoa(curfreq), nil
+	return strconv.Itoa(fdevice.CurFreq()), nil
+}
+
+type device struct {
+	frequency int
+	mu        sync.Mutex
+	seen      map[int]int
+}
+
+func newDevice() *device {
+	d := device{
+		frequency: 0,
+		mu:        sync.Mutex{},
+		seen:      make(map[int]int),
+	}
+
+	d.seen[0] = 1
+
+	return &d
+}
+
+func (d *device) Apply(delta freqDelta) {
+	switch delta.sign {
+	case "+":
+		d.frequency += delta.d
+	case "-":
+		d.frequency -= delta.d
+	}
+
+	d.mu.Lock()
+	defer d.mu.Unlock()
+
+	d.seen[d.frequency] = d.seen[d.frequency] + 1
+}
+
+func (d *device) CurFreq() int {
+	return d.frequency
+}
+
+func (d *device) SeenFreq(freq int) bool {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+
+	return d.seen[freq] > 1
 }
 
 type freqDelta struct {
