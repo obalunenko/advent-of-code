@@ -64,23 +64,16 @@ func part1(in io.Reader) (string, error) {
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		matches := re.FindStringSubmatch(line)
-
-		if len(matches) != totalmatches {
-			return "", fmt.Errorf("wrong matches[%d] for line[%s], should be [%d]",
-				len(matches), line, totalmatches)
-		}
-
-		d, err := strconv.Atoi(matches[digits])
+		delta, err := getFreqDelta(line)
 		if err != nil {
-			return "", fmt.Errorf("strconv atoi: %w", err)
+			return "", err
 		}
 
-		switch matches[sign] {
+		switch delta.sign {
 		case "+":
-			curfreq += d
+			curfreq += delta.d
 		case "-":
-			curfreq -= d
+			curfreq -= delta.d
 		}
 	}
 
@@ -118,23 +111,16 @@ func part2(in io.Reader) (string, error) {
 		for scanner.Scan() {
 			line := scanner.Text()
 
-			matches := re.FindStringSubmatch(line)
-
-			if len(matches) != totalmatches {
-				return "", fmt.Errorf("wrong matches[%d] for line[%s], should be [%d]",
-					len(matches), line, totalmatches)
-			}
-
-			d, err := strconv.Atoi(matches[digits])
+			delta, err := getFreqDelta(line)
 			if err != nil {
-				return "", fmt.Errorf("strconv atoi: %w", err)
+				return "", err
 			}
 
-			switch matches[sign] {
+			switch delta.sign {
 			case "+":
-				curfreq += d
+				curfreq += delta.d
 			case "-":
-				curfreq -= d
+				curfreq -= delta.d
 			}
 
 			if seenfreqs[curfreq] {
@@ -154,4 +140,28 @@ func part2(in io.Reader) (string, error) {
 	}
 
 	return strconv.Itoa(curfreq), nil
+}
+
+type freqDelta struct {
+	sign string
+	d    int
+}
+
+func getFreqDelta(line string) (freqDelta, error) {
+	matches := re.FindStringSubmatch(line)
+
+	if len(matches) != totalmatches {
+		return freqDelta{}, fmt.Errorf("wrong matches[%d] for line[%s], should be [%d]",
+			len(matches), line, totalmatches)
+	}
+
+	d, err := strconv.Atoi(matches[digits])
+	if err != nil {
+		return freqDelta{}, fmt.Errorf("strconv atoi: %w", err)
+	}
+
+	return freqDelta{
+		sign: matches[sign],
+		d:    d,
+	}, nil
 }

@@ -196,3 +196,51 @@ func Test_solution_Part2(t *testing.T) {
 		})
 	}
 }
+
+func Test_getFreqDelta(t *testing.T) {
+	type args struct {
+		line string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    freqDelta
+		wantErr bool
+	}{
+		{
+			name: "",
+			args: args{
+				line: "+2",
+			},
+			want: freqDelta{
+				sign: "+",
+				d:    2,
+			},
+			wantErr: false,
+		},
+		{
+			name: "",
+			args: args{
+				line: "2",
+			},
+			want: freqDelta{
+				sign: "",
+				d:    0,
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := getFreqDelta(tt.args.line)
+			if tt.wantErr {
+				assert.Error(t, err)
+
+				return
+			}
+
+			assert.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
