@@ -64,3 +64,6 @@ issues:
         - gofumpt
         - goimports
         - gosimple
+    - path: internal/puzzles/constants.go
+      linters:
+        - revive
