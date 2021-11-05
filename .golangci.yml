@@ -32,7 +32,7 @@ linters-settings:
   gocyclo:
     min-complexity: 15
   goimports:
-    local-prefixes: ithub.com/obalunenko/advent-of-code
+    local-prefixes: github.com/obalunenko/advent-of-code
   gomnd:
     settings:
       mnd:
