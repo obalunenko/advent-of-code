@@ -137,6 +137,9 @@ issues:
     - path: internal/puzzles/constants.go
       linters:
         - revive
+    - path: internal/puzzles/solutions/**/**
+      linters:
+        - gochecknoinits
 
       # Show only new issues: if there are unstaged changes or untracked files,
       # only those changes are analyzed, else only changes in HEAD~ are analyzed.

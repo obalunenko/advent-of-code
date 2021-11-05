@@ -1,3 +1,4 @@
+// Package input provides access to embedded puzzles input files.
 package input
 
 import (
