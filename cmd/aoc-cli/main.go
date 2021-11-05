@@ -198,7 +198,7 @@ func run(year string, name string) (puzzles.Result, error) {
 
 	res, err := puzzles.Run(s, bytes.NewReader(asset))
 	if err != nil {
-		return puzzles.Result{}, fmt.Errorf("failed to run [%s]: %w", s.Name(), err)
+		return puzzles.Result{}, fmt.Errorf("failed to run [%s]: %w", fullName, err)
 	}
 
 	return res, nil
