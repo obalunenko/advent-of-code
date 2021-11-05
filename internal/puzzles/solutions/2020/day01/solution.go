@@ -16,7 +16,7 @@ func (s solution) Year() string {
 	return puzzles.Year2020.String()
 }
 
-func (s solution) Name() string {
+func (s solution) Day() string {
 	return puzzles.Day01.String()
 }
 
@@ -108,7 +108,6 @@ loop:
 				}
 			}
 		}
-
 	}
 
 	if !found {

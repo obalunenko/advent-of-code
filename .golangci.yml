@@ -27,6 +27,7 @@ linters-settings:
     disabled-checks:
       - dupImport # https://github.com/go-critic/go-critic/issues/845
       - ifElseChain
+      - hugeParam
       - octalLiteral
       - wrapperFunc
   gocyclo:
@@ -89,6 +90,8 @@ linters:
     - unused
     - varcheck
     - whitespace
+    - revive
+    - wsl
 
   # don't enable:
   # - asciicheck
@@ -103,8 +106,6 @@ linters:
   # - nestif
   # - prealloc
   # - testpackage
-  # - revive
-  # - wsl
 
 issues:
   exclude-use-default: false

@@ -12,7 +12,7 @@ import (
 
 type solution struct{}
 
-func (s solution) Name() string {
+func (s solution) Day() string {
 	return puzzles.Day01.String()
 }
 
@@ -73,7 +73,6 @@ func makeList(in io.Reader) ([]int, error) {
 		r, _, err := reader.ReadRune()
 		if err != nil {
 			if errors.Is(err, io.EOF) {
-
 				break
 			}
 
@@ -115,11 +114,12 @@ func (i iterator) Sum() int {
 		sum                    int
 	)
 
-	rightBound := len(i.list) - 1
+	listlen := len(i.list)
+	rightBound := listlen - 1
 	lastidx := rightBound
 
 	if !i.isCircular {
-		lastidx = lastidx - i.shift
+		lastidx -= i.shift
 	}
 
 	for cursorStart <= lastidx {
@@ -128,7 +128,7 @@ func (i iterator) Sum() int {
 		cursorEnd += i.shift
 		if i.isCircular {
 			if cursorEnd > rightBound {
-				cursorEnd = cursorEnd - len(i.list)
+				cursorEnd -= listlen
 			}
 		}
 

@@ -28,7 +28,7 @@ func (m mockSolver) Part2(_ io.Reader) (string, error) {
 	return "part 2 of mockSolver", nil
 }
 
-func (m mockSolver) Name() string {
+func (m mockSolver) Day() string {
 	return m.name
 }
 
@@ -49,7 +49,7 @@ func (a anotherMockSolver) Part2(_ io.Reader) (string, error) {
 	return "part 2 of anotherMockSolver", nil
 }
 
-func (a anotherMockSolver) Name() string {
+func (a anotherMockSolver) Day() string {
 	return a.name
 }
 

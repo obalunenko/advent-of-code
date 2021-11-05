@@ -21,7 +21,7 @@ func (s solution) Year() string {
 	return puzzles.Year2019.String()
 }
 
-func (s solution) Name() string {
+func (s solution) Day() string {
 	return puzzles.Day02.String()
 }
 
@@ -69,6 +69,6 @@ func (s solution) Part2(input io.Reader) (string, error) {
 	return "", errors.New("can't found non and verb")
 }
 
-func nounVerb(noun int, verb int) int {
+func nounVerb(noun, verb int) int {
 	return 100*noun + verb
 }

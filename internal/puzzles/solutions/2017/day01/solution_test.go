@@ -86,7 +86,8 @@ func Test_solution_Part2(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "`1212` produces `6`: the list contains `4` items, and all four digits match the digit `2` items ahead",
+			name: "`1212` produces `6`: the list contains `4` items, and all four " +
+				"digits match the digit `2` items ahead",
 			args: args{
 				input: strings.NewReader("1212"),
 			},

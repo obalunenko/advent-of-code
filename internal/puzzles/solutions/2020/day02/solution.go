@@ -17,7 +17,7 @@ func (s solution) Year() string {
 	return puzzles.Year2020.String()
 }
 
-func (s solution) Name() string {
+func (s solution) Day() string {
 	return puzzles.Day02.String()
 }
 
@@ -50,8 +50,6 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		pwd       string
 		pwdParams passwordParams
 	}
-
-	var count int
 
 	scanner := bufio.NewScanner(input)
 
@@ -112,19 +110,19 @@ func (s solution) Part1(input io.Reader) (string, error) {
 
 	close(inchan)
 
-loop:
+	var count int
+
 	for {
 		select {
 		case isMatch := <-reschan:
 			if isMatch {
 				count++
-
 			}
 		case <-donechan:
 			operations--
 		}
 		if operations == 0 {
-			break loop
+			break
 		}
 	}
 
@@ -176,7 +174,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 					found++
 				}
 
-				res <- found > 0 && found < 2
+				res <- found == 1
 
 				done <- struct{}{}
 			}(d, res, done)

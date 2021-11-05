@@ -15,7 +15,7 @@ import (
 
 type solution struct{}
 
-func (s solution) Name() string {
+func (s solution) Day() string {
 	return puzzles.Day01.String()
 }
 
@@ -118,19 +118,19 @@ type position struct {
 }
 
 func (p *position) addX(n int) {
-	p.x = p.x + n
+	p.x += n
 }
 
 func (p *position) addY(n int) {
-	p.y = p.y + n
+	p.y += n
 }
 
 func (p *position) subX(n int) {
-	p.x = p.x - n
+	p.x -= n
 }
 
 func (p *position) subY(n int) {
-	p.y = p.y - n
+	p.y -= n
 }
 
 func (p position) manhattan() int {
@@ -217,9 +217,68 @@ func (c *cab) Move(t turn, steps int) error {
 		c.n.moveSouth(steps)
 	case westDirection:
 		c.n.moveWest(steps)
+	case unknownDirection, sentinelDirection:
+		return errInvalidDirect
 	}
 
 	return nil
+}
+
+type navigator struct {
+	record    chan position
+	pos       position
+	track     track
+	mu        *sync.Mutex
+	wg        *sync.WaitGroup
+	revisited []position
+}
+
+func newNavigator() navigator {
+	return navigator{
+		record: make(chan position),
+		pos: position{
+			x: 0,
+			y: 0,
+		},
+		track:     newTrack(),
+		mu:        &sync.Mutex{},
+		wg:        &sync.WaitGroup{},
+		revisited: []position{},
+	}
+}
+
+func (n *navigator) recordTrack(p position) {
+	n.mu.Lock()
+
+	defer func() {
+		n.mu.Unlock()
+	}()
+
+	if n.track.isVisited(p) {
+		n.revisited = append(n.revisited, p)
+	}
+
+	n.track.record(p)
+}
+
+func (n *navigator) start() {
+	n.wg.Add(1)
+
+	for p := range n.record {
+		n.recordTrack(p)
+	}
+
+	n.wg.Done()
+}
+
+func (n *navigator) stop() {
+	close(n.record)
+
+	n.wg.Wait()
+}
+
+func (n navigator) revisitedList() []position {
+	return n.revisited
 }
 
 func (n *navigator) moveNorth(steps int) {
@@ -262,10 +321,6 @@ func (n *navigator) moveWest(steps int) {
 	}
 }
 
-func (c *cab) Track() track {
-	return c.n.track
-}
-
 func (n navigator) Pos() position {
 	n.mu.Lock()
 	defer n.mu.Unlock()
@@ -277,7 +332,7 @@ func (n navigator) Pos() position {
 var re = regexp.MustCompile(`(?msi)(L|R)(\d+)`)
 
 const (
-	fullMatchPos = iota
+	_ = iota
 	turnPos
 	stepsPos
 
@@ -302,63 +357,6 @@ func splitCommand(cmd string) (turn, int, error) {
 	}
 
 	return t, s, nil
-}
-
-type navigator struct {
-	record    chan position
-	pos       position
-	track     track
-	mu        *sync.Mutex
-	wg        *sync.WaitGroup
-	revisited []position
-}
-
-func (n *navigator) recordTrack(p position) {
-	n.mu.Lock()
-
-	defer func() {
-		n.mu.Unlock()
-	}()
-
-	if n.track.isVisited(p) {
-		n.revisited = append(n.revisited, p)
-	}
-
-	n.track.record(p)
-}
-
-func (n *navigator) start() {
-	n.wg.Add(1)
-
-	for p := range n.record {
-		n.recordTrack(p)
-	}
-
-	n.wg.Done()
-}
-
-func (n *navigator) stop() {
-	close(n.record)
-
-	n.wg.Wait()
-}
-
-func (n navigator) revisitedList() []position {
-	return n.revisited
-}
-
-func newNavigator() navigator {
-	return navigator{
-		record: make(chan position),
-		pos: position{
-			x: 0,
-			y: 0,
-		},
-		track:     newTrack(),
-		mu:        &sync.Mutex{},
-		wg:        &sync.WaitGroup{},
-		revisited: []position{},
-	}
 }
 
 type track map[position]bool

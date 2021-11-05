@@ -167,25 +167,25 @@ func handlePuzzleChoices(ctx context.Context, year string, opt promptui.Select) 
 	}
 }
 
-func isExit(input string) bool {
-	return strings.EqualFold(exit, input)
+func isExit(in string) bool {
+	return strings.EqualFold(exit, in)
 }
 
 func isAbort(err error) bool {
 	return strings.HasSuffix(err.Error(), abort)
 }
 
-func isBack(input string) bool {
-	return strings.EqualFold(back, input)
+func isBack(in string) bool {
+	return strings.EqualFold(back, in)
 }
 
-func run(year string, name string) (puzzles.Result, error) {
-	s, err := puzzles.GetSolver(year, name)
+func run(year, day string) (puzzles.Result, error) {
+	s, err := puzzles.GetSolver(year, day)
 	if err != nil {
 		return puzzles.Result{}, fmt.Errorf("failed to get solver: %w", err)
 	}
 
-	fullName, err := puzzles.MakeName(s.Year(), s.Name())
+	fullName, err := puzzles.MakeName(s.Year(), s.Day())
 	if err != nil {
 		return puzzles.Result{}, fmt.Errorf("failed to make full name: %w", err)
 	}

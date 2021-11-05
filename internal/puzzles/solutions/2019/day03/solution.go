@@ -23,7 +23,7 @@ func (s solution) Year() string {
 	return puzzles.Year2019.String()
 }
 
-func (s solution) Name() string {
+func (s solution) Day() string {
 	return puzzles.Day03.String()
 }
 

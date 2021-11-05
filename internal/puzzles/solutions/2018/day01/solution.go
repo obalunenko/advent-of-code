@@ -14,7 +14,7 @@ import (
 
 type solution struct{}
 
-func (s solution) Name() string {
+func (s solution) Day() string {
 	return puzzles.Day01.String()
 }
 
@@ -144,7 +144,7 @@ func (d *device) Apply(delta freqDelta) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 
-	d.seen[d.frequency] = d.seen[d.frequency] + 1
+	d.seen[d.frequency]++
 }
 
 func (d *device) CurFreq() int {

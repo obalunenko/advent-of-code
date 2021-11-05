@@ -20,7 +20,7 @@ var ErrNotImplemented = errors.New("not implemented")
 type Solver interface {
 	Part1(input io.Reader) (string, error)
 	Part2(input io.Reader) (string, error)
-	Name() string
+	Day() string
 	Year() string
 }
 
@@ -34,7 +34,7 @@ var (
 // it panics.
 func Register(solver Solver) {
 	year := solver.Year()
-	name := solver.Name()
+	name := solver.Day()
 
 	solversMu.Lock()
 	defer solversMu.Unlock()
@@ -184,7 +184,7 @@ func Run(solver Solver, input io.Reader) (Result, error) {
 
 	res := Result{
 		Year:  solver.Year(),
-		Name:  solver.Name(),
+		Name:  solver.Day(),
 		Part1: unsolved,
 		Part2: unsolved,
 	}

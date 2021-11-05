@@ -12,7 +12,7 @@ import (
 
 type solution struct{}
 
-func (s solution) Name() string {
+func (s solution) Day() string {
 	return puzzles.Day01.String()
 }
 

@@ -28,7 +28,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 	return calc(input, calcPart2)
 }
 
-func (s solution) Name() string {
+func (s solution) Day() string {
 	return puzzles.Day01.String()
 }
 
@@ -46,7 +46,7 @@ func (m module) fuel() int {
 
 	diff := mass % divFactor
 	if diff != 0 {
-		mass = mass - diff
+		mass -= diff
 	}
 
 	f := (mass / divFactor) - subFactor
