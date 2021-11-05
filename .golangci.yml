@@ -137,7 +137,7 @@ issues:
     - path: internal/puzzles/constants.go
       linters:
         - revive
-    - path: internal/puzzles/solutions/**/**
+    - path: internal/puzzles/solutions/
       linters:
         - gochecknoinits
 
