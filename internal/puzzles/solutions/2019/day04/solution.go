@@ -46,14 +46,16 @@ func (s solution) Name() string {
 }
 
 func run(input io.Reader, criteria isPwdFunc) (string, error) {
-	buf := new(bytes.Buffer)
+	var buf bytes.Buffer
 	if _, err := buf.ReadFrom(input); err != nil {
 		return "", fmt.Errorf("failed to read: %w", err)
 	}
 
 	const limitsNum = 2
 
-	limits := strings.Split(buf.String(), "-") // should be 2: low and high
+	raw := strings.TrimSpace(buf.String())
+
+	limits := strings.Split(raw, "-") // should be 2: low and high
 	if len(limits) != limitsNum {
 		return "", errors.New("invalid number of limits")
 	}

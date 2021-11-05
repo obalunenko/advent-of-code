@@ -74,6 +74,8 @@ func part2(in io.Reader) (string, error) {
 }
 
 func makeList(in io.Reader) ([]int, error) {
+	const newline = '\n'
+
 	var list []int
 
 	reader := bufio.NewReader(in)
@@ -87,6 +89,10 @@ func makeList(in io.Reader) ([]int, error) {
 			}
 
 			return nil, fmt.Errorf("read rune: %w", err)
+		}
+
+		if r == newline {
+			continue
 		}
 
 		n, err := strconv.Atoi(string(r))
