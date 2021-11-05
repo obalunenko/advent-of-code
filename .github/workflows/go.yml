@@ -65,7 +65,7 @@ jobs:
         os: [ 'ubuntu-20.04' ]
         go: [ '1.17' ]
     runs-on: ${{ matrix.os }}
-    name: Send cover and quality reports
+    name: Quality reports
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
@@ -87,6 +87,10 @@ jobs:
       - name: Prepare test coverage
         run: |
           make test-cover
+
+      - name: Prepare lint report
+        run: |
+          make lint-sonar
           
       - name: Cover report
         if: success()
