@@ -95,7 +95,7 @@ issues:
           severity: warning
 
 run:
-  issues-exit-code: 0
+  issues-exit-code: 1
   tests: true
   skip-dirs:
     - vendor/
