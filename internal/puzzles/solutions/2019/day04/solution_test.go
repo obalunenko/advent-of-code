@@ -297,9 +297,17 @@ func Test_solution_Part2(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "",
+			name: "`111000-111222` produces `8`",
 			args: args{
 				input: strings.NewReader("111000-111222"),
+			},
+			want:    "8",
+			wantErr: false,
+		},
+		{
+			name: "`111000-111222\n\n` produces `8`",
+			args: args{
+				input: strings.NewReader("111000-111222\n\n"),
 			},
 			want:    "8",
 			wantErr: false,

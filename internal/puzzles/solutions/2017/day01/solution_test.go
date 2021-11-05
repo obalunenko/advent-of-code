@@ -125,6 +125,14 @@ func Test_solution_Part2(t *testing.T) {
 			want:    "4",
 			wantErr: false,
 		},
+		{
+			name: "`12131415\n\n` produces `4`",
+			args: args{
+				input: strings.NewReader("12131415\n\n"),
+			},
+			want:    "4",
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {
