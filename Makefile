@@ -35,9 +35,13 @@ compile-aoc-cli:
 
 ## Test coverage report.
 test-cover:
-	${call colored, test-cover is running...}
 	./scripts/tests/coverage.sh
 .PHONY: test-cover
+
+## Tests sonar report generate.
+test-sonar-report:
+	./scripts/tests/sonar-report.sh
+.PHONY: test-sonar-report
 
 ## Open coverage report.
 open-cover-report: test-cover
@@ -67,7 +71,6 @@ imports:
 
 ## Format code with go fmt.
 fmt:
-	${call colored, fmt is running...}
 	./scripts/style/fmt.sh
 .PHONY: fmt
 
@@ -81,7 +84,6 @@ install-tools:
 
 ## vet project
 vet:
-	${call colored, vet is running...}
 	./scripts/linting/run-vet.sh
 .PHONY: vet
 
@@ -100,9 +102,8 @@ lint-sonar:
 	./scripts/linting/golangci-sonar.sh
 .PHONY: lint-sonar
 
-## recreate all generated code and swagger documentation.
+## recreate all generated code and documentation.
 codegen:
-	${call colored, codegen is running...}
 	./scripts/codegen/go-generate.sh
 .PHONY: codegen
 
@@ -117,7 +118,6 @@ release:
 
 ## Release local snapshot
 release-local-snapshot:
-	${call colored, release is running...}
 	./scripts/release/local-snapshot-release.sh
 .PHONY: release-local-snapshot
 
