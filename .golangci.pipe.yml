@@ -13,7 +13,7 @@ linters-settings:
   gofmt:
     simplify: true
   goimports:
-    local-prefixes: github.com/obalunenko/advent-of-code
+    local-prefixes: github.com/obalunenko/advent-of-code/
   revive:
     # see https://github.com/mgechev/revive#available-rules for details.
     ignore-generated-header: true
