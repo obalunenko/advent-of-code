@@ -181,7 +181,7 @@ func (p pos) manhattan() int {
 	return x + y
 }
 
-func findCross(wm1 map[pos]int, wm2 map[pos]int) []pos {
+func findCross(wm1, wm2 map[pos]int) []pos {
 	res := make([]pos, 0, len(wm1))
 
 	for p := range wm1 {

@@ -22,7 +22,8 @@ func Test_solution_Part1(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: `1122 produces a sum of 3 (1 + 2) because the first digit (1) matches the second digit and the third digit (2) matches the fourth digit`,
+			name: "1122 produces a sum of 3 (1 + 2) because the first digit (1) matches the second digit and the " +
+				"third digit (2) matches the fourth digit",
 			args: args{
 				input: strings.NewReader("1122"),
 			},

@@ -141,7 +141,7 @@ func (c *IntComputer) abort() (int, error) {
 // Input allow to input noun and verb into intcode program for execution.
 // noun - 2nd position in intcode;
 // verb - 3rd position in intcode.
-func (c *IntComputer) Input(noun int, verb int) {
+func (c *IntComputer) Input(noun, verb int) {
 	c.memory[1] = noun
 	c.memory[2] = verb
 }

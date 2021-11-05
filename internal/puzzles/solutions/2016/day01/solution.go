@@ -329,7 +329,7 @@ func (n navigator) Pos() position {
 }
 
 // Example: L4, R5
-var re = regexp.MustCompile(`(?msi)(L|R)(\d+)`)
+var re = regexp.MustCompile(`(?msi)([LR])(\d+)`)
 
 const (
 	_ = iota
@@ -351,6 +351,7 @@ func splitCommand(cmd string) (turn, int, error) {
 	if err != nil {
 		return "", 0, fmt.Errorf("turnFromstring: %w", err)
 	}
+
 	s, err := strconv.Atoi(parts[stepsPos])
 	if err != nil {
 		return "", 0, fmt.Errorf("invalid steps num: %w", err)

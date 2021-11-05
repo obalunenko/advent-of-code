@@ -26,7 +26,7 @@ func init() {
 }
 
 var (
-	pwdRegex = regexp.MustCompile(`(?s)(\d{1,2})-(\d{1,2}) ([a-zA-Z]): ([[:word:]]+)`)
+	pwdRegex = regexp.MustCompile(`(?s)(\d{1,2})-(\d{1,2}) ([a-zA-Z]): (\w+)`)
 )
 
 func (s solution) Part1(input io.Reader) (string, error) {
@@ -121,6 +121,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		case <-donechan:
 			operations--
 		}
+
 		if operations == 0 {
 			break
 		}
@@ -222,19 +223,18 @@ func (s solution) Part2(input io.Reader) (string, error) {
 
 	close(inchan)
 
-loop:
 	for {
 		select {
 		case isMatch := <-reschan:
 			if isMatch {
 				count++
-
 			}
 		case <-donechan:
 			operations--
 		}
+
 		if operations == 0 {
-			break loop
+			break
 		}
 	}
 

@@ -53,6 +53,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 	for e := range expensereport {
 		a = e
 		b = dest - e
+
 		if expensereport[b] {
 			break
 		}

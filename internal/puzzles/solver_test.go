@@ -186,12 +186,12 @@ func TestSolversByYear(t *testing.T) {
 
 	makeAndRegisterSolvers(t)
 
-	solvers := puzzles.NamesByYear("2019")
+	solvers := puzzles.DaysByYear("2019")
 	expectedSolvers := []string{"mock", "anotherMock"}
 
 	assert.ElementsMatch(t, expectedSolvers, solvers)
 
-	solvers = puzzles.NamesByYear("2017")
+	solvers = puzzles.DaysByYear("2017")
 	expectedSolvers = []string{"mock1"}
 
 	assert.ElementsMatch(t, expectedSolvers, solvers)

@@ -148,6 +148,7 @@ func Test_getFreqDelta(t *testing.T) {
 	type args struct {
 		line string
 	}
+
 	tests := []struct {
 		name    string
 		args    args
@@ -177,6 +178,7 @@ func Test_getFreqDelta(t *testing.T) {
 			wantErr: true,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := getFreqDelta(tt.args.line)

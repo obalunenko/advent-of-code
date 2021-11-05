@@ -115,7 +115,7 @@ func handleYearChoices(ctx context.Context, opt promptui.Select) error {
 }
 
 func menuPuzzle(ctx context.Context, year string) error {
-	solvers := puzzles.NamesByYear(year)
+	solvers := puzzles.DaysByYear(year)
 
 	prompt := promptui.Select{
 		Label:             "Puzzles menu (exit' for exit; back - to return to year selection)",
