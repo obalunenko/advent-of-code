@@ -11,25 +11,18 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles/utils/intcomputer"
 )
 
-const (
-	puzzleName = "day02"
-	year       = "2019"
-)
-
 func init() {
-	puzzles.Register(solution{
-		year: year,
-		name: puzzleName,
-	})
+	puzzles.Register(solution{})
 }
 
-type solution struct {
-	year string
-	name string
-}
+type solution struct{}
 
 func (s solution) Year() string {
-	return s.year
+	return puzzles.Year2019.String()
+}
+
+func (s solution) Name() string {
+	return puzzles.Day02.String()
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
@@ -78,8 +71,4 @@ func (s solution) Part2(input io.Reader) (string, error) {
 
 func nounVerb(noun int, verb int) int {
 	return 100*noun + verb
-}
-
-func (s solution) Name() string {
-	return s.name
 }

@@ -11,29 +11,18 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
-const (
-	puzzleName = "day02"
-	year       = "2020"
-)
-
-type solution struct {
-	year string
-	name string
-}
+type solution struct{}
 
 func (s solution) Year() string {
-	return s.year
+	return puzzles.Year2020.String()
 }
 
 func (s solution) Name() string {
-	return s.name
+	return puzzles.Day02.String()
 }
 
 func init() {
-	puzzles.Register(solution{
-		year: year,
-		name: puzzleName,
-	})
+	puzzles.Register(solution{})
 }
 
 var (

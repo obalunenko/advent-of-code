@@ -9,10 +9,7 @@ import (
 )
 
 func Test_solution_Part1(t *testing.T) {
-	type fields struct {
-		name string
-		year string
-	}
+	var s solution
 
 	type args struct {
 		input io.Reader
@@ -20,17 +17,12 @@ func Test_solution_Part1(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		want    string
 		wantErr bool
 	}{
 		{
 			name: "+1, +1, +1` results in  `3`",
-			fields: fields{
-				name: "day01",
-				year: "2018",
-			},
 			args: args{
 				input: strings.NewReader("+1\n+1\n+1"),
 			},
@@ -39,10 +31,6 @@ func Test_solution_Part1(t *testing.T) {
 		},
 		{
 			name: "`+1, +1, -2` results in  `0`",
-			fields: fields{
-				name: "day01",
-				year: "2018",
-			},
 			args: args{
 				input: strings.NewReader("+1\n+1\n-2"),
 			},
@@ -51,10 +39,6 @@ func Test_solution_Part1(t *testing.T) {
 		},
 		{
 			name: "`-1, -2, -3` results in `-6`",
-			fields: fields{
-				name: "day01",
-				year: "2018",
-			},
 			args: args{
 				input: strings.NewReader("-1\n-2\n-3"),
 			},
@@ -63,9 +47,6 @@ func Test_solution_Part1(t *testing.T) {
 		},
 		{
 			name: "`+1, -2, +3, +1` results in `3`",
-			fields: fields{
-				name: "",
-			},
 			args: args{
 				input: strings.NewReader("+1\n-2\n+3\n+1"),
 			},
@@ -78,11 +59,6 @@ func Test_solution_Part1(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			s := solution{
-				year: tt.fields.year,
-				name: tt.fields.name,
-			}
-
 			got, err := s.Part1(tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)
@@ -97,10 +73,7 @@ func Test_solution_Part1(t *testing.T) {
 }
 
 func Test_solution_Part2(t *testing.T) {
-	type fields struct {
-		name string
-		year string
-	}
+	var s solution
 
 	type args struct {
 		input io.Reader
@@ -108,17 +81,12 @@ func Test_solution_Part2(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		want    string
 		wantErr bool
 	}{
 		{
 			name: "`+1, -2, +3, +1` results in `2`",
-			fields: fields{
-				name: "2018",
-				year: "day01",
-			},
 			args: args{
 				input: strings.NewReader("+1\n-2\n+3\n+1"),
 			},
@@ -127,10 +95,6 @@ func Test_solution_Part2(t *testing.T) {
 		},
 		{
 			name: "`+1, -1` first reaches `0` twice.",
-			fields: fields{
-				name: "2018",
-				year: "day01",
-			},
 			args: args{
 				input: strings.NewReader("+1\n-1"),
 			},
@@ -139,10 +103,6 @@ func Test_solution_Part2(t *testing.T) {
 		},
 		{
 			name: "`+3, +3, +4, -2, -4` first reaches `10` twice.",
-			fields: fields{
-				name: "2018",
-				year: "day01",
-			},
 			args: args{
 				input: strings.NewReader("+3\n+3\n+4\n-2\n-4"),
 			},
@@ -151,10 +111,6 @@ func Test_solution_Part2(t *testing.T) {
 		},
 		{
 			name: "`-6, +3, +8, +5, -6` first reaches `5` twice.",
-			fields: fields{
-				name: "2018",
-				year: "day01",
-			},
 			args: args{
 				input: strings.NewReader("-6\n+3\n+8\n+5\n-6"),
 			},
@@ -163,10 +119,6 @@ func Test_solution_Part2(t *testing.T) {
 		},
 		{
 			name: "`+7, +7, -2, -7, -4` first reaches `14` twice.",
-			fields: fields{
-				name: "2018",
-				year: "day01",
-			},
 			args: args{
 				input: strings.NewReader("+7\n+7\n-2\n-7\n-4"),
 			},
@@ -179,11 +131,6 @@ func Test_solution_Part2(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			s := solution{
-				year: tt.fields.year,
-				name: tt.fields.name,
-			}
-
 			got, err := s.Part2(tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)

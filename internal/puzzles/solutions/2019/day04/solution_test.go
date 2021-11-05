@@ -9,9 +9,7 @@ import (
 )
 
 func Test_solution_Part1(t *testing.T) {
-	type fields struct {
-		name string
-	}
+	var s solution
 
 	type args struct {
 		input io.Reader
@@ -19,16 +17,12 @@ func Test_solution_Part1(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		want    string
 		wantErr bool
 	}{
 		{
 			name: "",
-			fields: fields{
-				name: "",
-			},
 			args: args{
 				input: strings.NewReader("111000-111222"),
 			},
@@ -41,10 +35,6 @@ func Test_solution_Part1(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			s := solution{
-				name: tt.fields.name,
-			}
-
 			got, err := s.Part1(tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)
@@ -294,9 +284,7 @@ func Test_isPasswordPart2(t *testing.T) {
 }
 
 func Test_solution_Part2(t *testing.T) {
-	type fields struct {
-		name string
-	}
+	var s solution
 
 	type args struct {
 		input io.Reader
@@ -304,16 +292,12 @@ func Test_solution_Part2(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		want    string
 		wantErr bool
 	}{
 		{
 			name: "",
-			fields: fields{
-				name: "",
-			},
 			args: args{
 				input: strings.NewReader("111000-111222"),
 			},
@@ -326,10 +310,6 @@ func Test_solution_Part2(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			s := solution{
-				name: tt.fields.name,
-			}
-
 			got, err := s.Part2(tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)
