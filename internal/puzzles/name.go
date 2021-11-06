@@ -13,7 +13,7 @@ var (
 )
 
 // MakeName builds puzzle name according to year and puzzle passed.
-func MakeName(year string, puzzle string) (string, error) {
+func MakeName(year, puzzle string) (string, error) {
 	if puzzle == "" {
 		return "", ErrInvalidPzzlName
 	}
