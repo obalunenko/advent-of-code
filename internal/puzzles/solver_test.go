@@ -28,7 +28,7 @@ func (m mockSolver) Part2(_ io.Reader) (string, error) {
 	return "part 2 of mockSolver", nil
 }
 
-func (m mockSolver) Name() string {
+func (m mockSolver) Day() string {
 	return m.name
 }
 
@@ -49,7 +49,7 @@ func (a anotherMockSolver) Part2(_ io.Reader) (string, error) {
 	return "part 2 of anotherMockSolver", nil
 }
 
-func (a anotherMockSolver) Name() string {
+func (a anotherMockSolver) Day() string {
 	return a.name
 }
 
@@ -186,13 +186,71 @@ func TestSolversByYear(t *testing.T) {
 
 	makeAndRegisterSolvers(t)
 
-	solvers := puzzles.NamesByYear("2019")
+	solvers := puzzles.DaysByYear("2019")
 	expectedSolvers := []string{"mock", "anotherMock"}
 
 	assert.ElementsMatch(t, expectedSolvers, solvers)
 
-	solvers = puzzles.NamesByYear("2017")
+	solvers = puzzles.DaysByYear("2017")
 	expectedSolvers = []string{"mock1"}
 
 	assert.ElementsMatch(t, expectedSolvers, solvers)
+}
+
+func TestResult_String(t *testing.T) {
+	type fields struct {
+		Year  string
+		Name  string
+		Part1 string
+		Part2 string
+	}
+
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name: "",
+			fields: fields{
+				Year:  "2020",
+				Name:  "day01",
+				Part1: "12",
+				Part2: "10",
+			},
+			want: `
+2020/day01 puzzle answer:
+| part1: 12 |
+| part2: 10 |
+`,
+		},
+		{
+			name: "",
+			fields: fields{
+				Year:  "",
+				Name:  "",
+				Part1: "",
+				Part2: "",
+			},
+			want: `
+unknown/unknown puzzle answer:
+| part1: not solved |
+| part2: not solved |
+`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := puzzles.Result{
+				Year:  tt.fields.Year,
+				Name:  tt.fields.Name,
+				Part1: tt.fields.Part1,
+				Part2: tt.fields.Part2,
+			}
+
+			got := r.String()
+			assert.Equal(t, tt.want, got)
+		})
+	}
 }

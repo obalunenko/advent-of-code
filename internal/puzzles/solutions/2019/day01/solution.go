@@ -1,4 +1,4 @@
-// Package day01 solves https://adventofcode.com/2019/day/1
+// Package day01 contains solution for https://adventofcode.com/2019/day/1 puzzle.
 package day01
 
 import (
@@ -10,25 +10,14 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
-const (
-	puzzleName = "day01"
-	year       = "2019"
-)
-
-type solution struct {
-	year string
-	name string
-}
+type solution struct{}
 
 func (s solution) Year() string {
-	return s.year
+	return puzzles.Year2019.String()
 }
 
 func init() {
-	puzzles.Register(solution{
-		year: year,
-		name: puzzleName,
-	})
+	puzzles.Register(solution{})
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
@@ -39,8 +28,8 @@ func (s solution) Part2(input io.Reader) (string, error) {
 	return calc(input, calcPart2)
 }
 
-func (s solution) Name() string {
-	return s.name
+func (s solution) Day() string {
+	return puzzles.Day01.String()
 }
 
 const (
@@ -57,7 +46,7 @@ func (m module) fuel() int {
 
 	diff := mass % divFactor
 	if diff != 0 {
-		mass = mass - diff
+		mass -= diff
 	}
 
 	f := (mass / divFactor) - subFactor

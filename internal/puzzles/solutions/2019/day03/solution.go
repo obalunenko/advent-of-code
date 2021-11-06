@@ -1,4 +1,4 @@
-// Package day03 solves https://adventofcode.com/2019/day/3
+// Package day03 contains solution for https://adventofcode.com/2019/day/3 puzzle.
 package day03
 
 import (
@@ -13,25 +13,18 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
-const (
-	puzzleName = "day03"
-	year       = "2019"
-)
-
 func init() {
-	puzzles.Register(solution{
-		year: year,
-		name: puzzleName,
-	})
+	puzzles.Register(solution{})
 }
 
-type solution struct {
-	year string
-	name string
-}
+type solution struct{}
 
 func (s solution) Year() string {
-	return s.year
+	return puzzles.Year2019.String()
+}
+
+func (s solution) Day() string {
+	return puzzles.Day03.String()
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
@@ -72,10 +65,6 @@ func (s solution) Part2(input io.Reader) (string, error) {
 	sort.Ints(stps)
 
 	return strconv.Itoa(stps[0]), nil
-}
-
-func (s solution) Name() string {
-	return s.name
 }
 
 type wire struct {
@@ -192,7 +181,7 @@ func (p pos) manhattan() int {
 	return x + y
 }
 
-func findCross(wm1 map[pos]int, wm2 map[pos]int) []pos {
+func findCross(wm1, wm2 map[pos]int) []pos {
 	res := make([]pos, 0, len(wm1))
 
 	for p := range wm1 {
@@ -207,8 +196,13 @@ func findCross(wm1 map[pos]int, wm2 map[pos]int) []pos {
 }
 
 func runWires(input io.Reader) ([]map[pos]int, error) {
+	const (
+		wiresnum = 2
+	)
+
+	res := make([]map[pos]int, 0, wiresnum)
+
 	scanner := bufio.NewScanner(input)
-	res := make([]map[pos]int, 0, 2)
 
 	for scanner.Scan() {
 		line := scanner.Text()

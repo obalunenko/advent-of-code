@@ -20,7 +20,7 @@ var ErrNotImplemented = errors.New("not implemented")
 type Solver interface {
 	Part1(input io.Reader) (string, error)
 	Part2(input io.Reader) (string, error)
-	Name() string
+	Day() string
 	Year() string
 }
 
@@ -34,7 +34,7 @@ var (
 // it panics.
 func Register(solver Solver) {
 	year := solver.Year()
-	name := solver.Name()
+	name := solver.Day()
 
 	solversMu.Lock()
 	defer solversMu.Unlock()
@@ -69,8 +69,8 @@ func UnregisterAllSolvers(tb testing.TB) {
 	solvers = make(map[string]map[string]Solver)
 }
 
-// NamesByYear returns a sorted list of the names of the registered puzzle solvers for passed year.
-func NamesByYear(year string) []string {
+// DaysByYear returns a sorted list of the days of the registered puzzle solvers for passed year.
+func DaysByYear(year string) []string {
 	solversMu.RLock()
 	defer solversMu.RUnlock()
 
@@ -101,14 +101,14 @@ func GetYears() []string {
 	return list
 }
 
-// GetSolver returns registered solver by passed puzzle name.
-func GetSolver(year string, name string) (Solver, error) {
+// GetSolver returns registered solver by passed puzzle day.
+func GetSolver(year, day string) (Solver, error) {
 	if year == "" {
 		return nil, errors.New("empty puzzle year")
 	}
 
-	if name == "" {
-		return nil, errors.New("empty puzzle name")
+	if day == "" {
+		return nil, errors.New("empty puzzle day")
 	}
 
 	solversMu.Lock()
@@ -120,9 +120,9 @@ func GetSolver(year string, name string) (Solver, error) {
 		return nil, fmt.Errorf("unknown puzzle year [%s]", year)
 	}
 
-	s, exist := solversYear[name]
+	s, exist := solversYear[day]
 	if !exist {
-		return nil, fmt.Errorf("unknown puzzle name [%s]", name)
+		return nil, fmt.Errorf("unknown puzzle day [%s]", day)
 	}
 
 	return s, nil
@@ -184,7 +184,7 @@ func Run(solver Solver, input io.Reader) (Result, error) {
 
 	res := Result{
 		Year:  solver.Year(),
-		Name:  solver.Name(),
+		Name:  solver.Day(),
 		Part1: unsolved,
 		Part2: unsolved,
 	}

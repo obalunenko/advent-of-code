@@ -1,3 +1,4 @@
+// Package input provides access to embedded puzzles input files.
 package input
 
 import (
@@ -21,6 +22,9 @@ func Asset(name string) ([]byte, error) {
 		filepath.Join(dir, name)))
 }
 
+// MustAsset loads and returns the asset for the given name.
+// It panics if the asset could not be found or
+// could not be loaded.
 func MustAsset(name string) []byte {
 	res, err := Asset(name)
 	if err != nil {

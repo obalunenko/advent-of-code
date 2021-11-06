@@ -1,4 +1,4 @@
-// Package day02 solves https://adventofcode.com/2019/day/2
+// Package day02 contains solution for https://adventofcode.com/2019/day/2 puzzle.
 package day02
 
 import (
@@ -11,25 +11,18 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles/utils/intcomputer"
 )
 
-const (
-	puzzleName = "day02"
-	year       = "2019"
-)
-
 func init() {
-	puzzles.Register(solution{
-		year: year,
-		name: puzzleName,
-	})
+	puzzles.Register(solution{})
 }
 
-type solution struct {
-	year string
-	name string
-}
+type solution struct{}
 
 func (s solution) Year() string {
-	return s.year
+	return puzzles.Year2019.String()
+}
+
+func (s solution) Day() string {
+	return puzzles.Day02.String()
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
@@ -38,7 +31,12 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		return "", fmt.Errorf("failed to init computer: %w", err)
 	}
 
-	c.Input(12, 2)
+	const (
+		firstPos  = 12
+		secondPos = 2
+	)
+
+	c.Input(firstPos, secondPos)
 
 	res, err := c.Execute()
 	if err != nil {
@@ -76,10 +74,6 @@ func (s solution) Part2(input io.Reader) (string, error) {
 	return "", errors.New("can't found non and verb")
 }
 
-func nounVerb(noun int, verb int) int {
+func nounVerb(noun, verb int) int {
 	return 100*noun + verb
-}
-
-func (s solution) Name() string {
-	return s.name
 }

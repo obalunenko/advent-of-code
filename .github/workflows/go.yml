@@ -65,7 +65,7 @@ jobs:
         os: [ 'ubuntu-20.04' ]
         go: [ '1.17' ]
     runs-on: ${{ matrix.os }}
-    name: Send cover and quality reports
+    name: Quality reports
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
@@ -87,13 +87,21 @@ jobs:
       - name: Prepare test coverage
         run: |
           make test-cover
+      
+      - name: Tests report
+        run: |
+          make test-sonar-report
+
+      - name: Prepare lint report
+        run: |
+          make lint-sonar
           
-      - name: Cover report
+      - name: Cover report upload
         if: success()
         run: |
           bash <(curl -s https://codecov.io/bash) -f ./coverage/full.cov    
 
-      - name: SonarCloud Scan report
+      - name: SonarCloud report upload
         uses: sonarsource/sonarcloud-github-action@v1.6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

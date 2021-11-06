@@ -103,7 +103,7 @@ function golangci() {
 
   checkInstalled 'golangci-lint'
 
-  golangci-lint run --out-format=colored-line-number ./...
+  golangci-lint run --config .golangci.yml ./...
 
   echo ""
 }

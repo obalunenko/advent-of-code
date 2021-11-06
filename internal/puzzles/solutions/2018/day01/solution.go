@@ -1,3 +1,4 @@
+// Package day01 contains solution for https://adventofcode.com/2018/day/1 puzzle.
 package day01
 
 import (
@@ -12,29 +13,18 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
-const (
-	puzzleName = "day01"
-	year       = "2018"
-)
+type solution struct{}
 
-type solution struct {
-	year string
-	name string
-}
-
-func (s solution) Name() string {
-	return s.name
+func (s solution) Day() string {
+	return puzzles.Day01.String()
 }
 
 func (s solution) Year() string {
-	return s.year
+	return puzzles.Year2018.String()
 }
 
 func init() {
-	puzzles.Register(solution{
-		year: year,
-		name: puzzleName,
-	})
+	puzzles.Register(solution{})
 }
 
 func (s solution) Part1(in io.Reader) (string, error) {
@@ -155,7 +145,7 @@ func (d *device) Apply(delta freqDelta) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 
-	d.seen[d.frequency] = d.seen[d.frequency] + 1
+	d.seen[d.frequency]++
 }
 
 func (d *device) CurFreq() int {

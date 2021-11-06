@@ -1,3 +1,4 @@
+// Package day01 contains solution for https://adventofcode.com/2016/day/1 puzzle.
 package day01
 
 import (
@@ -13,29 +14,18 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
-const (
-	puzzleName = "day01"
-	year       = "2016"
-)
+type solution struct{}
 
-type solution struct {
-	year string
-	name string
-}
-
-func (s solution) Name() string {
-	return s.name
+func (s solution) Day() string {
+	return puzzles.Day01.String()
 }
 
 func (s solution) Year() string {
-	return s.year
+	return puzzles.Year2016.String()
 }
 
 func init() {
-	puzzles.Register(solution{
-		year: year,
-		name: puzzleName,
-	})
+	puzzles.Register(solution{})
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
@@ -129,19 +119,19 @@ type position struct {
 }
 
 func (p *position) addX(n int) {
-	p.x = p.x + n
+	p.x += n
 }
 
 func (p *position) addY(n int) {
-	p.y = p.y + n
+	p.y += n
 }
 
 func (p *position) subX(n int) {
-	p.x = p.x - n
+	p.x -= n
 }
 
 func (p *position) subY(n int) {
-	p.y = p.y - n
+	p.y -= n
 }
 
 func (p position) manhattan() int {
@@ -228,9 +218,68 @@ func (c *cab) Move(t turn, steps int) error {
 		c.n.moveSouth(steps)
 	case westDirection:
 		c.n.moveWest(steps)
+	case unknownDirection, sentinelDirection:
+		return errInvalidDirect
 	}
 
 	return nil
+}
+
+type navigator struct {
+	record    chan position
+	pos       position
+	track     track
+	mu        *sync.Mutex
+	wg        *sync.WaitGroup
+	revisited []position
+}
+
+func newNavigator() navigator {
+	return navigator{
+		record: make(chan position),
+		pos: position{
+			x: 0,
+			y: 0,
+		},
+		track:     newTrack(),
+		mu:        &sync.Mutex{},
+		wg:        &sync.WaitGroup{},
+		revisited: []position{},
+	}
+}
+
+func (n *navigator) recordTrack(p position) {
+	n.mu.Lock()
+
+	defer func() {
+		n.mu.Unlock()
+	}()
+
+	if n.track.isVisited(p) {
+		n.revisited = append(n.revisited, p)
+	}
+
+	n.track.record(p)
+}
+
+func (n *navigator) start() {
+	n.wg.Add(1)
+
+	for p := range n.record {
+		n.recordTrack(p)
+	}
+
+	n.wg.Done()
+}
+
+func (n *navigator) stop() {
+	close(n.record)
+
+	n.wg.Wait()
+}
+
+func (n navigator) revisitedList() []position {
+	return n.revisited
 }
 
 func (n *navigator) moveNorth(steps int) {
@@ -273,10 +322,6 @@ func (n *navigator) moveWest(steps int) {
 	}
 }
 
-func (c *cab) Track() track {
-	return c.n.track
-}
-
 func (n navigator) Pos() position {
 	n.mu.Lock()
 	defer n.mu.Unlock()
@@ -285,10 +330,10 @@ func (n navigator) Pos() position {
 }
 
 // Example: L4, R5
-var re = regexp.MustCompile(`(?msi)(L|R)(\d+)`)
+var re = regexp.MustCompile(`(?msi)([LR])(\d+)`)
 
 const (
-	fullMatchPos = iota
+	_ = iota
 	turnPos
 	stepsPos
 
@@ -307,69 +352,13 @@ func splitCommand(cmd string) (turn, int, error) {
 	if err != nil {
 		return "", 0, fmt.Errorf("turnFromstring: %w", err)
 	}
+
 	s, err := strconv.Atoi(parts[stepsPos])
 	if err != nil {
 		return "", 0, fmt.Errorf("invalid steps num: %w", err)
 	}
 
 	return t, s, nil
-}
-
-type navigator struct {
-	record    chan position
-	pos       position
-	track     track
-	mu        *sync.Mutex
-	wg        *sync.WaitGroup
-	revisited []position
-}
-
-func (n *navigator) recordTrack(p position) {
-	n.mu.Lock()
-
-	defer func() {
-		n.mu.Unlock()
-	}()
-
-	if n.track.isVisited(p) {
-		n.revisited = append(n.revisited, p)
-	}
-
-	n.track.record(p)
-}
-
-func (n *navigator) start() {
-	n.wg.Add(1)
-
-	for p := range n.record {
-		n.recordTrack(p)
-	}
-
-	n.wg.Done()
-}
-
-func (n *navigator) stop() {
-	close(n.record)
-
-	n.wg.Wait()
-}
-
-func (n navigator) revisitedList() []position {
-	return n.revisited
-}
-
-func newNavigator() navigator {
-	return navigator{
-		record: make(chan position),
-		pos: position{
-			x: 0,
-			y: 0,
-		},
-		track:     newTrack(),
-		mu:        &sync.Mutex{},
-		wg:        &sync.WaitGroup{},
-		revisited: []position{},
-	}
 }
 
 type track map[position]bool
