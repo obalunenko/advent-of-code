@@ -253,5 +253,5 @@ jobs:
 
       - name: Check release
         run: |
-          make release-local-snapshot
+          make check-releaser
         shell: bash
