@@ -1,4 +1,4 @@
-// Package day04 solves https://adventofcode.com/2019/day/4
+// Package day04 contains solution for https://adventofcode.com/2019/day/4 puzzle.
 package day04
 
 import (
@@ -12,25 +12,18 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
-const (
-	puzzleName = "day04"
-	year       = "2019"
-)
-
 func init() {
-	puzzles.Register(solution{
-		year: year,
-		name: puzzleName,
-	})
+	puzzles.Register(solution{})
 }
 
-type solution struct {
-	year string
-	name string
-}
+type solution struct{}
 
 func (s solution) Year() string {
-	return s.year
+	return puzzles.Year2019.String()
+}
+
+func (s solution) Day() string {
+	return puzzles.Day04.String()
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
@@ -41,19 +34,17 @@ func (s solution) Part2(input io.Reader) (string, error) {
 	return run(input, isPasswordPart2)
 }
 
-func (s solution) Name() string {
-	return s.name
-}
-
 func run(input io.Reader, criteria isPwdFunc) (string, error) {
-	buf := new(bytes.Buffer)
+	var buf bytes.Buffer
 	if _, err := buf.ReadFrom(input); err != nil {
 		return "", fmt.Errorf("failed to read: %w", err)
 	}
 
 	const limitsNum = 2
 
-	limits := strings.Split(buf.String(), "-") // should be 2: low and high
+	raw := strings.TrimSpace(buf.String())
+
+	limits := strings.Split(raw, "-") // should be 2: low and high
 	if len(limits) != limitsNum {
 		return "", errors.New("invalid number of limits")
 	}

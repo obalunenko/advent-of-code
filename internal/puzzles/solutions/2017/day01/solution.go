@@ -1,3 +1,4 @@
+// Package day01 contains solution for https://adventofcode.com/2017/day/1 puzzle.
 package day01
 
 import (
@@ -10,29 +11,18 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
-const (
-	puzzleName = "day01"
-	year       = "2017"
-)
+type solution struct{}
 
-type solution struct {
-	year string
-	name string
-}
-
-func (s solution) Name() string {
-	return s.name
+func (s solution) Day() string {
+	return puzzles.Day01.String()
 }
 
 func (s solution) Year() string {
-	return s.year
+	return puzzles.Year2017.String()
 }
 
 func init() {
-	puzzles.Register(solution{
-		year: year,
-		name: puzzleName,
-	})
+	puzzles.Register(solution{})
 }
 
 func (s solution) Part1(in io.Reader) (string, error) {
@@ -74,6 +64,8 @@ func part2(in io.Reader) (string, error) {
 }
 
 func makeList(in io.Reader) ([]int, error) {
+	const newline = '\n'
+
 	var list []int
 
 	reader := bufio.NewReader(in)
@@ -82,11 +74,14 @@ func makeList(in io.Reader) ([]int, error) {
 		r, _, err := reader.ReadRune()
 		if err != nil {
 			if errors.Is(err, io.EOF) {
-
 				break
 			}
 
 			return nil, fmt.Errorf("read rune: %w", err)
+		}
+
+		if r == newline {
+			continue
 		}
 
 		n, err := strconv.Atoi(string(r))
@@ -120,11 +115,12 @@ func (i iterator) Sum() int {
 		sum                    int
 	)
 
-	rightBound := len(i.list) - 1
+	listlen := len(i.list)
+	rightBound := listlen - 1
 	lastidx := rightBound
 
 	if !i.isCircular {
-		lastidx = lastidx - i.shift
+		lastidx -= i.shift
 	}
 
 	for cursorStart <= lastidx {
@@ -133,7 +129,7 @@ func (i iterator) Sum() int {
 		cursorEnd += i.shift
 		if i.isCircular {
 			if cursorEnd > rightBound {
-				cursorEnd = cursorEnd - len(i.list)
+				cursorEnd -= listlen
 			}
 		}
 

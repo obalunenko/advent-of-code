@@ -1,3 +1,4 @@
+// Package day01 contains solution for https://adventofcode.com/2020/day/1 puzzle.
 package day01
 
 import (
@@ -10,29 +11,18 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
-const (
-	puzzleName = "day01"
-	year       = "2020"
-)
-
-type solution struct {
-	year string
-	name string
-}
+type solution struct{}
 
 func (s solution) Year() string {
-	return s.year
+	return puzzles.Year2020.String()
 }
 
-func (s solution) Name() string {
-	return s.name
+func (s solution) Day() string {
+	return puzzles.Day01.String()
 }
 
 func init() {
-	puzzles.Register(solution{
-		year: year,
-		name: puzzleName,
-	})
+	puzzles.Register(solution{})
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
@@ -43,14 +33,14 @@ func (s solution) Part1(input io.Reader) (string, error) {
 	for scanner.Scan() {
 		entry, err := strconv.Atoi(scanner.Text())
 		if err != nil {
-			return "", fmt.Errorf("[%s:%s]: part1: faied to parse int: %w", s.year, s.name, err)
+			return "", fmt.Errorf("faied to parse int: %w", err)
 		}
 
 		expensereport[entry] = true
 	}
 
 	if err := scanner.Err(); err != nil {
-		return "", fmt.Errorf("[%s:%s]: part1: scanner error: %w", s.year, s.name, err)
+		return "", fmt.Errorf("scanner error: %w", err)
 	}
 
 	const (
@@ -64,6 +54,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 	for e := range expensereport {
 		a = e
 		b = dest - e
+
 		if expensereport[b] {
 			break
 		}
@@ -82,14 +73,14 @@ func (s solution) Part2(input io.Reader) (string, error) {
 	for scanner.Scan() {
 		entry, err := strconv.Atoi(scanner.Text())
 		if err != nil {
-			return "", fmt.Errorf("[%s:%s]: part2: faied to parse int: %w", s.year, s.name, err)
+			return "", fmt.Errorf("faied to parse int: %w", err)
 		}
 
 		expensereport = append(expensereport, entry)
 	}
 
 	if err := scanner.Err(); err != nil {
-		return "", fmt.Errorf("[%s:%s]: part2: scanner error: %w", s.year, s.name, err)
+		return "", fmt.Errorf("scanner error: %w", err)
 	}
 
 	sort.Ints(expensereport)
@@ -119,11 +110,10 @@ loop:
 				}
 			}
 		}
-
 	}
 
 	if !found {
-		return "", fmt.Errorf("[%s:%s]: part2: answer not found", s.year, s.name)
+		return "", fmt.Errorf("answer not found")
 	}
 
 	res := a * b * c

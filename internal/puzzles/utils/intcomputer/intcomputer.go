@@ -32,15 +32,17 @@ const (
 )
 
 // New creates instance of IntComputer from passed intcode program.
-func New(intcode io.Reader) (IntComputer, error) {
+func New(in io.Reader) (IntComputer, error) {
 	var c IntComputer
 
-	buf := new(bytes.Buffer)
-	if _, err := buf.ReadFrom(intcode); err != nil {
+	var buf bytes.Buffer
+	if _, err := buf.ReadFrom(in); err != nil {
 		return c, fmt.Errorf("failed to read: %w", err)
 	}
 
-	nums := strings.Split(buf.String(), ",")
+	raw := strings.TrimSpace(buf.String())
+
+	nums := strings.Split(raw, ",")
 	c.initial = make([]int, len(nums))
 	c.memory = make(map[int]int, len(nums))
 
@@ -139,7 +141,7 @@ func (c *IntComputer) abort() (int, error) {
 // Input allow to input noun and verb into intcode program for execution.
 // noun - 2nd position in intcode;
 // verb - 3rd position in intcode.
-func (c *IntComputer) Input(noun int, verb int) {
+func (c *IntComputer) Input(noun, verb int) {
 	c.memory[1] = noun
 	c.memory[2] = verb
 }

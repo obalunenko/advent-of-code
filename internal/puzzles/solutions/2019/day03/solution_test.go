@@ -9,9 +9,7 @@ import (
 )
 
 func Test_solution_Part1(t *testing.T) {
-	type fields struct {
-		name string
-	}
+	var s solution
 
 	type args struct {
 		input io.Reader
@@ -19,16 +17,12 @@ func Test_solution_Part1(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		want    string
 		wantErr bool
 	}{
 		{
 			name: "distance 6",
-			fields: fields{
-				name: "part1",
-			},
 			args: args{
 				input: strings.NewReader("U7,R6,D4,L4\n" +
 					"R8,U5,L5,D3"),
@@ -38,9 +32,6 @@ func Test_solution_Part1(t *testing.T) {
 		},
 		{
 			name: "distance 159",
-			fields: fields{
-				name: "part1",
-			},
 			args: args{
 				input: strings.NewReader("R75,D30,R83,U83,L12,D49,R71,U7,L72\n" +
 					"U62,R66,U55,R34,D71,R55,D58,R83"),
@@ -50,9 +41,6 @@ func Test_solution_Part1(t *testing.T) {
 		},
 		{
 			name: "distance 159",
-			fields: fields{
-				name: "part1",
-			},
 			args: args{
 				input: strings.NewReader("R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51\n" +
 					"U98,R91,D20,R16,D67,R40,U7,R15,U6,R7"),
@@ -66,10 +54,6 @@ func Test_solution_Part1(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			s := solution{
-				name: tt.fields.name,
-			}
-
 			got, err := s.Part1(tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)
@@ -129,9 +113,7 @@ func Test_findCross(t *testing.T) {
 }
 
 func Test_solution_Part2(t *testing.T) {
-	type fields struct {
-		name string
-	}
+	var s solution
 
 	type args struct {
 		input io.Reader
@@ -139,16 +121,12 @@ func Test_solution_Part2(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		want    string
 		wantErr bool
 	}{
 		{
 			name: "610",
-			fields: fields{
-				name: "test",
-			},
 			args: args{
 				input: strings.NewReader("R75,D30,R83,U83,L12,D49,R71,U7,L72\n" +
 					"U62,R66,U55,R34,D71,R55,D58,R83"),
@@ -158,9 +136,6 @@ func Test_solution_Part2(t *testing.T) {
 		},
 		{
 			name: "410",
-			fields: fields{
-				name: "test",
-			},
 			args: args{
 				input: strings.NewReader("R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51\n" +
 					"U98,R91,D20,R16,D67,R40,U7,R15,U6,R7"),
@@ -174,10 +149,6 @@ func Test_solution_Part2(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			s := solution{
-				name: tt.fields.name,
-			}
-
 			got, err := s.Part2(tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)
