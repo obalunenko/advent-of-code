@@ -204,6 +204,7 @@ func TestResult_String(t *testing.T) {
 		Part1 string
 		Part2 string
 	}
+
 	tests := []struct {
 		name   string
 		fields fields
@@ -238,6 +239,7 @@ unknown/unknown puzzle answer:
 `,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := puzzles.Result{
@@ -246,6 +248,7 @@ unknown/unknown puzzle answer:
 				Part1: tt.fields.Part1,
 				Part2: tt.fields.Part2,
 			}
+
 			got := r.String()
 			assert.Equal(t, tt.want, got)
 		})
