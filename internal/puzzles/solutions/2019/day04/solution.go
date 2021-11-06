@@ -1,4 +1,4 @@
-// Package day04 solves https://adventofcode.com/2019/day/4
+// Package day04 contains solution for https://adventofcode.com/2019/day/4 puzzle.
 package day04
 
 import (

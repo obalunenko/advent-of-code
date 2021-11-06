@@ -1,4 +1,4 @@
-// Package day02 solves https://adventofcode.com/2019/day/2
+// Package day02 contains solution for https://adventofcode.com/2019/day/2 puzzle.
 package day02
 
 import (
@@ -31,7 +31,12 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		return "", fmt.Errorf("failed to init computer: %w", err)
 	}
 
-	c.Input(12, 2)
+	const (
+		firstPos  = 12
+		secondPos = 2
+	)
+
+	c.Input(firstPos, secondPos)
 
 	res, err := c.Execute()
 	if err != nil {

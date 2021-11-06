@@ -1,3 +1,4 @@
+// Package day01 contains solution for https://adventofcode.com/2018/day/1 puzzle.
 package day01
 
 import (
