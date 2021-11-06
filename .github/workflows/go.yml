@@ -18,6 +18,7 @@ on:
       - 'go.sum'
       - 'Makefile'
       - '!**.*md'
+      - '.github/workflows/**'
 
 jobs:
   linting:
@@ -43,18 +44,37 @@ jobs:
           go-version: ${{ matrix.go }}
       - run: |
           go version
+        shell: bash
 
       - name: Vet
         run: |
           make vet
+        shell: bash
+      
+      - name: Set up cache
+        uses: actions/cache@v2.1.6
+        env:
+          cache-name: cache-vendored-tools
+        with:
+          path: |
+            ${{ env.GOBIN }}
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tools/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: Install tools
         run: |
           make install-tools
+        shell: bash
 
       - name: Lint
         run: |
           make lint-pipeline
+        shell: bash
 
   reports:
     needs: linting
@@ -79,27 +99,48 @@ jobs:
           go-version: ${{ matrix.go }}
       - run: |
           go version
+        shell: bash
+
+      - name: Set up cache
+        uses: actions/cache@v2.1.6
+        env:
+          cache-name: cache-vendored-tools
+        with:
+          path: |
+            ${{ env.GOBIN }}
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tools/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: Install tools
         run: |
            make install-tools
+        shell: bash
 
       - name: Prepare test coverage
         run: |
           make test-cover
+        shell: bash
       
       - name: Tests report
         run: |
           make test-sonar-report
+        shell: bash
 
       - name: Prepare lint report
         run: |
           make lint-sonar
+        shell: bash
           
       - name: Cover report upload
         if: success()
         run: |
-          bash <(curl -s https://codecov.io/bash) -f ./coverage/full.cov    
+          bash <(curl -s https://codecov.io/bash) -f ./coverage/full.cov
+        shell: bash
 
       - name: SonarCloud report upload
         uses: sonarsource/sonarcloud-github-action@v1.6
@@ -127,16 +168,35 @@ jobs:
         with:
           stable: 'true'
           go-version: ${{ matrix.go }}
+
       - run: |
           go version
+        shell: bash
+
+      - name: Set up cache
+        uses: actions/cache@v2.1.6
+        env:
+          cache-name: cache-vendored-tools
+        with:
+          path: |
+            ${{ env.GOBIN }}
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tools/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: Install tools
         run: |
           make install-tools
+        shell: bash
 
       - name: Test
         run: |
           make test
+        shell: bash
 
 
   build:
@@ -160,17 +220,38 @@ jobs:
         with:
           stable: 'true'
           go-version: ${{ matrix.go }}
+
       - run: |
           go version
+        shell: bash
+
+      - name: Set up cache
+        uses: actions/cache@v2.1.6
+        env:
+          cache-name: cache-vendored-tools
+        with:
+          path: |
+            ${{ env.GOBIN }}
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tools/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
 
       - name: Install tools
         run: |
           make install-tools
+        shell: bash
 
       - name: Build
         run: |
           make build
+        shell: bash
 
       - name: Check release
         run: |
-          make release-local-snapshot
+          make check-releaser
+        shell: bash
