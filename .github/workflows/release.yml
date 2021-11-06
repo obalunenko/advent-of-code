@@ -28,24 +28,30 @@ jobs:
         with:
           stable: 'true'
           go-version: ${{ matrix.go }}
+
       - run: |
           go version
+        shell: bash
 
       - name: Install tools
         run: |
           make install-tools
+        shell: bash
 
       - name: Vet
         run: |
           make vet
+        shell: bash
 
       - name: Lint
         run: |
           make lint-pipeline
+        shell: bash
 
       - name: Test
         run: |
           make test
+        shell: bash
 
       - name: Run GoReleaser
         if: success()
@@ -53,3 +59,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           make release
+        shell: bash
