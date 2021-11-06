@@ -121,6 +121,11 @@ release-local-snapshot:
 	./scripts/release/local-snapshot-release.sh
 .PHONY: release-local-snapshot
 
+## Check goreleaser config.
+check-releaser:
+	./scripts/release/check.sh
+.PHONY: check-releaser
+
 ## Issue new release.
 new-version: vet test build
 	./scripts/release/new-version.sh
