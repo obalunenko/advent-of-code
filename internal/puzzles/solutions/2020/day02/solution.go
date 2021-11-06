@@ -1,3 +1,4 @@
+// Package day02 contains solution for https://adventofcode.com/2020/day/2 puzzle.
 package day02
 
 import (

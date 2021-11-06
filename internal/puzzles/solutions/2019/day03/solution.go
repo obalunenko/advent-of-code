@@ -196,8 +196,13 @@ func findCross(wm1, wm2 map[pos]int) []pos {
 }
 
 func runWires(input io.Reader) ([]map[pos]int, error) {
+	const (
+		wiresnum = 2
+	)
+
+	res := make([]map[pos]int, 0, wiresnum)
+
 	scanner := bufio.NewScanner(input)
-	res := make([]map[pos]int, 0, 2)
 
 	for scanner.Scan() {
 		line := scanner.Text()
