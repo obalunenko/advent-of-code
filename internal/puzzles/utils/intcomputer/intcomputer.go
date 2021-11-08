@@ -31,6 +31,9 @@ const (
 	shift = 4
 )
 
+// ErrNotExist returns in case when value not found in memory.
+var ErrNotExist = errors.New("value not exist")
+
 // New creates instance of IntComputer from passed intcode program.
 func New(in io.Reader) (IntComputer, error) {
 	var c IntComputer
@@ -98,12 +101,12 @@ loop:
 func (c *IntComputer) add(aPos, bPos, resPos int) error {
 	a, ok := c.memory[aPos]
 	if !ok {
-		return fmt.Errorf("value not exist [apos:%d]", aPos)
+		return fmt.Errorf("apos:%d: %w", aPos, ErrNotExist)
 	}
 
 	b, ok := c.memory[bPos]
 	if !ok {
-		return fmt.Errorf("value not exist [bpos:%d]", bPos)
+		return fmt.Errorf("bpos:%d: %w", bPos, ErrNotExist)
 	}
 
 	res := a + b
@@ -115,12 +118,12 @@ func (c *IntComputer) add(aPos, bPos, resPos int) error {
 func (c *IntComputer) mult(aPos, bPos, resPos int) error {
 	a, ok := c.memory[aPos]
 	if !ok {
-		return errors.New("value not exist")
+		return ErrNotExist
 	}
 
 	b, ok := c.memory[bPos]
 	if !ok {
-		return errors.New("value not exist")
+		return ErrNotExist
 	}
 
 	res := a * b
@@ -132,7 +135,7 @@ func (c *IntComputer) mult(aPos, bPos, resPos int) error {
 func (c *IntComputer) abort() (int, error) {
 	res, ok := c.memory[0]
 	if !ok {
-		return 0, errors.New("value not exist")
+		return 0, ErrNotExist
 	}
 
 	return res, nil
@@ -150,8 +153,9 @@ func (c *IntComputer) Input(noun, verb int) {
 func (c *IntComputer) Reset() {
 	c.memory = make(map[int]int, len(c.initial))
 
-	for i, n := range c.initial {
-		n := n
+	for i := range c.initial {
+		n := c.initial[i]
+
 		c.memory[i] = n
 	}
 }
