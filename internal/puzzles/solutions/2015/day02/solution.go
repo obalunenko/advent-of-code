@@ -2,7 +2,14 @@
 package day02
 
 import (
+	"bufio"
+	"context"
+	"fmt"
 	"io"
+	"strconv"
+	"strings"
+
+	log "github.com/obalunenko/logger"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -14,7 +21,7 @@ func init() {
 type solution struct{}
 
 func (s solution) Day() string {
-	return puzzles.Day01.String()
+	return puzzles.Day02.String()
 }
 
 func (s solution) Year() string {
@@ -22,9 +29,145 @@ func (s solution) Year() string {
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	return part1(input)
 }
 
 func (s solution) Part2(input io.Reader) (string, error) {
 	return "", puzzles.ErrNotImplemented
+}
+
+func part1(input io.Reader) (string, error) {
+	scanner := bufio.NewScanner(input)
+
+	var res int
+
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		b, err := boxFromDimensions(line)
+		if err != nil {
+			return "", fmt.Errorf("failed to make box: %w", err)
+		}
+
+		res += b.surfaceWithExtra()
+	}
+
+	return strconv.Itoa(res), nil
+}
+
+type rectangle struct {
+	width  int
+	length int
+}
+
+func (r rectangle) square() int {
+	return r.width * r.length
+}
+
+type cuboid struct {
+	width  int
+	length int
+	height int
+}
+
+func (c cuboid) faces() []rectangle {
+	return []rectangle{
+		{
+			width:  c.width,
+			length: c.height,
+		},
+		{
+			width:  c.height,
+			length: c.length,
+		},
+		{
+			width:  c.length,
+			length: c.width,
+		},
+	}
+}
+
+type box struct {
+	cuboid
+}
+
+// 2x4x7, where x is delimiter.
+func boxFromDimensions(dimensions string) (box, error) {
+	const (
+		delim  = "x"
+		dimNum = 3
+
+		widthPos  = 0
+		heightPos = 1
+		lengthPos = 2
+	)
+
+	dims := strings.Split(dimensions, delim)
+	if len(dims) != dimNum {
+		return box{}, fmt.Errorf("invaid dimensions")
+	}
+
+	var sides = make([]int, 0, 3)
+
+	for _, s := range dims {
+		d, err := strconv.Atoi(s)
+		if err != nil {
+			return box{}, fmt.Errorf("atoi dimension: %w", err)
+		}
+
+		sides = append(sides, d)
+	}
+
+	w := sides[widthPos]
+	h := sides[heightPos]
+	l := sides[lengthPos]
+
+	b := newBox(w, h, l)
+
+	return b, nil
+}
+
+func newBox(width, height, length int) box {
+	return box{
+		cuboid: cuboid{
+			width:  width,
+			length: length,
+			height: height,
+		},
+	}
+}
+
+func (b box) surfaceWithExtra() int {
+	var (
+		// the smallest surface area used an extra paper.
+		extra    int
+		surfarea int
+	)
+
+	for _, f := range b.faces() {
+		s := f.square()
+
+		if extra == 0 {
+			extra = s
+		}
+
+		if s < extra {
+			extra = s
+		}
+
+		surfarea += s
+
+		log.WithFields(context.Background(), log.Fields{
+			"box":    f,
+			"square": s,
+			"extra":  extra,
+		}).Info("surface calc")
+	}
+
+	// each face meets twice.
+	const mod = 2
+
+	surfarea *= mod
+
+	return surfarea + extra
 }
