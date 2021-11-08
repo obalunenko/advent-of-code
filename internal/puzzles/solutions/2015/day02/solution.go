@@ -3,13 +3,11 @@ package day02
 
 import (
 	"bufio"
-	"context"
 	"fmt"
 	"io"
+	"sort"
 	"strconv"
 	"strings"
-
-	log "github.com/obalunenko/logger"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -33,7 +31,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 }
 
 func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	return part2(input)
 }
 
 func part1(input io.Reader) (string, error) {
@@ -50,6 +48,25 @@ func part1(input io.Reader) (string, error) {
 		}
 
 		res += b.surfaceWithExtra()
+	}
+
+	return strconv.Itoa(res), nil
+}
+
+func part2(input io.Reader) (string, error) {
+	scanner := bufio.NewScanner(input)
+
+	var res int
+
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		b, err := boxFromDimensions(line)
+		if err != nil {
+			return "", fmt.Errorf("failed to make box: %w", err)
+		}
+
+		res += b.ribbon()
 	}
 
 	return strconv.Itoa(res), nil
@@ -156,12 +173,6 @@ func (b box) surfaceWithExtra() int {
 		}
 
 		surfarea += s
-
-		log.WithFields(context.Background(), log.Fields{
-			"box":    f,
-			"square": s,
-			"extra":  extra,
-		}).Info("surface calc")
 	}
 
 	// each face meets twice.
@@ -170,4 +181,31 @@ func (b box) surfaceWithExtra() int {
 	surfarea *= mod
 
 	return surfarea + extra
+}
+
+func (b box) wrapRibbon() int {
+	var sides = []int{
+		b.height, b.width, b.length,
+	}
+
+	sort.Ints(sides)
+
+	const (
+		// each side meets twice
+		mod    = 2
+		first  = 0
+		second = 1
+	)
+
+	s := sides[first]*mod + sides[second]*mod
+
+	return s
+}
+
+func (b box) bowRibbon() int {
+	return b.width * b.height * b.length
+}
+
+func (b box) ribbon() int {
+	return b.bowRibbon() + b.wrapRibbon()
 }

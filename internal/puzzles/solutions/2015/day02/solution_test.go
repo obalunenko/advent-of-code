@@ -69,8 +69,22 @@ func Test_solution_Part2(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		// TODO(@obalunenko): Add tests
-		{},
+		{
+			name: "`2x3x4` requires a total of 34 square feet",
+			args: args{
+				input: strings.NewReader("2x3x4\n"),
+			},
+			want:    "34",
+			wantErr: false,
+		},
+		{
+			name: "`1x1x10` requires a total of 14 square feet",
+			args: args{
+				input: strings.NewReader("1x1x10\n"),
+			},
+			want:    "14",
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {
