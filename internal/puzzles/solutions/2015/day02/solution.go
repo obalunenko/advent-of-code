@@ -124,7 +124,7 @@ func boxFromDimensions(dimensions string) (box, error) {
 		return box{}, fmt.Errorf("invaid dimensions")
 	}
 
-	var sides = make([]int, 0, 3)
+	sides := make([]int, 0, dimNum)
 
 	for _, s := range dims {
 		d, err := strconv.Atoi(s)
