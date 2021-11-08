@@ -11,6 +11,10 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
+func init() {
+	puzzles.Register(solution{})
+}
+
 type solution struct{}
 
 func (s solution) Year() string {
@@ -19,10 +23,6 @@ func (s solution) Year() string {
 
 func (s solution) Day() string {
 	return puzzles.Day01.String()
-}
-
-func init() {
-	puzzles.Register(solution{})
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
@@ -85,14 +85,22 @@ func (s solution) Part2(input io.Reader) (string, error) {
 
 	sort.Ints(expensereport)
 
+	a, b, c, err := foundEntries(expensereport)
+	if err != nil {
+		return "", fmt.Errorf("found entries: %w", err)
+	}
+
+	res := a * b * c
+
+	return strconv.Itoa(res), nil
+}
+
+func foundEntries(expensereport []int) (a, b, c int, err error) {
 	const (
 		dest = 2020
 	)
 
-	var (
-		a, b, c int
-		found   bool
-	)
+	var found bool
 
 loop:
 	for i := 0; i < len(expensereport)-2; i++ {
@@ -113,10 +121,8 @@ loop:
 	}
 
 	if !found {
-		return "", fmt.Errorf("answer not found")
+		return 0, 0, 0, fmt.Errorf("answer not found")
 	}
 
-	res := a * b * c
-
-	return strconv.Itoa(res), nil
+	return a, b, c, nil
 }
