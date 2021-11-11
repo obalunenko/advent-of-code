@@ -50,6 +50,10 @@ func part1(input io.Reader) (string, error) {
 		res += b.surfaceWithExtra()
 	}
 
+	if err := scanner.Err(); err != nil {
+		return "", fmt.Errorf("scanner error: %w", err)
+	}
+
 	return strconv.Itoa(res), nil
 }
 

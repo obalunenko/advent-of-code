@@ -2,6 +2,7 @@ package day02
 
 import (
 	"io"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,9 +23,11 @@ func Test_solution_Part1(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:    "",
-			args:    args{},
-			want:    "",
+			name: "`ULL\nRRDDD\nLURDL\nUUUUD\n` produces 1985",
+			args: args{
+				input: strings.NewReader("ULL\nRRDDD\nLURDL\nUUUUD\n"),
+			},
+			want:    "1985",
 			wantErr: false,
 		},
 	}
