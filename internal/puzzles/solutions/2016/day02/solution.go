@@ -133,157 +133,92 @@ func loadKeypadPart2() keypad {
 			x: 0,
 			y: 2,
 		}: {
-			val: "1",
-			borders: map[move]bool{
-				right: false,
-				left:  false,
-				down:  true,
-				up:    false,
-			},
+			val:     "1",
+			borders: allowedMoves(down),
 		},
 		{
 			x: -1,
 			y: 1,
 		}: {
-			val: "2",
-			borders: map[move]bool{
-				right: true,
-				left:  false,
-				down:  true,
-				up:    false,
-			},
+			val:     "2",
+			borders: allowedMoves(right, down),
 		},
 		{
 			x: 0,
 			y: 1,
 		}: {
-			val: "3",
-			borders: map[move]bool{
-				right: true,
-				left:  true,
-				down:  true,
-				up:    true,
-			},
+			val:     "3",
+			borders: allowedMoves(right, left, down, up),
 		},
 		{
 			x: 1,
 			y: 1,
 		}: {
-			val: "4",
-			borders: map[move]bool{
-				right: false,
-				left:  true,
-				down:  true,
-				up:    false,
-			},
+			val:     "4",
+			borders: allowedMoves(left, down),
 		},
 		{
 			x: -2,
 			y: 0,
 		}: {
-			val: "5",
-			borders: map[move]bool{
-				right: true,
-				left:  false,
-				down:  false,
-				up:    false,
-			},
+			val:     "5",
+			borders: allowedMoves(right),
 		},
 		{
 			x: -1,
 			y: 0,
 		}: {
-			val: "6",
-			borders: map[move]bool{
-				right: true,
-				left:  true,
-				down:  true,
-				up:    true,
-			},
+			val:     "6",
+			borders: allowedMoves(right, left, down, up),
 		},
 		{
 			x: 0,
 			y: 0,
 		}: {
-			val: "7",
-			borders: map[move]bool{
-				right: true,
-				left:  true,
-				down:  true,
-				up:    true,
-			},
+			val:     "7",
+			borders: allowedMoves(right, left, down, up),
 		},
 		{
 			x: 1,
 			y: 0,
 		}: {
-			val: "8",
-			borders: map[move]bool{
-				right: true,
-				left:  true,
-				down:  true,
-				up:    true,
-			},
+			val:     "8",
+			borders: allowedMoves(right, left, down, up),
 		},
 		{
 			x: 2,
 			y: 0,
 		}: {
-			val: "9",
-			borders: map[move]bool{
-				right: false,
-				left:  true,
-				down:  false,
-				up:    false,
-			},
+			val:     "9",
+			borders: allowedMoves(left),
 		},
 		{
 			x: -1,
 			y: -1,
 		}: {
-			val: "A",
-			borders: map[move]bool{
-				right: true,
-				left:  false,
-				down:  false,
-				up:    true,
-			},
+			val:     "A",
+			borders: allowedMoves(right, up),
 		},
 		{
 			x: 0,
 			y: -1,
 		}: {
-			val: "B",
-			borders: map[move]bool{
-				right: true,
-				left:  true,
-				down:  true,
-				up:    true,
-			},
+			val:     "B",
+			borders: allowedMoves(right, left, down, up),
 		},
 		{
 			x: 1,
 			y: -1,
 		}: {
-			val: "C",
-			borders: map[move]bool{
-				right: false,
-				left:  true,
-				down:  false,
-				up:    true,
-			},
+			val:     "C",
+			borders: allowedMoves(left, up),
 		},
 		{
 			x: 0,
 			y: -2,
 		}: {
-			val: "D",
-			borders: map[move]bool{
-				right: false,
-				left:  false,
-				down:  false,
-				up:    true,
-			},
+			val:     "D",
+			borders: allowedMoves(up),
 		},
 	}
 
@@ -312,113 +247,83 @@ func loadKeypadPart1() keypad {
 			x: -1,
 			y: 1,
 		}: {
-			val: "1",
-			borders: map[move]bool{
-				right: true,
-				left:  false,
-				down:  true,
-				up:    false,
-			},
+			val:     "1",
+			borders: allowedMoves(right, down),
 		},
 		{
 			x: 0,
 			y: 1,
 		}: {
-			val: "2",
-			borders: map[move]bool{
-				right: true,
-				left:  true,
-				down:  true,
-				up:    false,
-			},
+			val:     "2",
+			borders: allowedMoves(right, left, down),
 		},
 		{
 			x: 1,
 			y: 1,
 		}: {
-			val: "3",
-			borders: map[move]bool{
-				right: false,
-				left:  true,
-				down:  true,
-				up:    false,
-			},
+			val:     "3",
+			borders: allowedMoves(left, down),
 		},
 		{
 			x: -1,
 			y: 0,
 		}: {
-			val: "4",
-			borders: map[move]bool{
-				right: true,
-				left:  false,
-				down:  true,
-				up:    true,
-			},
+			val:     "4",
+			borders: allowedMoves(right, down, up),
 		},
 		{
 			x: 0,
 			y: 0,
 		}: {
-			val: "5",
-			borders: map[move]bool{
-				right: true,
-				left:  true,
-				down:  true,
-				up:    true,
-			},
+			val:     "5",
+			borders: allowedMoves(right, left, down, up),
 		},
 		{
 			x: 1,
 			y: 0,
 		}: {
-			val: "6",
-			borders: map[move]bool{
-				right: false,
-				left:  true,
-				down:  true,
-				up:    true,
-			},
+			val:     "6",
+			borders: allowedMoves(left, down, up),
 		},
 		{
 			x: -1,
 			y: -1,
 		}: {
-			val: "7",
-			borders: map[move]bool{
-				right: true,
-				left:  false,
-				down:  false,
-				up:    true,
-			},
+			val:     "7",
+			borders: allowedMoves(right, up),
 		},
 		{
 			x: 0,
 			y: -1,
 		}: {
-			val: "8",
-			borders: map[move]bool{
-				right: true,
-				left:  true,
-				down:  false,
-				up:    true,
-			},
+			val:     "8",
+			borders: allowedMoves(left, up, right),
 		},
 		{
 			x: 1,
 			y: -1,
 		}: {
-			val: "9",
-			borders: map[move]bool{
-				right: false,
-				left:  true,
-				down:  false,
-				up:    true,
-			},
+			val:     "9",
+			borders: allowedMoves(left, up),
 		},
 	}
 
 	return newKeypad(instructions, start)
+}
+
+func allowedMoves(am ...move) map[move]bool {
+	allowed := map[move]bool{
+		right: false,
+		left:  false,
+		down:  false,
+		up:    false,
+	}
+
+	for _, m := range am {
+		allowed[m] = true
+	}
+
+	return allowed
 }
 
 func newKeypad(specs map[keypadPos]num, startPos keypadPos) keypad {
