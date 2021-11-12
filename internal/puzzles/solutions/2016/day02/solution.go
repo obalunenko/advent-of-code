@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"strconv"
 	"strings"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
@@ -30,13 +29,23 @@ func (s solution) Part1(input io.Reader) (string, error) {
 }
 
 func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	return part2(input)
+}
+
+func part2(input io.Reader) (string, error) {
+	kpd := loadKeypadPart2()
+
+	return getPassword(kpd, input)
 }
 
 func part1(input io.Reader) (string, error) {
-	reader := bufio.NewReader(input)
+	kpd := loadKeypadPart1()
 
-	kpd := newKeypad()
+	return getPassword(kpd, input)
+}
+
+func getPassword(kpd keypad, input io.Reader) (string, error) {
+	reader := bufio.NewReader(input)
 
 	var pwd strings.Builder
 
@@ -55,7 +64,7 @@ func part1(input io.Reader) (string, error) {
 		if r == '\n' {
 			cur := kpd.numb()
 
-			_, err = pwd.WriteString(strconv.Itoa(cur))
+			_, err = pwd.WriteString(cur)
 			if err != nil {
 				return "", fmt.Errorf("write string: %w", err)
 			}
@@ -63,7 +72,7 @@ func part1(input io.Reader) (string, error) {
 			continue
 		}
 
-		if err = kpd.move(m); err != nil {
+		if err = kpd.move(move(m)); err != nil {
 			return "", fmt.Errorf("move: %w", err)
 		}
 	}
@@ -71,100 +80,372 @@ func part1(input io.Reader) (string, error) {
 	return pwd.String(), nil
 }
 
-/*
-keyboard
-    1 2 3
-    4 5 6
-    7 8 9
-
-let's predict that this is x y coordinates and 5 is a 0,0
-*/
-
 type keypadPos struct {
 	x int
 	y int
 }
 
-type keypad struct {
-	finger keypadPos
-	dict   map[keypadPos]int
+type move string
+
+const (
+	up    = move("U")
+	down  = move("D")
+	left  = move("L")
+	right = move("R")
+)
+
+type num struct {
+	val     string
+	borders map[move]bool
 }
 
-func newKeypad() keypad {
-	dict := map[keypadPos]int{
+type keypad struct {
+	finger keypadPos
+	specs  map[keypadPos]num
+}
+
+// TODO(obalunenko): refactor to load keypad from specs.
+
+func loadKeypadPart2() keypad {
+	/*
+
+		keyboard
+
+		       1
+		     2 3 4
+		   5 6 7 8 9
+		     A B C
+		       D
+
+		start at `5`
+
+		`7` is 0,0
+	*/
+
+	start := keypadPos{
+		x: -2,
+		y: 0,
+	}
+
+	instructions := map[keypadPos]num{
+		{
+			x: 0,
+			y: 2,
+		}: {
+			val: "1",
+			borders: map[move]bool{
+				right: false,
+				left:  false,
+				down:  true,
+				up:    false,
+			},
+		},
 		{
 			x: -1,
 			y: 1,
-		}: 1,
+		}: {
+			val: "2",
+			borders: map[move]bool{
+				right: true,
+				left:  false,
+				down:  true,
+				up:    false,
+			},
+		},
 		{
 			x: 0,
 			y: 1,
-		}: 2,
+		}: {
+			val: "3",
+			borders: map[move]bool{
+				right: true,
+				left:  true,
+				down:  true,
+				up:    true,
+			},
+		},
 		{
 			x: 1,
 			y: 1,
-		}: 3,
+		}: {
+			val: "4",
+			borders: map[move]bool{
+				right: false,
+				left:  true,
+				down:  true,
+				up:    false,
+			},
+		},
+		{
+			x: -2,
+			y: 0,
+		}: {
+			val: "5",
+			borders: map[move]bool{
+				right: true,
+				left:  false,
+				down:  false,
+				up:    false,
+			},
+		},
 		{
 			x: -1,
 			y: 0,
-		}: 4,
+		}: {
+			val: "6",
+			borders: map[move]bool{
+				right: true,
+				left:  true,
+				down:  true,
+				up:    true,
+			},
+		},
 		{
 			x: 0,
 			y: 0,
-		}: 5,
+		}: {
+			val: "7",
+			borders: map[move]bool{
+				right: true,
+				left:  true,
+				down:  true,
+				up:    true,
+			},
+		},
 		{
 			x: 1,
 			y: 0,
-		}: 6,
+		}: {
+			val: "8",
+			borders: map[move]bool{
+				right: true,
+				left:  true,
+				down:  true,
+				up:    true,
+			},
+		},
+		{
+			x: 2,
+			y: 0,
+		}: {
+			val: "9",
+			borders: map[move]bool{
+				right: false,
+				left:  true,
+				down:  false,
+				up:    false,
+			},
+		},
 		{
 			x: -1,
 			y: -1,
-		}: 7,
+		}: {
+			val: "A",
+			borders: map[move]bool{
+				right: true,
+				left:  false,
+				down:  false,
+				up:    true,
+			},
+		},
 		{
 			x: 0,
 			y: -1,
-		}: 8,
+		}: {
+			val: "B",
+			borders: map[move]bool{
+				right: true,
+				left:  true,
+				down:  true,
+				up:    true,
+			},
+		},
 		{
 			x: 1,
 			y: -1,
-		}: 9,
+		}: {
+			val: "C",
+			borders: map[move]bool{
+				right: false,
+				left:  true,
+				down:  false,
+				up:    true,
+			},
+		},
+		{
+			x: 0,
+			y: -2,
+		}: {
+			val: "D",
+			borders: map[move]bool{
+				right: false,
+				left:  false,
+				down:  false,
+				up:    true,
+			},
+		},
 	}
 
 	return keypad{
-		finger: keypadPos{
-			x: 0,
-			y: 0,
-		},
-		dict: dict,
+		finger: start,
+		specs:  instructions,
 	}
-
 }
 
-func (k *keypad) move(move string) error {
-	const (
-		up    = "U"
-		down  = "D"
-		left  = "L"
-		right = "R"
-	)
+func loadKeypadPart1() keypad {
+	/*
+		keyboard
+		    1 2 3
+		    4 5 6
+		    7 8 9
 
-	switch move {
+		let's predict that this is x y coordinates and 5 is a 0,0
+	*/
+	start := keypadPos{
+		x: 0,
+		y: 0,
+	}
+
+	instructions := map[keypadPos]num{
+		{
+			x: -1,
+			y: 1,
+		}: {
+			val: "1",
+			borders: map[move]bool{
+				right: true,
+				left:  false,
+				down:  true,
+				up:    false,
+			},
+		},
+		{
+			x: 0,
+			y: 1,
+		}: {
+			val: "2",
+			borders: map[move]bool{
+				right: true,
+				left:  true,
+				down:  true,
+				up:    false,
+			},
+		},
+		{
+			x: 1,
+			y: 1,
+		}: {
+			val: "3",
+			borders: map[move]bool{
+				right: false,
+				left:  true,
+				down:  true,
+				up:    false,
+			},
+		},
+		{
+			x: -1,
+			y: 0,
+		}: {
+			val: "4",
+			borders: map[move]bool{
+				right: true,
+				left:  false,
+				down:  true,
+				up:    true,
+			},
+		},
+		{
+			x: 0,
+			y: 0,
+		}: {
+			val: "5",
+			borders: map[move]bool{
+				right: true,
+				left:  true,
+				down:  true,
+				up:    true,
+			},
+		},
+		{
+			x: 1,
+			y: 0,
+		}: {
+			val: "6",
+			borders: map[move]bool{
+				right: false,
+				left:  true,
+				down:  true,
+				up:    true,
+			},
+		},
+		{
+			x: -1,
+			y: -1,
+		}: {
+			val: "7",
+			borders: map[move]bool{
+				right: true,
+				left:  false,
+				down:  false,
+				up:    true,
+			},
+		},
+		{
+			x: 0,
+			y: -1,
+		}: {
+			val: "8",
+			borders: map[move]bool{
+				right: true,
+				left:  true,
+				down:  false,
+				up:    true,
+			},
+		},
+		{
+			x: 1,
+			y: -1,
+		}: {
+			val: "9",
+			borders: map[move]bool{
+				right: false,
+				left:  true,
+				down:  false,
+				up:    true,
+			},
+		},
+	}
+
+	return newKeypad(instructions, start)
+}
+
+func newKeypad(specs map[keypadPos]num, startPos keypadPos) keypad {
+	return keypad{
+		finger: startPos,
+		specs:  specs,
+	}
+}
+
+func (k *keypad) move(m move) error {
+
+	switch m {
 	case up:
-		if k.canMoveYUp() {
+		if k.canMoveUp() {
 			k.finger.y++
 		}
 
 	case down:
-		if k.canMoveYDown() {
+		if k.canMoveDown() {
 			k.finger.y--
 		}
 
 	case left:
-		if k.canMoveXLeft() {
+		if k.canMoveLeft() {
 			k.finger.x--
 		}
 	case right:
-		if k.canMoveXRight() {
+		if k.canMoveRight() {
 			k.finger.x++
 		}
 	default:
@@ -174,22 +455,22 @@ func (k *keypad) move(move string) error {
 	return nil
 }
 
-func (k keypad) canMoveXRight() bool {
-	return k.finger.x < 1
+func (k keypad) canMoveRight() bool {
+	return k.specs[k.finger].borders[right]
 }
 
-func (k keypad) canMoveXLeft() bool {
-	return k.finger.x > -1
+func (k keypad) canMoveLeft() bool {
+	return k.specs[k.finger].borders[left]
 }
 
-func (k keypad) canMoveYUp() bool {
-	return k.finger.y < 1
+func (k keypad) canMoveUp() bool {
+	return k.specs[k.finger].borders[up]
 }
 
-func (k keypad) canMoveYDown() bool {
-	return k.finger.y > -1
+func (k keypad) canMoveDown() bool {
+	return k.specs[k.finger].borders[down]
 }
 
-func (k keypad) numb() int {
-	return k.dict[k.finger]
+func (k keypad) numb() string {
+	return k.specs[k.finger].val
 }

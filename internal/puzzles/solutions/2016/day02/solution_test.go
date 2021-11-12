@@ -60,7 +60,14 @@ func Test_solution_Part2(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{},
+		{
+			name: "`ULL\nRRDDD\nLURDL\nUUUUD\n` produces 5DB3",
+			args: args{
+				input: strings.NewReader("ULL\nRRDDD\nLURDL\nUUUUD\n"),
+			},
+			want:    "5DB3",
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {
