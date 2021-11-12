@@ -107,22 +107,20 @@ type keypad struct {
 
 // TODO(obalunenko): refactor to load keypad from specs.
 
+/* loadKeypadPart2
+keyboard
+
+       1
+     2 3 4
+   5 6 7 8 9
+     A B C
+       D
+
+start at `5`
+
+`7` is 0,0
+*/
 func loadKeypadPart2() keypad {
-	/*
-
-		keyboard
-
-		       1
-		     2 3 4
-		   5 6 7 8 9
-		     A B C
-		       D
-
-		start at `5`
-
-		`7` is 0,0
-	*/
-
 	start := keypadPos{
 		x: -2,
 		y: 0,
@@ -228,15 +226,16 @@ func loadKeypadPart2() keypad {
 	}
 }
 
-func loadKeypadPart1() keypad {
-	/*
-		keyboard
-		    1 2 3
-		    4 5 6
-		    7 8 9
+/* loadKeypadPart1
+keyboard
+    1 2 3
+    4 5 6
+    7 8 9
 
-		let's predict that this is x y coordinates and 5 is a 0,0
-	*/
+let's predict that this is x y coordinates and 5 is a 0,0
+*/
+func loadKeypadPart1() keypad {
+
 	start := keypadPos{
 		x: 0,
 		y: 0,
