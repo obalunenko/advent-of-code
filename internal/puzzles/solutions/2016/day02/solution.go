@@ -1,3 +1,4 @@
+// Package day02 contains solution for https://adventofcode.com/2016/day/2 puzzle.
 package day02
 
 import (
@@ -428,7 +429,6 @@ func newKeypad(specs map[keypadPos]num, startPos keypadPos) keypad {
 }
 
 func (k *keypad) move(m move) error {
-
 	switch m {
 	case up:
 		if k.canMoveUp() {
