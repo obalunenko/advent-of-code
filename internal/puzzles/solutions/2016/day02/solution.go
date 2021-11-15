@@ -235,13 +235,10 @@ keyboard
 let's predict that this is x y coordinates and 5 is a 0,0
 */
 func loadKeypadPart1() keypad {
-
-	start := keypadPos{
+	start, instructions := keypadPos{
 		x: 0,
 		y: 0,
-	}
-
-	instructions := map[keypadPos]num{
+	}, map[keypadPos]num{
 		{
 			x: -1,
 			y: 1,
