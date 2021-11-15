@@ -26,9 +26,11 @@ help:
 
 
 
+## Build project.
 build: compile-aoc-cli
 .PHONY: build
 
+## Compile aoc-cli.
 compile-aoc-cli:
 	./scripts/build/aoc-cli.sh
 .PHONY: compile-spamassassin-parser-be
@@ -48,24 +50,26 @@ open-cover-report: test-cover
 	./scripts/open-coverage-report.sh
 .PHONY: open-cover-report
 
+## Update readme coverage.
 update-readme-cover: build test-cover
 	./scripts/update-readme-coverage.sh
 .PHONY: update-readme-cover
 
+## Run tests.
 test:
 	./scripts/tests/run.sh
 .PHONY: test
 
+## Sync vendor and install needed tools.
+configure: sync-vendor install-tools
 
-configure: sync-vendor
-
+## Sync vendor with go.mod.
 sync-vendor:
 	./scripts/sync-vendor.sh
 .PHONY: sync-vendor
 
 ## Fix imports sorting.
 imports:
-	${call colored, fix-imports is running...}
 	./scripts/style/fix-imports.sh
 .PHONY: imports
 
@@ -78,6 +82,7 @@ fmt:
 format-project: fmt imports
 .PHONY: format-project
 
+## Installs vendored tools.
 install-tools:
 	./scripts/install/vendored-tools.sh
 .PHONY: install-tools
@@ -131,6 +136,7 @@ new-version: vet test build
 	./scripts/release/new-version.sh
 .PHONY: new-release
 
+## Open advent of code homepage in browser.
 open-advent-homepage:
 	./scripts/browser-opener.sh -u 'https://adventofcode.com/'
 
