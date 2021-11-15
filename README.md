@@ -63,7 +63,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
   <summary>2016</summary>  
     
   - [x] [Day 1: No Time for a Taxicab](https://adventofcode.com/2016/day/1)
-  - [ ] [Day 2: Bathroom Security](https://adventofcode.com/2016/day/2)
+  - [x] [Day 2: Bathroom Security](https://adventofcode.com/2016/day/2)
   - [ ] [Day 3: Squares With Three Sides](https://adventofcode.com/2016/day/3)
   - [ ] [Day 4: Security Through Obscurity](https://adventofcode.com/2016/day/4)
   - [ ] [Day 5: How About a Nice Game of Chess?](https://adventofcode.com/2016/day/5)
