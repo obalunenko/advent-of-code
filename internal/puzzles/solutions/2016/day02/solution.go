@@ -81,11 +81,6 @@ func getPassword(kpd keypad, input io.Reader) (string, error) {
 	return pwd.String(), nil
 }
 
-type keypadPos struct {
-	x int
-	y int
-}
-
 type move string
 
 const (
@@ -95,19 +90,20 @@ const (
 	right = move("R")
 )
 
-type num struct {
-	val     string
-	borders map[move]bool
+type keypadPos struct {
+	x int
+	y int
 }
+
+type grid [][]string
 
 type keypad struct {
 	finger keypadPos
-	specs  map[keypadPos]num
+	grid   grid
 }
 
-// TODO(obalunenko): refactor to load keypad from specs.
-
-/* loadKeypadPart2
+/*
+loadKeypadPart2
 keyboard
 
        1
@@ -118,214 +114,56 @@ keyboard
 
 start at `5`
 
-`7` is 0,0
+let's predict that this is a 2 dimension matrix and '5' is 0,2m
 */
 func loadKeypadPart2() keypad {
 	start := keypadPos{
-		x: -2,
-		y: 0,
+		x: 0,
+		y: 2,
 	}
 
-	instructions := map[keypadPos]num{
-		{
-			x: 0,
-			y: 2,
-		}: {
-			val:     "1",
-			borders: allowedMoves(down),
-		},
-		{
-			x: -1,
-			y: 1,
-		}: {
-			val:     "2",
-			borders: allowedMoves(right, down),
-		},
-		{
-			x: 0,
-			y: 1,
-		}: {
-			val:     "3",
-			borders: allowedMoves(right, left, down, up),
-		},
-		{
-			x: 1,
-			y: 1,
-		}: {
-			val:     "4",
-			borders: allowedMoves(left, down),
-		},
-		{
-			x: -2,
-			y: 0,
-		}: {
-			val:     "5",
-			borders: allowedMoves(right),
-		},
-		{
-			x: -1,
-			y: 0,
-		}: {
-			val:     "6",
-			borders: allowedMoves(right, left, down, up),
-		},
-		{
-			x: 0,
-			y: 0,
-		}: {
-			val:     "7",
-			borders: allowedMoves(right, left, down, up),
-		},
-		{
-			x: 1,
-			y: 0,
-		}: {
-			val:     "8",
-			borders: allowedMoves(right, left, down, up),
-		},
-		{
-			x: 2,
-			y: 0,
-		}: {
-			val:     "9",
-			borders: allowedMoves(left),
-		},
-		{
-			x: -1,
-			y: -1,
-		}: {
-			val:     "A",
-			borders: allowedMoves(right, up),
-		},
-		{
-			x: 0,
-			y: -1,
-		}: {
-			val:     "B",
-			borders: allowedMoves(right, left, down, up),
-		},
-		{
-			x: 1,
-			y: -1,
-		}: {
-			val:     "C",
-			borders: allowedMoves(left, up),
-		},
-		{
-			x: 0,
-			y: -2,
-		}: {
-			val:     "D",
-			borders: allowedMoves(up),
-		},
+	g := [][]string{
+		{"", "", "1", "", ""},
+		{"", "2", "3", "4", ""},
+		{"5", "6", "7", "8", "9"},
+		{"", "A", "B", "C", ""},
+		{"", "", "D", "", ""},
 	}
 
 	return keypad{
 		finger: start,
-		specs:  instructions,
+		grid:   g,
 	}
 }
 
-/* loadKeypadPart1
+/*
+loadKeypadPart1
 keyboard
     1 2 3
     4 5 6
     7 8 9
 
-let's predict that this is x y coordinates and 5 is a 0,0
+let's predict that this is a 2 dimension matrix and 5 is a 1,1
 */
 func loadKeypadPart1() keypad {
-	start, instructions := keypadPos{
-		x: 0,
-		y: 0,
-	}, map[keypadPos]num{
-		{
-			x: -1,
-			y: 1,
-		}: {
-			val:     "1",
-			borders: allowedMoves(right, down),
-		},
-		{
-			x: 0,
-			y: 1,
-		}: {
-			val:     "2",
-			borders: allowedMoves(right, left, down),
-		},
-		{
-			x: 1,
-			y: 1,
-		}: {
-			val:     "3",
-			borders: allowedMoves(left, down),
-		},
-		{
-			x: -1,
-			y: 0,
-		}: {
-			val:     "4",
-			borders: allowedMoves(right, down, up),
-		},
-		{
-			x: 0,
-			y: 0,
-		}: {
-			val:     "5",
-			borders: allowedMoves(right, left, down, up),
-		},
-		{
-			x: 1,
-			y: 0,
-		}: {
-			val:     "6",
-			borders: allowedMoves(left, down, up),
-		},
-		{
-			x: -1,
-			y: -1,
-		}: {
-			val:     "7",
-			borders: allowedMoves(right, up),
-		},
-		{
-			x: 0,
-			y: -1,
-		}: {
-			val:     "8",
-			borders: allowedMoves(left, up, right),
-		},
-		{
-			x: 1,
-			y: -1,
-		}: {
-			val:     "9",
-			borders: allowedMoves(left, up),
-		},
+	g := [][]string{
+		{"1", "2", "3"},
+		{"4", "5", "6"},
+		{"7", "8", "9"},
 	}
 
-	return newKeypad(instructions, start)
+	start := keypadPos{
+		x: 1,
+		y: 1,
+	}
+
+	return newKeypad(g, start)
 }
 
-func allowedMoves(am ...move) map[move]bool {
-	allowed := map[move]bool{
-		right: false,
-		left:  false,
-		down:  false,
-		up:    false,
-	}
-
-	for _, m := range am {
-		allowed[m] = true
-	}
-
-	return allowed
-}
-
-func newKeypad(specs map[keypadPos]num, startPos keypadPos) keypad {
+func newKeypad(specs grid, startPos keypadPos) keypad {
 	return keypad{
 		finger: startPos,
-		specs:  specs,
+		grid:   specs,
 	}
 }
 
@@ -333,12 +171,12 @@ func (k *keypad) move(m move) error {
 	switch m {
 	case up:
 		if k.canMoveUp() {
-			k.finger.y++
+			k.finger.y--
 		}
 
 	case down:
 		if k.canMoveDown() {
-			k.finger.y--
+			k.finger.y++
 		}
 
 	case left:
@@ -357,21 +195,45 @@ func (k *keypad) move(m move) error {
 }
 
 func (k keypad) canMoveRight() bool {
-	return k.specs[k.finger].borders[right]
+	cur := k.finger
+
+	if cur.x == len(k.grid[cur.y])-1 {
+		return false
+	}
+
+	return k.grid[cur.y][cur.x+1] != ""
 }
 
 func (k keypad) canMoveLeft() bool {
-	return k.specs[k.finger].borders[left]
+	cur := k.finger
+
+	if cur.x == 0 {
+		return false
+	}
+
+	return k.grid[cur.y][cur.x-1] != ""
 }
 
 func (k keypad) canMoveUp() bool {
-	return k.specs[k.finger].borders[up]
+	cur := k.finger
+
+	if cur.y == 0 {
+		return false
+	}
+
+	return k.grid[cur.y-1][cur.x] != ""
 }
 
 func (k keypad) canMoveDown() bool {
-	return k.specs[k.finger].borders[down]
+	cur := k.finger
+
+	if cur.y == len(k.grid)-1 {
+		return false
+	}
+
+	return k.grid[cur.y+1][cur.x] != ""
 }
 
 func (k keypad) numb() string {
-	return k.specs[k.finger].val
+	return k.grid[k.finger.y][k.finger.x]
 }
