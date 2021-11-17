@@ -2,13 +2,10 @@ package puzzles
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"testing"
 	"text/tabwriter"
 	"time"
-
-	commonfile "github.com/obalunenko/advent-of-code/internal/puzzles/common/file"
 )
 
 type metricsFlag uint32
@@ -128,8 +125,6 @@ func timeElapsed(start time.Time) string {
 }
 
 func bench(f benchFunc) string {
-	defer commonfile.RedirectNull(&os.Stdout, &os.Stderr)()
-
 	b := testing.Benchmark(func(b *testing.B) {
 		b.ResetTimer()
 

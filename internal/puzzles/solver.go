@@ -127,14 +127,17 @@ type runParams struct {
 	withMetrics metricsFlag
 }
 
+// RunOption provides run options pattern.
 type RunOption interface {
 	Apply(opts *runParams)
 }
 
+// WithElapsed add elapsed metric to run options.
 func WithElapsed() RunOption {
 	return withElapsed{}
 }
 
+// WithBenchmark add benchmark metric to run options.
 func WithBenchmark() RunOption {
 	return withBenchmark{}
 }
