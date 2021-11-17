@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
-	"github.com/obalunenko/advent-of-code/internal/puzzles/utils/intcomputer"
+	"github.com/obalunenko/advent-of-code/internal/puzzles/common/intcomputer"
 )
 
 func init() {

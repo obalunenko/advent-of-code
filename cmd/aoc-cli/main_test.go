@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -23,6 +24,8 @@ type testcase struct {
 
 // Regression tests for all puzzles. Check that answers still correct.
 func Test_run(t *testing.T) {
+	ctx := context.Background()
+
 	var tests []testcase
 
 	tests = append(tests, invalid()...)
@@ -35,7 +38,7 @@ func Test_run(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := run(tt.args.year, tt.args.name)
+			got, err := run(ctx, tt.args.year, tt.args.name)
 			if tt.wantErr {
 				require.Error(t, err)
 
