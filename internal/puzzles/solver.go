@@ -185,9 +185,7 @@ func Run(solver Solver, input io.Reader, opts ...RunOption) (Result, error) {
 	b := buf.Bytes()
 
 	apply := res.addMetrics(solver, b, params.withMetrics)
-	defer func() {
-		apply()
-	}()
+	defer apply()
 
 	if err := res.addAnswers(solver, b); err != nil {
 		return Result{}, fmt.Errorf("failed to add answers: %w", err)
@@ -205,7 +203,9 @@ func (r *Result) addMetrics(solver Solver, input []byte, mf metricsFlag) func() 
 		}
 	}
 
-	metricFuncs := make([]applyMetricFunc, 0, 2)
+	const metricsnum = 2
+
+	metricFuncs := make([]applyMetricFunc, 0, metricsnum)
 
 	if mf.HasFlag(metricsFlagElapsed) {
 		var em metric

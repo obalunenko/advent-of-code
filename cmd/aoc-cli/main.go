@@ -227,7 +227,9 @@ func isBack(in string) bool {
 }
 
 func optionsFromCli(c *cli.Context) []puzzles.RunOption {
-	options := make([]puzzles.RunOption, 0, 2)
+	const optsnum = 2
+
+	options := make([]puzzles.RunOption, 0, optsnum)
 
 	if c.GlobalBool(flagElapsed) || c.GlobalBool(flagShortElapsed) {
 		options = append(options, puzzles.WithElapsed())
@@ -289,9 +291,11 @@ func run(ctx context.Context, year, day string) (puzzles.Result, error) {
 
 // setSpinner runs the displaying of spinner to handle long time operations. Returns stop func.
 func setSpinner() func() {
+	const delayms = 100
+
 	s := spinner.New(
 		spinner.CharSets[62],
-		100*time.Millisecond,
+		delayms*time.Millisecond,
 		spinner.WithFinalMSG("Solved!"),
 		spinner.WithHiddenCursor(true),
 		spinner.WithColor("yellow"),

@@ -20,10 +20,10 @@ const (
 	none      = "none"
 )
 
-func (m metricsFlag) String() string {
+func (f metricsFlag) String() string {
 	var s string
 
-	if m.HasFlag(metricsFlagNone) {
+	if f.HasFlag(metricsFlagNone) {
 		s = none
 	}
 
@@ -35,11 +35,11 @@ func (m metricsFlag) String() string {
 		return ""
 	}
 
-	if m.HasFlag(metricsFlagElapsed) {
+	if f.HasFlag(metricsFlagElapsed) {
 		s += maybePfx(s) + elapsed
 	}
 
-	if m.HasFlag(metricsFlagBenchmark) {
+	if f.HasFlag(metricsFlagBenchmark) {
 		s += maybePfx(s) + benchmark
 	}
 

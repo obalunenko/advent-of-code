@@ -39,15 +39,17 @@ func (r Result) String() string {
 
 	table := make([][]string, 0, linesnum)
 
-	table = append(table, []string{})
+	var emptyline []string
+
+	table = append(table, emptyline)
+
 	puzzleHeaderLine := []string{fmt.Sprintf("%s/%s puzzle answer:", r.Year, r.Name)}
 	table = append(table, puzzleHeaderLine)
 
 	part1Line := []string{"part1", r.Part1}
 	part2Line := []string{"part2", r.Part2}
 
-	table = append(table, part1Line, part2Line)
-	table = append(table, []string{})
+	table = append(table, part1Line, part2Line, emptyline)
 
 	if r.metrics != nil {
 		metricsHeaderLine := []string{"metrics:"}
@@ -68,7 +70,9 @@ func (r Result) String() string {
 			table = append(table, line)
 		}
 	}
-	table = append(table, []string{})
+
+	table = append(table, emptyline)
+
 	if err := printTable(&buf, table); err != nil {
 		panic(err)
 	}
@@ -81,11 +85,11 @@ func (r Result) String() string {
 }
 
 func printTable(w io.Writer, table [][]string) error {
-	writer := tabwriter.NewWriter(w, 0, 0, 3, ' ', tabwriter.DiscardEmptyColumns)
+	const padding = 3
 
-	var (
-		err error
-	)
+	writer := tabwriter.NewWriter(w, 0, 0, padding, ' ', tabwriter.DiscardEmptyColumns)
+
+	var err error
 
 	for _, line := range table {
 		switch len(line) {
