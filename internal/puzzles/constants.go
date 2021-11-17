@@ -54,3 +54,10 @@ const (
 
 	yearSentinel
 )
+
+const (
+	unknown    = "unknown"
+	unsolved   = "not solved"
+	undefined  = "undefined"
+	inProgress = "in progress"
+)

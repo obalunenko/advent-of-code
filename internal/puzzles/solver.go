@@ -7,14 +7,9 @@ import (
 	"fmt"
 	"io"
 	"sort"
-	"strings"
 	"sync"
 	"testing"
-	"text/tabwriter"
 )
-
-// ErrNotImplemented signal that puzzle in not implemented yet.
-var ErrNotImplemented = errors.New("not implemented")
 
 // Solver represents solutions for puzzles methods.
 type Solver interface {
@@ -128,84 +123,130 @@ func GetSolver(year, day string) (Solver, error) {
 	return s, nil
 }
 
-// Result represents puzzle solution result.
-type Result struct {
-	Year  string
-	Name  string
-	Part1 string
-	Part2 string
+type runParams struct {
+	withMetrics metricsFlag
 }
 
-const (
-	unsolved = "not solved"
-	unknown  = "unknown"
-)
+// RunOption provides run options pattern.
+type RunOption interface {
+	Apply(opts *runParams)
+}
 
-func (r Result) String() string {
-	if r.Part1 == "" {
-		r.Part1 = unsolved
+// WithElapsed add elapsed metric to run options.
+func WithElapsed() RunOption {
+	return withElapsed{}
+}
+
+// WithBenchmark add benchmark metric to run options.
+func WithBenchmark() RunOption {
+	return withBenchmark{}
+}
+
+type withElapsed struct{}
+
+func (w withElapsed) Apply(opts *runParams) {
+	opts.withMetrics.AddFlag(metricsFlagElapsed)
+}
+
+type withBenchmark struct{}
+
+func (w withBenchmark) Apply(opts *runParams) {
+	opts.withMetrics.AddFlag(metricsFlagBenchmark)
+}
+
+func makeRunParams(opts []RunOption) runParams {
+	var p runParams
+
+	for _, opt := range opts {
+		opt.Apply(&p)
 	}
 
-	if r.Part2 == "" {
-		r.Part2 = unsolved
-	}
-
-	if r.Name == "" {
-		r.Name = unknown
-	}
-
-	if r.Year == "" {
-		r.Year = unknown
-	}
-
-	var buf strings.Builder
-
-	w := tabwriter.NewWriter(&buf, 0, 0, 1, ' ', tabwriter.TabIndent)
-
-	_, err := fmt.Fprintf(w, `
-%s/%s puzzle answer:
-| part1:	%s	|
-| part2:	%s	|
-`, r.Year, r.Name, r.Part1, r.Part2)
-	if err != nil {
-		panic(err)
-	}
-
-	if err := w.Flush(); err != nil {
-		panic(err)
-	}
-
-	return buf.String()
+	return p
 }
 
 // Run uses solver of puzzle and path to input.
-func Run(solver Solver, input io.Reader) (Result, error) {
-	var err error
+func Run(solver Solver, input io.Reader, opts ...RunOption) (Result, error) {
+	params := makeRunParams(opts)
 
 	res := Result{
-		Year:  solver.Year(),
-		Name:  solver.Day(),
-		Part1: unsolved,
-		Part2: unsolved,
+		Year:    solver.Year(),
+		Name:    solver.Day(),
+		Part1:   unsolved,
+		Part2:   unsolved,
+		metrics: nil,
 	}
 
 	var buf bytes.Buffer
 
-	if _, err = buf.ReadFrom(input); err != nil {
+	if _, err := buf.ReadFrom(input); err != nil {
 		return Result{}, fmt.Errorf("failed to read: %w", err)
 	}
 
 	b := buf.Bytes()
 
-	res.Part1, err = solver.Part1(bytes.NewReader(b))
-	if err != nil && !errors.Is(err, ErrNotImplemented) {
-		return Result{}, fmt.Errorf("failed to solve Part1: %w", err)
-	}
+	apply := res.addMetrics(solver, b, params.withMetrics)
+	defer apply()
 
-	res.Part2, err = solver.Part2(bytes.NewReader(b))
-	if err != nil && !errors.Is(err, ErrNotImplemented) {
-		return Result{}, fmt.Errorf("failed to solve Part2: %w", err)
+	if err := res.addAnswers(solver, b); err != nil {
+		return Result{}, fmt.Errorf("failed to add answers: %w", err)
 	}
 
 	return res, nil
+}
+
+type applyMetricFunc func()
+
+func (r *Result) addMetrics(solver Solver, input []byte, mf metricsFlag) func() {
+	if mf.HasFlag(metricsFlagNone) {
+		return func() {
+			r.metrics = nil
+		}
+	}
+
+	const metricsnum = 2
+
+	metricFuncs := make([]applyMetricFunc, 0, metricsnum)
+
+	if mf.HasFlag(metricsFlagElapsed) {
+		var em metric
+
+		r.metrics = append(r.metrics, &em)
+
+		metricFuncs = append(metricFuncs, em.elapsed())
+	}
+
+	if mf.HasFlag(metricsFlagBenchmark) {
+		var bm metric
+
+		r.metrics = append(r.metrics, &bm)
+
+		bf := benchFunc(func() error {
+			return r.addAnswers(solver, input)
+		})
+
+		metricFuncs = append(metricFuncs, bm.bench(bf))
+	}
+
+	return func() {
+		for _, f := range metricFuncs {
+			f()
+		}
+	}
+}
+
+func (r *Result) addAnswers(s Solver, input []byte) error {
+	part1, err := s.Part1(bytes.NewReader(input))
+	if err != nil && !errors.Is(err, ErrNotImplemented) {
+		return fmt.Errorf("failed to solve Part1: %w", err)
+	}
+
+	part2, err := s.Part2(bytes.NewReader(input))
+	if err != nil && !errors.Is(err, ErrNotImplemented) {
+		return fmt.Errorf("failed to solve Part2: %w", err)
+	}
+
+	r.Part1 = part1
+	r.Part2 = part2
+
+	return nil
 }
