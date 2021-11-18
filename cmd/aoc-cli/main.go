@@ -13,7 +13,6 @@ import (
 	"github.com/briandowns/spinner"
 	"github.com/manifoldco/promptui"
 	log "github.com/obalunenko/logger"
-	"github.com/obalunenko/version"
 	"github.com/urfave/cli"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
@@ -41,13 +40,13 @@ func main() {
 		"answers for input on site."
 	app.Usage = `a command line tool for get solution for Advent of Code puzzles`
 	app.Author = "Oleg Balunenko"
-	app.Version = version.GetVersion()
+	app.Version = printVersion(ctx)
 	app.Email = "oleg.balunenko@gmail.com"
 
 	app.Flags = flags()
 
 	app.Action = menu(ctx)
-	app.Before = printVersion
+	app.Before = printHeader
 	app.After = onExit
 
 	if err := app.Run(os.Args); err != nil {
