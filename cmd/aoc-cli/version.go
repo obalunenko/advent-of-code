@@ -2,16 +2,41 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"strings"
 	"text/tabwriter"
 
+	log "github.com/obalunenko/logger"
 	"github.com/obalunenko/version"
 	"github.com/urfave/cli"
 )
 
-func printVersion(_ *cli.Context) error {
+func printHeader(_ *cli.Context) error {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.TabIndent)
+
+	_, err := fmt.Fprintf(w, `
+
+ █████╗ ██████╗ ██╗   ██╗███████╗███╗   ██╗████████╗     ██████╗ ███████╗     ██████╗ ██████╗ ██████╗ ███████╗
+██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║╚══██╔══╝    ██╔═══██╗██╔════╝    ██╔════╝██╔═══██╗██╔══██╗██╔════╝
+███████║██║  ██║██║   ██║█████╗  ██╔██╗ ██║   ██║       ██║   ██║█████╗      ██║     ██║   ██║██║  ██║█████╗  
+██╔══██║██║  ██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║   ██║       ██║   ██║██╔══╝      ██║     ██║   ██║██║  ██║██╔══╝  
+██║  ██║██████╔╝ ╚████╔╝ ███████╗██║ ╚████║   ██║       ╚██████╔╝██║         ╚██████╗╚██████╔╝██████╔╝███████╗
+╚═╝  ╚═╝╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝        ╚═════╝ ╚═╝          ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝
+
+`)
+	if err != nil {
+		return fmt.Errorf("print version: %w", err)
+	}
+
+	return nil
+}
+
+func printVersion(ctx context.Context) string {
+	var buf strings.Builder
+
+	w := tabwriter.NewWriter(&buf, 0, 0, 1, ' ', tabwriter.TabIndent)
 
 	_, err := fmt.Fprintf(w, `
 | app_name:	%s	|
@@ -34,8 +59,12 @@ func printVersion(_ *cli.Context) error {
 		version.GetBuildDate(),
 		version.GetGoVersion())
 	if err != nil {
-		return fmt.Errorf("print version: %w", err)
+		log.WithError(ctx, err).Fatal("fprintf")
 	}
 
-	return nil
+	if err := w.Flush(); err != nil {
+		log.WithError(ctx, err).Fatal("flush")
+	}
+
+	return buf.String()
 }
