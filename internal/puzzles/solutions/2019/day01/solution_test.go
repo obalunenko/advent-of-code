@@ -10,6 +10,24 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func Test_solution_Year(t *testing.T) {
+	var s solution
+
+	want := "2019"
+	got := s.Year()
+
+	assert.Equal(t, want, got)
+}
+
+func Test_solution_Day(t *testing.T) {
+	var s solution
+
+	want := "day01"
+	got := s.Day()
+
+	assert.Equal(t, want, got)
+}
+
 func Test_module_fuel(t *testing.T) {
 	type fields struct {
 		mass int
