@@ -10,7 +10,7 @@ import (
 
 	log "github.com/obalunenko/logger"
 	"github.com/obalunenko/version"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func printHeader(_ *cli.Context) error {

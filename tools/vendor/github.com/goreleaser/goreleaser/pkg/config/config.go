@@ -147,6 +147,22 @@ type Homebrew struct {
 	Goarm                 string               `yaml:"goarm,omitempty"`
 }
 
+// Krew contains the krew section.
+type Krew struct {
+	IDs                   []string     `yaml:"ids,omitempty"`
+	Name                  string       `yaml:"name,omitempty"`
+	Index                 RepoRef      `yaml:"index,omitempty"`
+	CommitAuthor          CommitAuthor `yaml:"commit_author,omitempty"`
+	CommitMessageTemplate string       `yaml:"commit_msg_template,omitempty"`
+	Caveats               string       `yaml:"caveats,omitempty"`
+	ShortDescription      string       `yaml:"short_description,omitempty"`
+	Description           string       `yaml:"description,omitempty"`
+	Homepage              string       `yaml:"homepage,omitempty"`
+	URLTemplate           string       `yaml:"url_template,omitempty"`
+	Goarm                 string       `yaml:"goarm,omitempty"`
+	SkipUpload            string       `yaml:"skip_upload,omitempty"`
+}
+
 // Scoop contains the scoop.sh section.
 type Scoop struct {
 	Name                  string       `yaml:"name,omitempty"`
@@ -579,7 +595,7 @@ type NFPMOverridables struct {
 	Suggests         []string          `yaml:"suggests,omitempty"`
 	Conflicts        []string          `yaml:"conflicts,omitempty"`
 	Replaces         []string          `yaml:"replaces,omitempty"`
-	EmptyFolders     []string          `yaml:"empty_folders,omitempty"`
+	EmptyFolders     []string          `yaml:"empty_folders,omitempty"` // deprecated
 	Contents         files.Contents    `yaml:"contents,omitempty"`
 	Scripts          NFPMScripts       `yaml:"scripts,omitempty"`
 	RPM              NFPMRPM           `yaml:"rpm,omitempty"`
@@ -589,14 +605,16 @@ type NFPMOverridables struct {
 
 // Sign config.
 type Sign struct {
-	ID        string   `yaml:"id,omitempty"`
-	Cmd       string   `yaml:"cmd,omitempty"`
-	Args      []string `yaml:"args,omitempty"`
-	Signature string   `yaml:"signature,omitempty"`
-	Artifacts string   `yaml:"artifacts,omitempty"`
-	IDs       []string `yaml:"ids,omitempty"`
-	Stdin     *string  `yaml:"stdin,omitempty"`
-	StdinFile string   `yaml:"stdin_file,omitempty"`
+	ID          string   `yaml:"id,omitempty"`
+	Cmd         string   `yaml:"cmd,omitempty"`
+	Args        []string `yaml:"args,omitempty"`
+	Signature   string   `yaml:"signature,omitempty"`
+	Artifacts   string   `yaml:"artifacts,omitempty"`
+	IDs         []string `yaml:"ids,omitempty"`
+	Stdin       *string  `yaml:"stdin,omitempty"`
+	StdinFile   string   `yaml:"stdin_file,omitempty"`
+	Env         []string `yaml:"env,omitempty"`
+	Certificate string   `yaml:"certificate,omitempty"`
 }
 
 // SnapcraftAppMetadata for the binaries that will be in the snap package.
@@ -756,9 +774,10 @@ type Publisher struct {
 
 // Source configuration.
 type Source struct {
-	NameTemplate string `yaml:"name_template,omitempty"`
-	Format       string `yaml:"format,omitempty"`
-	Enabled      bool   `yaml:"enabled,omitempty"`
+	NameTemplate   string `yaml:"name_template,omitempty"`
+	Format         string `yaml:"format,omitempty"`
+	Enabled        bool   `yaml:"enabled,omitempty"`
+	PrefixTemplate string `yaml:"prefix_template,omitempty"`
 }
 
 // Project includes all project configuration.
@@ -769,6 +788,7 @@ type Project struct {
 	Milestones      []Milestone      `yaml:"milestones,omitempty"`
 	Brews           []Homebrew       `yaml:"brews,omitempty"`
 	Rigs            []GoFish         `yaml:"rigs,omitempty"`
+	Krews           []Krew           `yaml:"krews,omitempty"`
 	Scoop           Scoop            `yaml:"scoop,omitempty"`
 	Builds          []Build          `yaml:"builds,omitempty"`
 	Archives        []Archive        `yaml:"archives,omitempty"`
@@ -822,6 +842,7 @@ type Announce struct {
 	Teams      Teams      `yaml:"teams,omitempty"`
 	SMTP       SMTP       `yaml:"smtp,omitempty"`
 	Mattermost Mattermost `yaml:"mattermost,omitempty"`
+	LinkedIn   LinkedIn   `yaml:"linkedin,omitempty"`
 	Telegram   Telegram   `yaml:"telegram,omitempty"`
 }
 
@@ -885,6 +906,11 @@ type SMTP struct {
 	SubjectTemplate    string   `yaml:"subject_template,omitempty"`
 	BodyTemplate       string   `yaml:"body_template,omitempty"`
 	InsecureSkipVerify bool     `yaml:"insecure_skip_verify,omitempty"`
+}
+
+type LinkedIn struct {
+	Enabled         bool   `yaml:"enabled,omitempty"`
+	MessageTemplate string `yaml:"message_template,omitempty"`
 }
 
 type Telegram struct {
