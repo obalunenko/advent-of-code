@@ -188,16 +188,18 @@ func getChangeloger(ctx *context.Context) (changeloger, error) {
 	case "":
 		return gitChangeloger{}, nil
 	case "github":
-		return newGitHubChangeloger(ctx)
+		fallthrough
 	case "gitlab":
-		return newGitLabChangeloger(ctx)
+		return newSCMChangeloger(ctx)
+	case "github-native":
+		return newGithubChangeloger(ctx)
 	default:
 		return nil, fmt.Errorf("invalid changelog.use: %q", ctx.Config.Changelog.Use)
 	}
 }
 
-func newGitHubChangeloger(ctx *context.Context) (changeloger, error) {
-	cli, err := client.New(ctx)
+func newGithubChangeloger(ctx *context.Context) (changeloger, error) {
+	cli, err := client.NewGitHub(ctx, ctx.Token)
 	if err != nil {
 		return nil, err
 	}
@@ -205,7 +207,7 @@ func newGitHubChangeloger(ctx *context.Context) (changeloger, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &scmChangeloger{
+	return &githubNativeChangeloger{
 		client: cli,
 		repo: client.Repo{
 			Owner: repo.Owner,
@@ -214,7 +216,7 @@ func newGitHubChangeloger(ctx *context.Context) (changeloger, error) {
 	}, nil
 }
 
-func newGitLabChangeloger(ctx *context.Context) (changeloger, error) {
+func newSCMChangeloger(ctx *context.Context) (changeloger, error) {
 	cli, err := client.New(ctx)
 	if err != nil {
 		return nil, err
@@ -287,4 +289,13 @@ type scmChangeloger struct {
 
 func (c *scmChangeloger) Log(ctx *context.Context, prev, current string) (string, error) {
 	return c.client.Changelog(ctx, c.repo, prev, current)
+}
+
+type githubNativeChangeloger struct {
+	client client.GitHubClient
+	repo   client.Repo
+}
+
+func (c *githubNativeChangeloger) Log(ctx *context.Context, prev, current string) (string, error) {
+	return c.client.GenerateReleaseNotes(ctx, c.repo, prev, current)
 }

@@ -13,7 +13,7 @@ import (
 	"github.com/briandowns/spinner"
 	"github.com/manifoldco/promptui"
 	log "github.com/obalunenko/logger"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 	"github.com/obalunenko/advent-of-code/internal/puzzles/input"
@@ -34,17 +34,18 @@ func main() {
 
 	app := cli.NewApp()
 	app.Name = "aoc-cli"
-
 	app.Description = "Solutions of puzzles for Advent Of Code (https://adventofcode.com/)\n" +
 		"This command line tool contains solutions for puzzles and cli tool to run solutions to get " +
 		"answers for input on site."
 	app.Usage = `a command line tool for get solution for Advent of Code puzzles`
-	app.Author = "Oleg Balunenko"
+	app.Authors = []*cli.Author{
+		{
+			Name:  "Oleg Balunenko",
+			Email: "oleg.balunenko@gmail.com",
+		},
+	}
 	app.Version = printVersion(ctx)
-	app.Email = "oleg.balunenko@gmail.com"
-
 	app.Flags = flags()
-
 	app.Action = menu(ctx)
 	app.Before = printHeader
 	app.After = onExit
@@ -69,26 +70,34 @@ func flags() []cli.Flag {
 	var res []cli.Flag
 
 	elapsed := cli.BoolFlag{
-		Name:        fmt.Sprintf("%s, %s", flagElapsed, flagShortElapsed),
+		Name:        flagElapsed,
+		Aliases:     []string{flagShortElapsed},
 		Usage:       "Enables elapsed time metric",
-		EnvVar:      "",
+		EnvVars:     nil,
 		FilePath:    "",
 		Required:    false,
 		Hidden:      false,
+		Value:       false,
+		DefaultText: "",
 		Destination: nil,
+		HasBeenSet:  false,
 	}
 
 	benchmark := cli.BoolFlag{
-		Name:        fmt.Sprintf("%s, %s", flagBenchmark, flagShortBenchmark),
+		Name:        flagBenchmark,
+		Aliases:     []string{flagShortBenchmark},
 		Usage:       "Enables benchmark metric",
-		EnvVar:      "",
+		EnvVars:     nil,
 		FilePath:    "",
 		Required:    false,
 		Hidden:      false,
+		Value:       false,
+		DefaultText: "",
 		Destination: nil,
+		HasBeenSet:  false,
 	}
 
-	res = append(res, elapsed, benchmark)
+	res = append(res, &elapsed, &benchmark)
 
 	return res
 }
@@ -230,11 +239,11 @@ func optionsFromCli(c *cli.Context) []puzzles.RunOption {
 
 	options := make([]puzzles.RunOption, 0, optsnum)
 
-	if c.GlobalBool(flagElapsed) || c.GlobalBool(flagShortElapsed) {
+	if c.Bool(flagElapsed) || c.Bool(flagShortElapsed) {
 		options = append(options, puzzles.WithElapsed())
 	}
 
-	if c.GlobalBool(flagBenchmark) || c.GlobalBool(flagShortBenchmark) {
+	if c.Bool(flagBenchmark) || c.Bool(flagShortBenchmark) {
 		options = append(options, puzzles.WithBenchmark())
 	}
 

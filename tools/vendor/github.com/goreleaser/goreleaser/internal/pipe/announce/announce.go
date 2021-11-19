@@ -9,6 +9,7 @@ import (
 	"github.com/goreleaser/goreleaser/internal/middleware/logging"
 	"github.com/goreleaser/goreleaser/internal/middleware/skip"
 	"github.com/goreleaser/goreleaser/internal/pipe/discord"
+	"github.com/goreleaser/goreleaser/internal/pipe/linkedin"
 	"github.com/goreleaser/goreleaser/internal/pipe/mattermost"
 	"github.com/goreleaser/goreleaser/internal/pipe/reddit"
 	"github.com/goreleaser/goreleaser/internal/pipe/slack"
@@ -31,6 +32,7 @@ type Announcer interface {
 var announcers = []Announcer{
 	// XXX: keep asc sorting
 	discord.Pipe{},
+	linkedin.Pipe{},
 	mattermost.Pipe{},
 	reddit.Pipe{},
 	slack.Pipe{},

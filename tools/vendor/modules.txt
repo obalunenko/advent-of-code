@@ -21,8 +21,8 @@ cloud.google.com/go/storage/internal/apiv2
 # code.gitea.io/sdk/gitea v0.15.0
 ## explicit; go 1.13
 code.gitea.io/sdk/gitea
-# github.com/AlekSi/pointer v1.1.0
-## explicit; go 1.11
+# github.com/AlekSi/pointer v1.2.0
+## explicit; go 1.18
 github.com/AlekSi/pointer
 # github.com/Antonboom/errname v0.1.5
 ## explicit; go 1.17
@@ -101,7 +101,7 @@ github.com/Masterminds/semver/v3
 # github.com/Masterminds/sprig v2.22.0+incompatible
 ## explicit
 github.com/Masterminds/sprig
-# github.com/Microsoft/go-winio v0.4.16
+# github.com/Microsoft/go-winio v0.5.0
 ## explicit; go 1.12
 github.com/Microsoft/go-winio
 github.com/Microsoft/go-winio/pkg/guid
@@ -126,6 +126,9 @@ github.com/ProtonMail/go-crypto/openpgp/internal/ecc
 github.com/ProtonMail/go-crypto/openpgp/internal/encoding
 github.com/ProtonMail/go-crypto/openpgp/packet
 github.com/ProtonMail/go-crypto/openpgp/s2k
+# github.com/acomagu/bufpipe v1.0.3
+## explicit; go 1.12
+github.com/acomagu/bufpipe
 # github.com/alecthomas/jsonschema v0.0.0-20211022214203-8b29eab41725
 ## explicit; go 1.12
 github.com/alecthomas/jsonschema
@@ -325,8 +328,8 @@ github.com/charithe/durationcheck
 # github.com/chavacava/garif v0.0.0-20210405164556-e8a0a408d6af
 ## explicit; go 1.16
 github.com/chavacava/garif
-# github.com/cpuguy83/go-md2man/v2 v2.0.0
-## explicit; go 1.12
+# github.com/cpuguy83/go-md2man/v2 v2.0.1
+## explicit; go 1.11
 github.com/cpuguy83/go-md2man/v2/md2man
 # github.com/daixiang0/gci v0.2.9
 ## explicit; go 1.14
@@ -391,14 +394,15 @@ github.com/go-git/gcfg
 github.com/go-git/gcfg/scanner
 github.com/go-git/gcfg/token
 github.com/go-git/gcfg/types
-# github.com/go-git/go-billy/v5 v5.1.0
+# github.com/go-git/go-billy/v5 v5.3.1
 ## explicit; go 1.13
 github.com/go-git/go-billy/v5
 github.com/go-git/go-billy/v5/helper/chroot
 github.com/go-git/go-billy/v5/helper/polyfill
+github.com/go-git/go-billy/v5/memfs
 github.com/go-git/go-billy/v5/osfs
 github.com/go-git/go-billy/v5/util
-# github.com/go-git/go-git/v5 v5.3.0
+# github.com/go-git/go-git/v5 v5.4.2
 ## explicit; go 1.13
 github.com/go-git/go-git/v5
 github.com/go-git/go-git/v5/config
@@ -570,7 +574,7 @@ github.com/google/go-github/v39/github
 # github.com/google/go-querystring v1.1.0
 ## explicit; go 1.10
 github.com/google/go-querystring/query
-# github.com/google/rpmpack v0.0.0-20210410105602-e20c988a6f5a
+# github.com/google/rpmpack v0.0.0-20210518075352-dc539ef4f2ea
 ## explicit; go 1.12
 github.com/google/rpmpack
 # github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
@@ -596,7 +600,7 @@ github.com/goreleaser/chglog
 # github.com/goreleaser/fileglob v1.2.0
 ## explicit; go 1.16
 github.com/goreleaser/fileglob
-# github.com/goreleaser/goreleaser v0.184.0
+# github.com/goreleaser/goreleaser v1.0.0
 ## explicit; go 1.17
 github.com/goreleaser/goreleaser
 github.com/goreleaser/goreleaser/cmd
@@ -611,7 +615,6 @@ github.com/goreleaser/goreleaser/internal/gio
 github.com/goreleaser/goreleaser/internal/git
 github.com/goreleaser/goreleaser/internal/http
 github.com/goreleaser/goreleaser/internal/ids
-github.com/goreleaser/goreleaser/internal/linux
 github.com/goreleaser/goreleaser/internal/logext
 github.com/goreleaser/goreleaser/internal/middleware
 github.com/goreleaser/goreleaser/internal/middleware/errhandler
@@ -637,6 +640,8 @@ github.com/goreleaser/goreleaser/internal/pipe/env
 github.com/goreleaser/goreleaser/internal/pipe/git
 github.com/goreleaser/goreleaser/internal/pipe/gofish
 github.com/goreleaser/goreleaser/internal/pipe/gomod
+github.com/goreleaser/goreleaser/internal/pipe/krew
+github.com/goreleaser/goreleaser/internal/pipe/linkedin
 github.com/goreleaser/goreleaser/internal/pipe/mattermost
 github.com/goreleaser/goreleaser/internal/pipe/milestone
 github.com/goreleaser/goreleaser/internal/pipe/nfpm
@@ -671,11 +676,12 @@ github.com/goreleaser/goreleaser/pkg/build
 github.com/goreleaser/goreleaser/pkg/config
 github.com/goreleaser/goreleaser/pkg/context
 github.com/goreleaser/goreleaser/pkg/defaults
-# github.com/goreleaser/nfpm/v2 v2.6.0
-## explicit; go 1.16
+# github.com/goreleaser/nfpm/v2 v2.9.2
+## explicit; go 1.17
 github.com/goreleaser/nfpm/v2
 github.com/goreleaser/nfpm/v2/apk
 github.com/goreleaser/nfpm/v2/deb
+github.com/goreleaser/nfpm/v2/deprecation
 github.com/goreleaser/nfpm/v2/files
 github.com/goreleaser/nfpm/v2/internal/glob
 github.com/goreleaser/nfpm/v2/internal/sign
@@ -726,7 +732,7 @@ github.com/hashicorp/hcl/json/token
 # github.com/huandu/xstrings v1.3.2
 ## explicit; go 1.12
 github.com/huandu/xstrings
-# github.com/iancoleman/orderedmap v0.0.0-20190318233801-ac98e3ecb4b0
+# github.com/iancoleman/orderedmap v0.2.0
 ## explicit
 github.com/iancoleman/orderedmap
 # github.com/imdario/mergo v0.3.12
@@ -824,7 +830,7 @@ github.com/mgechev/revive/config
 github.com/mgechev/revive/formatter
 github.com/mgechev/revive/lint
 github.com/mgechev/revive/rule
-# github.com/mitchellh/copystructure v1.1.2
+# github.com/mitchellh/copystructure v1.2.0
 ## explicit; go 1.15
 github.com/mitchellh/copystructure
 # github.com/mitchellh/go-homedir v1.1.0
@@ -833,7 +839,7 @@ github.com/mitchellh/go-homedir
 # github.com/mitchellh/mapstructure v1.4.2
 ## explicit; go 1.14
 github.com/mitchellh/mapstructure
-# github.com/mitchellh/reflectwalk v1.0.1
+# github.com/mitchellh/reflectwalk v1.0.2
 ## explicit
 github.com/mitchellh/reflectwalk
 # github.com/moricho/tparallel v0.2.1
@@ -871,9 +877,6 @@ github.com/obalunenko/version
 # github.com/olekukonko/tablewriter v0.0.5
 ## explicit; go 1.12
 github.com/olekukonko/tablewriter
-# github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
-## explicit
-github.com/op/go-logging
 # github.com/pelletier/go-toml v1.9.4
 ## explicit; go 1.12
 github.com/pelletier/go-toml
@@ -926,7 +929,7 @@ github.com/quasilyte/go-ruleguard/ruleguard/typematch
 # github.com/quasilyte/regex/syntax v0.0.0-20200407221936-30656e2c4a95
 ## explicit; go 1.14
 github.com/quasilyte/regex/syntax
-# github.com/russross/blackfriday/v2 v2.0.1
+# github.com/russross/blackfriday/v2 v2.1.0
 ## explicit
 github.com/russross/blackfriday/v2
 # github.com/ryancurrah/gomodguard v1.2.3
@@ -938,10 +941,6 @@ github.com/ryanrolds/sqlclosecheck/pkg/analyzer
 # github.com/sanposhiho/wastedassign/v2 v2.0.6
 ## explicit; go 1.14
 github.com/sanposhiho/wastedassign/v2
-# github.com/sassoftware/go-rpmutils v0.0.0-20190420191620-a8f1baeba37b
-## explicit
-github.com/sassoftware/go-rpmutils/cpio
-github.com/sassoftware/go-rpmutils/fileutil
 # github.com/securego/gosec/v2 v2.9.1
 ## explicit; go 1.16
 github.com/securego/gosec/v2
@@ -953,9 +952,6 @@ github.com/sergi/go-diff/diffmatchpatch
 # github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 ## explicit
 github.com/shazow/go-diff/difflib
-# github.com/shurcooL/sanitized_anchor_name v1.0.0
-## explicit
-github.com/shurcooL/sanitized_anchor_name
 # github.com/sirupsen/logrus v1.8.1
 ## explicit; go 1.13
 github.com/sirupsen/logrus
@@ -1064,8 +1060,8 @@ github.com/vasi-stripe/gogroup/cmd/gogroup
 # github.com/xanzy/go-gitlab v0.50.3
 ## explicit; go 1.13
 github.com/xanzy/go-gitlab
-# github.com/xanzy/ssh-agent v0.3.0
-## explicit
+# github.com/xanzy/ssh-agent v0.3.1
+## explicit; go 1.16
 github.com/xanzy/ssh-agent
 # github.com/yeya24/promlinter v0.1.0
 ## explicit; go 1.14
@@ -1141,7 +1137,7 @@ golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/modfile
 golang.org/x/mod/module
 golang.org/x/mod/semver
-# golang.org/x/net v0.0.0-20210825183410-e898025ed96a
+# golang.org/x/net v0.0.0-20211007125505-59d4e928ea9d
 ## explicit; go 1.17
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
