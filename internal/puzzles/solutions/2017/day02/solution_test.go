@@ -75,9 +75,11 @@ func Test_solution_Part2(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:    "",
-			args:    args{},
-			want:    "",
+			name: "example from spec",
+			args: args{
+				input: strings.NewReader("5 9 2 8\n9 4 7 3\n3 8 6 5\n"),
+			},
+			want:    "9",
 			wantErr: false,
 		},
 	}

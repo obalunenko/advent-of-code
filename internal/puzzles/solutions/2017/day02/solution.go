@@ -3,13 +3,10 @@ package day02
 
 import (
 	"bufio"
-	"context"
 	"fmt"
 	"io"
 	"strconv"
 	"strings"
-
-	log "github.com/obalunenko/logger"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -29,37 +26,18 @@ func (s solution) Year() string {
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
-	scanner := bufio.NewScanner(input)
-
-	var checksum int
-
-	for scanner.Scan() {
-		line := scanner.Text()
-
-		line = strings.ReplaceAll(line, "\t", " ")
-
+	var f checksumFunc = func(row []string) (int, error) {
 		var min, max int
 
-		numbers := strings.Split(line, " ")
-
-		for i, number := range numbers {
+		for i, number := range row {
 			d, err := strconv.Atoi(number)
 			if err != nil {
-				return "", fmt.Errorf("atoi: %w", err)
+				return 0, fmt.Errorf("atoi: %w", err)
 			}
 
 			if i == 0 {
 				min, max = d, d
 			}
-
-			log.WithFields(context.TODO(), log.Fields{
-				"checksum": checksum,
-				"min":      min,
-				"max":      max,
-				"i":        i,
-				"number":   d,
-				"row":      line,
-			}).Info("Iterate")
 
 			if d < min {
 				min = d
@@ -70,12 +48,75 @@ func (s solution) Part1(input io.Reader) (string, error) {
 			}
 		}
 
-		checksum += max - min
-
+		return max - min, nil
 	}
-	return strconv.Itoa(checksum), nil
+
+	return findChecksum(input, f)
 }
 
 func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	var f checksumFunc = func(row []string) (int, error) {
+		numbers := make([]int, 0, len(row))
+
+		for _, n := range row {
+			d, err := strconv.Atoi(n)
+			if err != nil {
+				return 0, fmt.Errorf("atoi: %w", err)
+			}
+
+			numbers = append(numbers, d)
+		}
+
+		var result int
+
+	loop:
+		for i := 0; i < len(numbers); i++ {
+			d1 := numbers[i]
+			for j := i + 1; j < len(numbers); j++ {
+				d2 := numbers[j]
+
+				var a, b = d1, d2
+
+				if a < b {
+					a, b = b, a
+				}
+
+				if a%b == 0 {
+					result = a / b
+
+					break loop
+				}
+			}
+		}
+
+		return result, nil
+	}
+
+	return findChecksum(input, f)
+}
+
+type checksumFunc func(row []string) (int, error)
+
+func findChecksum(spreadsheet io.Reader, f checksumFunc) (string, error) {
+	scanner := bufio.NewScanner(spreadsheet)
+
+	var checksum int
+
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		line = strings.ReplaceAll(line, "\t", " ")
+
+		numbers := strings.Split(line, " ")
+
+		n, err := f(numbers)
+		if err != nil {
+			return "", err
+		}
+
+		checksum += n
+	}
+
+	return strconv.Itoa(checksum), nil
+
 }
