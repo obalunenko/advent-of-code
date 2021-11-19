@@ -1,7 +1,7 @@
 package puzzles
 
 import (
-	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -25,7 +25,7 @@ func TestMakeName(t *testing.T) {
 				year:   "2019",
 				puzzle: "day01",
 			},
-			want:    "2019" + string(os.PathSeparator) + "day01",
+			want:    filepath.Join("2019", "day01"),
 			wantErr: false,
 		},
 		{
