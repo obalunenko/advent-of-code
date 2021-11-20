@@ -3,6 +3,7 @@ package day02
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"strconv"
@@ -56,22 +57,14 @@ func (s solution) Part1(input io.Reader) (string, error) {
 
 func (s solution) Part2(input io.Reader) (string, error) {
 	var f checksumFunc = func(row []string) (int, error) {
-		numbers := make([]int, 0, len(row))
-
-		for _, n := range row {
-			d, err := strconv.Atoi(n)
-			if err != nil {
-				return 0, fmt.Errorf("atoi: %w", err)
-			}
-
-			numbers = append(numbers, d)
+		numbers, err := stringsToNumbers(row)
+		if err != nil {
+			return 0, fmt.Errorf("strings to numbers: %w", err)
 		}
 
-		var result int
-
-	loop:
 		for i := 0; i < len(numbers); i++ {
 			d1 := numbers[i]
+
 			for j := i + 1; j < len(numbers); j++ {
 				d2 := numbers[j]
 
@@ -82,18 +75,34 @@ func (s solution) Part2(input io.Reader) (string, error) {
 				}
 
 				if a%b == 0 {
-					result = a / b
-
-					break loop
+					return a / b, nil
 				}
 			}
 		}
 
-		return result, nil
+		return 0, ErrNotFound
 	}
 
 	return findChecksum(input, f)
 }
+
+func stringsToNumbers(row []string) ([]int, error) {
+	numbers := make([]int, 0, len(row))
+
+	for _, n := range row {
+		d, err := strconv.Atoi(n)
+		if err != nil {
+			return nil, fmt.Errorf("atoi: %w", err)
+		}
+
+		numbers = append(numbers, d)
+	}
+
+	return numbers, nil
+}
+
+// ErrNotFound returns when checksum could not be found.
+var ErrNotFound = errors.New("checksum not found")
 
 type checksumFunc func(row []string) (int, error)
 
@@ -118,5 +127,4 @@ func findChecksum(spreadsheet io.Reader, f checksumFunc) (string, error) {
 	}
 
 	return strconv.Itoa(checksum), nil
-
 }

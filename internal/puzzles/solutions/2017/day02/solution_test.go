@@ -28,6 +28,8 @@ func Test_solution_Day(t *testing.T) {
 }
 
 func Test_solution_Part1(t *testing.T) {
+	var s solution
+
 	type args struct {
 		input io.Reader
 	}
@@ -50,7 +52,6 @@ func Test_solution_Part1(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := solution{}
 			got, err := s.Part1(tt.args.input)
 			if tt.wantErr {
 				require.Error(t, err)
@@ -65,9 +66,12 @@ func Test_solution_Part1(t *testing.T) {
 }
 
 func Test_solution_Part2(t *testing.T) {
+	var s solution
+
 	type args struct {
 		input io.Reader
 	}
+
 	tests := []struct {
 		name    string
 		args    args
@@ -83,9 +87,9 @@ func Test_solution_Part2(t *testing.T) {
 			wantErr: false,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := solution{}
 			got, err := s.Part2(tt.args.input)
 			if tt.wantErr {
 				require.Error(t, err)
