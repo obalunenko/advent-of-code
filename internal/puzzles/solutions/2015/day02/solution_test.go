@@ -8,6 +8,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func Test_solution_Year(t *testing.T) {
+	var s solution
+
+	want := "2015"
+	got := s.Year()
+
+	assert.Equal(t, want, got)
+}
+
+func Test_solution_Day(t *testing.T) {
+	var s solution
+
+	want := "day02"
+	got := s.Day()
+
+	assert.Equal(t, want, got)
+}
+
 func Test_solution_Part1(t *testing.T) {
 	var s solution
 

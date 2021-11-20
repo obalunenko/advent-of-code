@@ -12,7 +12,7 @@ import (
 func Test_solution_Year(t *testing.T) {
 	var s solution
 
-	want := "2016"
+	want := "2017"
 	got := s.Year()
 
 	assert.Equal(t, want, got)
@@ -41,11 +41,11 @@ func Test_solution_Part1(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "`ULL\nRRDDD\nLURDL\nUUUUD\n` produces 1985",
+			name: "example from spec",
 			args: args{
-				input: strings.NewReader("ULL\nRRDDD\nLURDL\nUUUUD\n"),
+				input: strings.NewReader("5 1 9 5\n7 5 3\n2 4 6 8\n"),
 			},
-			want:    "1985",
+			want:    "18",
 			wantErr: false,
 		},
 	}
@@ -79,11 +79,11 @@ func Test_solution_Part2(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "`ULL\nRRDDD\nLURDL\nUUUUD\n` produces 5DB3",
+			name: "example from spec",
 			args: args{
-				input: strings.NewReader("ULL\nRRDDD\nLURDL\nUUUUD\n"),
+				input: strings.NewReader("5 9 2 8\n9 4 7 3\n3 8 6 5\n"),
 			},
-			want:    "5DB3",
+			want:    "9",
 			wantErr: false,
 		},
 	}
