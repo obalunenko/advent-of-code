@@ -94,7 +94,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
   <summary>2017</summary>  
     
   - [x] [Day 1: Inverse Captcha](https://adventofcode.com/2017/day/1)
-  - [ ] [Day 2: Corruption Checksum](https://adventofcode.com/2017/day/2)
+  - [x] [Day 2: Corruption Checksum](https://adventofcode.com/2017/day/2)
   - [ ] [Day 3: Spiral Memory](https://adventofcode.com/2017/day/3)
   - [ ] [Day 4: High-Entropy Passphrases](https://adventofcode.com/2017/day/4)
   - [ ] [Day 5: A Maze of Twisty Trampolines, All Alike](https://adventofcode.com/2017/day/5)
@@ -223,7 +223,27 @@ and execute
 
 Run it and follow instructions
 
+Cli support optional metrics, to enable them you can use following flags:
+
+```text
+    --elapsed, -e  Enables elapsed time metric
+    --bench, -b    Enables benchmark metric
+```
+
+All available flags:
+
+```text
+    COMMANDS:
+       help, h  Shows a list of commands or help for one command
+
+    GLOBAL OPTIONS:
+       --elapsed, -e  Enables elapsed time metric (default: false)
+       --bench, -b    Enables benchmark metric (default: false)
+       --help, -h     show help (default: false)
+       --version, -v  print the version (default: false)
+```
+
+
 ### Demo
 
-![cli demo_step_1](.github/images/demo_1.png)
-![cli demo_step_2](.github/images/demo_2.png)
+[![asciicast](https://asciinema.org/a/9UFklCUVZTQHCRsHD2vybTlMb.svg)](https://asciinema.org/a/9UFklCUVZTQHCRsHD2vybTlMb)
