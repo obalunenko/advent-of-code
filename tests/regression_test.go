@@ -1202,10 +1202,10 @@ func testcases2018() []testcase {
 			want: puzzles.Result{
 				Year:  year,
 				Name:  puzzles.Day02.String(),
-				Part1: "",
+				Part1: "6944",
 				Part2: "",
 			},
-			wantErr: true,
+			wantErr: false,
 		},
 		{
 			name: "2018/day03",
