@@ -23,6 +23,8 @@ package tools
 
 //go:generate go install -mod=vendor gotest.tools/gotestsum
 
+//go:generate go install -mod=vendor golang.org/x/tools/cmd/stringer
+
 import (
 	_ "github.com/axw/gocov/gocov"
 	_ "github.com/golangci/golangci-lint/cmd/golangci-lint"
@@ -32,5 +34,6 @@ import (
 	_ "github.com/obalunenko/coverbadger/cmd/coverbadger"
 	_ "github.com/vasi-stripe/gogroup/cmd/gogroup"
 	_ "golang.org/x/tools/cmd/cover"
+	_ "golang.org/x/tools/cmd/stringer"
 	_ "gotest.tools/gotestsum"
 )
