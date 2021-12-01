@@ -164,8 +164,8 @@ func makeRunParams(opts []RunOption) runParams {
 	return p
 }
 
-// Run uses solver of puzzle and path to input.
-func Run(solver Solver, input io.Reader, opts ...RunOption) (Result, error) {
+// Solve input to solve puzzle.
+func Solve(solver Solver, input io.Reader, opts ...RunOption) (Result, error) {
 	params := makeRunParams(opts)
 
 	res := Result{

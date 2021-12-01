@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -15,8 +14,8 @@ import (
 	log "github.com/obalunenko/logger"
 	"github.com/urfave/cli/v2"
 
+	"github.com/obalunenko/advent-of-code/internal/command"
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
-	"github.com/obalunenko/advent-of-code/internal/puzzles/input"
 )
 
 func onExit(_ context.Context) cli.AfterFunc {
@@ -69,7 +68,8 @@ func notFound(ctx context.Context) cli.CommandNotFoundFunc {
 }
 func menu(ctx context.Context) cli.ActionFunc {
 	return func(c *cli.Context) error {
-		ctx = contextWithOptions(ctx, optionsFromCli(c))
+		ctx = command.ContextWithOptions(ctx, optionsFromCli(c))
+		ctx = command.ContextWithSession(ctx, sessionFromCli(c))
 
 		years := puzzles.GetYears()
 
@@ -166,7 +166,7 @@ func handlePuzzleChoices(ctx context.Context, year string, opt promptui.Select) 
 
 		stopSpinner := setSpinner()
 
-		res, err := run(ctx, year, choice)
+		res, err := command.Run(ctx, year, choice)
 		if err != nil {
 			log.WithError(ctx, err).Error("Puzzle run failed")
 
@@ -209,51 +209,20 @@ func optionsFromCli(c *cli.Context) []puzzles.RunOption {
 	return options
 }
 
-type optsCtxKey struct{}
+func sessionFromCli(c *cli.Context) string {
+	var sess string
 
-func contextWithOptions(ctx context.Context, opts []puzzles.RunOption) context.Context {
-	if len(opts) == 0 {
-		return ctx
+	sess = c.String(flagSession)
+	if sess != "" {
+		return sess
 	}
 
-	return context.WithValue(ctx, optsCtxKey{}, opts)
-}
-
-func optionsFromContext(ctx context.Context) []puzzles.RunOption {
-	v := ctx.Value(optsCtxKey{})
-
-	opts, ok := v.([]puzzles.RunOption)
-	if !ok {
-		return []puzzles.RunOption{}
+	sess = c.String(flagShortSession)
+	if sess != "" {
+		return sess
 	}
 
-	return opts
-}
-
-func run(ctx context.Context, year, day string) (puzzles.Result, error) {
-	s, err := puzzles.GetSolver(year, day)
-	if err != nil {
-		return puzzles.Result{}, fmt.Errorf("failed to get solver: %w", err)
-	}
-
-	fullName, err := puzzles.MakeName(s.Year(), s.Day())
-	if err != nil {
-		return puzzles.Result{}, fmt.Errorf("failed to make full name: %w", err)
-	}
-
-	asset, err := input.Asset(fmt.Sprintf("%s.txt", fullName))
-	if err != nil {
-		return puzzles.Result{}, fmt.Errorf("failed to open input data: %w", err)
-	}
-
-	opts := optionsFromContext(ctx)
-
-	res, err := puzzles.Run(s, bytes.NewReader(asset), opts...)
-	if err != nil {
-		return puzzles.Result{}, fmt.Errorf("failed to run [%s]: %w", fullName, err)
-	}
-
-	return res, nil
+	return ""
 }
 
 // setSpinner runs the displaying of spinner to handle long time operations. Returns stop func.

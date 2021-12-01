@@ -2,34 +2,99 @@
 package input
 
 import (
-	"embed"
-	"path/filepath"
+	"context"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+	"path"
+	"time"
+
+	"github.com/obalunenko/logger"
 )
 
-const (
-	dir = "data"
-)
-
-// content holds our puzzles inputs content.
-//go:embed data/*
-var content embed.FS
-
-// Asset loads and returns the asset for the given name.
-// It returns an error if the asset could not be found or
-// could not be loaded.
-func Asset(name string) ([]byte, error) {
-	return content.ReadFile(filepath.Clean(
-		filepath.Join(dir, name)))
+// Date holds date info.
+type Date struct {
+	Year string
+	Day  string
 }
 
-// MustAsset loads and returns the asset for the given name.
-// It panics if the asset could not be found or
-// could not be loaded.
-func MustAsset(name string) []byte {
-	res, err := Asset(name)
+func (d Date) String() string {
+	return path.Join(d.Year, d.Day)
+}
+
+// Get returns puzzle input.
+func Get(ctx context.Context, d Date, session string) ([]byte, error) {
+	req, err := createInputReq(ctx, d, session)
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("create input request: %w", err)
 	}
 
-	return res
+	client := http.DefaultClient
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("send request: %w", err)
+	}
+
+	defer func() {
+		if err = resp.Body.Close(); err != nil {
+			logger.WithError(ctx, err).Error("Failed to close body")
+		}
+	}()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("read responsse body: %w", err)
+	}
+
+	switch resp.StatusCode {
+	case http.StatusOK:
+		return body, nil
+	case http.StatusNotFound:
+		return nil, fmt.Errorf("[%s] puzzle input not found", d)
+	case http.StatusBadRequest:
+		return nil, fmt.Errorf("unauthorized")
+	default:
+		return nil, fmt.Errorf("[%s] failed to get puzzle input[%s]", d, resp.Status)
+	}
+}
+
+// createInputReq creates an HTTP request for retrieving the Advent of Code
+// input given year/day.
+func createInputReq(ctx context.Context, d Date, sessionID string) (*http.Request, error) {
+	const (
+		baseurl = "https://adventofcode.com"
+		day     = "day"
+		input   = "input"
+	)
+
+	u, err := url.Parse(baseurl)
+	if err != nil {
+		return nil, fmt.Errorf("parse base url: %w", err)
+	}
+
+	u.Path = path.Join(u.Path, d.Year, day, d.Day, input)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), http.NoBody)
+	if err != nil {
+		return nil, err
+	}
+
+	req.AddCookie(&http.Cookie{
+		Name:       "session",
+		Value:      sessionID,
+		Path:       "/",
+		Domain:     ".adventofcode.com",
+		Expires:    time.Time{},
+		RawExpires: "",
+		MaxAge:     0,
+		Secure:     false,
+		HttpOnly:   false,
+		SameSite:   0,
+		Raw:        "",
+		Unparsed:   nil,
+	})
+
+	return req, nil
 }

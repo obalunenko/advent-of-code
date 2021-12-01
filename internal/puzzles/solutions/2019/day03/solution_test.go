@@ -20,7 +20,7 @@ func Test_solution_Year(t *testing.T) {
 func Test_solution_Day(t *testing.T) {
 	var s solution
 
-	want := "day03"
+	want := "3"
 	got := s.Day()
 
 	assert.Equal(t, want, got)

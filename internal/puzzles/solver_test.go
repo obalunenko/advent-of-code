@@ -158,7 +158,7 @@ func TestRun(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := puzzles.Run(tt.args.solver, tt.args.input)
+			got, err := puzzles.Solve(tt.args.solver, tt.args.input)
 			if tt.wantErr {
 				assert.Error(t, err)
 

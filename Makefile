@@ -40,6 +40,11 @@ test-cover:
 	./scripts/tests/coverage.sh
 .PHONY: test-cover
 
+## Test regression.
+test-regression:
+	./scripts/tests/run-regression.sh
+.PHONY: test-regression
+
 ## Tests sonar report generate.
 test-sonar-report:
 	./scripts/tests/sonar-report.sh

@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/briandowns/spinner v1.13.0
 	github.com/manifoldco/promptui v0.9.0
+	github.com/obalunenko/getenv v0.0.0-20211201164541-6fa80e1bd028
 	github.com/obalunenko/logger v0.1.0
 	github.com/obalunenko/version v1.1.0
 	github.com/stretchr/testify v1.7.0
