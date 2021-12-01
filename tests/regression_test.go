@@ -1,4 +1,4 @@
-package command_test
+package tests_test
 
 import (
 	"context"
@@ -10,6 +10,7 @@ import (
 
 	"github.com/obalunenko/advent-of-code/internal/command"
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
+	_ "github.com/obalunenko/advent-of-code/internal/puzzles/solutions" // register puzzles solvers.
 )
 
 type args struct {
