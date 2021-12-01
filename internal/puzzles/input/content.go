@@ -13,6 +13,7 @@ import (
 	"github.com/obalunenko/logger"
 )
 
+// Date holds date info.
 type Date struct {
 	Year string
 	Day  string

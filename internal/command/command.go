@@ -9,7 +9,7 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles/input"
 )
 
-// Run
+// Run runs puzzle solving for passed year/day date.
 func Run(ctx context.Context, year, day string) (puzzles.Result, error) {
 	s, err := puzzles.GetSolver(year, day)
 	if err != nil {
