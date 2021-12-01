@@ -37,9 +37,9 @@ func _() {
 	_ = x[daySentinel-26]
 }
 
-const _Day_name = "dayUnknownday01day02day03day04day05day06day07day08day09day10day11day12day13day14day15day16day17day18day19day20day21day22day23day24day25daySentinel"
+const _Day_name = "dayUnknown12345678910111213141516171819202122232425daySentinel"
 
-var _Day_index = [...]uint8{0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 146}
+var _Day_index = [...]uint8{0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 62}
 
 func (i Day) String() string {
 	if i < 0 || i >= Day(len(_Day_index)-1) {

@@ -9,6 +9,8 @@ const (
 	flagShortElapsed   = "e"
 	flagBenchmark      = "bench"
 	flagShortBenchmark = "b"
+	flagSession        = "session"
+	flagShortSession   = "s"
 )
 
 func cmdRunFlags() []cli.Flag {
@@ -42,7 +44,22 @@ func cmdRunFlags() []cli.Flag {
 		HasBeenSet:  false,
 	}
 
-	res = append(res, &elapsed, &benchmark)
+	session := cli.StringFlag{
+		Name:        flagSession,
+		Aliases:     []string{flagShortSession},
+		Usage:       "AOC auth session to get inputs",
+		EnvVars:     []string{"AOC_SESSION"},
+		FilePath:    "",
+		Required:    true,
+		Hidden:      false,
+		TakesFile:   false,
+		Value:       "",
+		DefaultText: "",
+		Destination: nil,
+		HasBeenSet:  false,
+	}
+
+	res = append(res, &elapsed, &benchmark, &session)
 
 	return res
 }

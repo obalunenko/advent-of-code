@@ -17,7 +17,7 @@ func TestDay_String(t *testing.T) {
 		{
 			name: "exist",
 			i:    Day01,
-			want: "day01",
+			want: "1",
 		},
 		{
 			name: "not exist",

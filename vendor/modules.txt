@@ -33,6 +33,9 @@ github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.8
 ## explicit
 github.com/mattn/go-isatty
+# github.com/obalunenko/getenv v0.0.0-20211201164541-6fa80e1bd028
+## explicit; go 1.17
+github.com/obalunenko/getenv
 # github.com/obalunenko/logger v0.1.0
 ## explicit; go 1.17
 github.com/obalunenko/logger

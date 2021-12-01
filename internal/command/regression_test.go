@@ -1,12 +1,14 @@
-package main
+package command_test
 
 import (
 	"context"
 	"testing"
 
+	"github.com/obalunenko/getenv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/obalunenko/advent-of-code/internal/command"
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
@@ -23,8 +25,17 @@ type testcase struct {
 }
 
 // Regression tests for all puzzles. Check that answers still correct.
-func Test_run(t *testing.T) {
-	ctx := context.Background()
+func TestRun(t *testing.T) {
+	if !getenv.BoolOrDefault("AOC_REGRESSION_ENABLED", false) {
+		t.Skip("Regression test disabled")
+	}
+
+	session := getenv.StringOrDefault("AOC_SESSION", "")
+	if session == "" {
+		t.Skip("AOC_SESSION not set")
+	}
+
+	ctx := command.ContextWithSession(context.Background(), session)
 
 	var tests []testcase
 
@@ -38,7 +49,7 @@ func Test_run(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := run(ctx, tt.args.year, tt.args.name)
+			got, err := command.Run(ctx, tt.args.year, tt.args.name)
 			if tt.wantErr {
 				require.Error(t, err)
 
