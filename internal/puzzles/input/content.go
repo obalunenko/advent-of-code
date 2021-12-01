@@ -75,10 +75,6 @@ func createInputReq(ctx context.Context, d Date, sessionID string) (*http.Reques
 
 	u.Path = path.Join(u.Path, d.Year, day, d.Day, input)
 
-	path.Join()
-
-	logger.WithField(ctx, "url", u.String()).Info("request url")
-
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
 	if err != nil {
 		return nil, err
