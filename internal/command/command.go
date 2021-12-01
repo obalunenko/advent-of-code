@@ -1,3 +1,4 @@
+// Package command holds functionality for running puzzle solving command.
 package command
 
 import (

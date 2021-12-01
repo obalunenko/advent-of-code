@@ -4,7 +4,7 @@ package input
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"path"
@@ -38,12 +38,12 @@ func Get(ctx context.Context, d Date, session string) ([]byte, error) {
 	}
 
 	defer func() {
-		if err := resp.Body.Close(); err != nil {
+		if err = resp.Body.Close(); err != nil {
 			logger.WithError(ctx, err).Error("Failed to close body")
 		}
 	}()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("read responsse body: %w", err)
 	}
@@ -54,7 +54,7 @@ func Get(ctx context.Context, d Date, session string) ([]byte, error) {
 	case http.StatusNotFound:
 		return nil, fmt.Errorf("[%s] puzzle input not found", d)
 	case http.StatusBadRequest:
-		return nil, fmt.Errorf("unauthorised")
+		return nil, fmt.Errorf("unauthorized")
 	default:
 		return nil, fmt.Errorf("[%s] failed to get puzzle input[%s]", d, resp.Status)
 	}
@@ -76,7 +76,7 @@ func createInputReq(ctx context.Context, d Date, sessionID string) (*http.Reques
 
 	u.Path = path.Join(u.Path, d.Year, day, d.Day, input)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), http.NoBody)
 	if err != nil {
 		return nil, err
 	}

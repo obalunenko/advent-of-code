@@ -24,6 +24,7 @@ func SessionFromContext(ctx context.Context) string {
 	}
 
 	val := ctx.Value(sessCtxKey{})
+
 	sess, ok := val.(string)
 	if !ok {
 		return ""
