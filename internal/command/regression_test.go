@@ -32,7 +32,7 @@ func TestRun(t *testing.T) {
 
 	session := getenv.StringOrDefault("AOC_SESSION", "")
 	if session == "" {
-		t.Skip("AOC_SESSION not set")
+		t.Fatal("AOC_SESSION not set")
 	}
 
 	ctx := command.ContextWithSession(context.Background(), session)
