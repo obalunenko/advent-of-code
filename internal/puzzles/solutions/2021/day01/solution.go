@@ -1,4 +1,4 @@
-// Package day01 contains solution for https://adventofcode.com/2020/day/1 puzzle.
+// Package day01 contains solution for https://adventofcode.com/2021/day/1 puzzle.
 package day01
 
 import (

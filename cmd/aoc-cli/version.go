@@ -1,4 +1,3 @@
-// aoc-cli is a tool to run solutions to get answers for input on advent-of-code site.
 package main
 
 import (
