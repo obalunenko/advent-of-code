@@ -82,9 +82,9 @@ func Test_solution_Part2(t *testing.T) {
 		{
 			name: "test example from description",
 			args: args{
-				input: strings.NewReader(""),
+				input: strings.NewReader("199\n200\n208\n210\n200\n207\n240\n269\n260\n263\n"),
 			},
-			want:    "",
+			want:    "5",
 			wantErr: false,
 		},
 	}
