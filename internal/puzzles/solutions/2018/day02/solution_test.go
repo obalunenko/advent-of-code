@@ -12,7 +12,7 @@ func Test_solution_Day(t *testing.T) {
 	var s solution
 
 	got := s.Day()
-	expected := "day02"
+	expected := "2"
 
 	assert.Equal(t, expected, got)
 }
@@ -78,9 +78,11 @@ func Test_solution_Part2(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:    "",
-			args:    args{},
-			want:    "",
+			name: "example from spec",
+			args: args{
+				input: strings.NewReader("abcde\nfghij\nklmno\npqrst\nfguij\naxcye\nwvxyz\n"),
+			},
+			want:    "fgij",
 			wantErr: false,
 		},
 	}
@@ -148,6 +150,81 @@ func Test_hasNSameLetters(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := hasNSameLetters(tt.args.s, tt.args.n)
+
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func Test_hasNDiffLetters(t *testing.T) {
+	type args struct {
+		box1 string
+		box2 string
+		n    int
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "match",
+			args: args{
+				box1: "fghij",
+				box2: "fguij",
+				n:    1,
+			},
+			want: true,
+		},
+		{
+			name: "not match",
+			args: args{
+				box1: "abcde",
+				box2: "axcye",
+				n:    1,
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := hasNDiffLetters(tt.args.box1, tt.args.box2, tt.args.n)
+
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func Test_getCommonBoxesPart(t *testing.T) {
+	type args struct {
+		box1 string
+		box2 string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "",
+			args: args{
+				box1: "abcde",
+				box2: "axcye",
+			},
+			want: "ace",
+		},
+		{
+			name: "",
+			args: args{
+				box1: "abcde",
+				box2: "zxylk",
+			},
+			want: "",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := getCommonBoxesPart(tt.args.box1, tt.args.box2)
 
 			assert.Equal(t, tt.want, got)
 		})

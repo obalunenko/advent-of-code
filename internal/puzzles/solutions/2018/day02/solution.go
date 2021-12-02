@@ -3,9 +3,13 @@ package day02
 
 import (
 	"bufio"
+	"context"
+	"errors"
 	"fmt"
 	"io"
 	"strconv"
+
+	"github.com/obalunenko/logger"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -25,7 +29,10 @@ func (s solution) Year() string {
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
-	scanner := bufio.NewScanner(input)
+	boxes, err := makeBoxesList(input)
+	if err != nil {
+		return "", fmt.Errorf("make boxes: %w", err)
+	}
 
 	const (
 		two   = 2
@@ -36,20 +43,16 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		twoCount, threeCount int
 	)
 
-	for scanner.Scan() {
-		line := scanner.Text()
+	for i, _ := range boxes {
+		box := boxes[i]
 
-		if hasNSameLetters(line, two) {
+		if hasNSameLetters(box, two) {
 			twoCount++
 		}
 
-		if hasNSameLetters(line, three) {
+		if hasNSameLetters(box, three) {
 			threeCount++
 		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		return "", fmt.Errorf("scanner error: %w", err)
 	}
 
 	checksum := twoCount * threeCount
@@ -57,10 +60,105 @@ func (s solution) Part1(input io.Reader) (string, error) {
 	return strconv.Itoa(checksum), nil
 }
 
+var errNotFound = errors.New("not found")
+
 func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	boxes, err := makeBoxesList(input)
+	if err != nil {
+		return "", fmt.Errorf("make boxes: %w", err)
+	}
+
+	// finds same boxes
+	// find common letters
+	boxesnum := len(boxes)
+
+	var (
+		box1, box2, common string
+	)
+
+loop:
+	for i := 0; i <= boxesnum; i++ {
+		for j := i + 1; j <= boxesnum-1; j++ {
+			if hasNDiffLetters(boxes[i], boxes[j], 1) {
+				box1, box2 = boxes[i], boxes[j]
+
+				common = getCommonBoxesPart(box1, box2)
+
+				break loop
+			}
+		}
+	}
+
+	logger.WithFields(context.Background(), logger.Fields{
+		"box1":   box1,
+		"box2":   box2,
+		"common": common,
+	}).Info("found boxes")
+
+	if common == "" {
+		return "", errNotFound
+	}
+
+	return common, nil
 }
 
+func getCommonBoxesPart(box1, box2 string) string {
+	if len(box1) != len(box2) {
+		return ""
+	}
+
+	br1, br2 := []rune(box1), []rune(box2)
+
+	common := make([]rune, 0, len(br1))
+
+	for i := 0; i < len(br1); i++ {
+		a, b := br1[i], br2[i]
+		if a == b {
+			common = append(common, a)
+		}
+	}
+
+	return string(common)
+}
+
+func hasNDiffLetters(box1, box2 string, n int) bool {
+	if n < 0 {
+		return false
+	}
+
+	if len(box1) != len(box2) {
+		return false
+	}
+
+	var diff int
+
+	for i := 0; i < len(box1); i++ {
+		if box1[i] == box2[i] {
+			continue
+		}
+
+		diff++
+	}
+
+	return diff == n
+}
+
+func makeBoxesList(input io.Reader) ([]string, error) {
+	var boxes []string
+
+	scanner := bufio.NewScanner(input)
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		boxes = append(boxes, line)
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("scanner error: %w", err)
+	}
+
+	return boxes, nil
+}
 func hasNSameLetters(s string, n int) bool {
 	if n <= 0 {
 		return false
