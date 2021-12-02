@@ -47,6 +47,7 @@ func TestRun(t *testing.T) {
 	tests = append(tests, testcases2018()...)
 	tests = append(tests, testcases2019()...)
 	tests = append(tests, testcases2020()...)
+	tests = append(tests, testcases2021()...)
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -2231,6 +2232,363 @@ func testcases2020() []testcase {
 		},
 		{
 			name: "2020/day25",
+			args: args{
+				year: year,
+				name: puzzles.Day25.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day25.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+	}
+}
+
+func testcases2021() []testcase {
+	year := puzzles.Year2021.String()
+
+	return []testcase{
+		{
+			name: "2021/day01",
+			args: args{
+				year: year,
+				name: puzzles.Day01.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day01.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: false,
+		},
+		{
+			name: "2021/day02",
+			args: args{
+				year: year,
+				name: puzzles.Day02.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day02.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day03",
+			args: args{
+				year: year,
+				name: puzzles.Day03.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day03.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day04",
+			args: args{
+				year: year,
+				name: puzzles.Day04.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day04.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day05",
+			args: args{
+				year: year,
+				name: puzzles.Day05.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day05.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day06",
+			args: args{
+				year: year,
+				name: puzzles.Day06.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day06.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day07",
+			args: args{
+				year: year,
+				name: puzzles.Day07.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day07.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day08",
+			args: args{
+				year: year,
+				name: puzzles.Day08.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day08.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day09",
+			args: args{
+				year: year,
+				name: puzzles.Day09.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day09.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day10",
+			args: args{
+				year: year,
+				name: puzzles.Day10.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day10.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day11",
+			args: args{
+				year: year,
+				name: puzzles.Day11.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day11.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day12",
+			args: args{
+				year: year,
+				name: puzzles.Day12.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day12.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day13",
+			args: args{
+				year: year,
+				name: puzzles.Day13.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day13.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day14",
+			args: args{
+				year: year,
+				name: puzzles.Day14.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day14.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day15",
+			args: args{
+				year: year,
+				name: puzzles.Day15.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day15.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day16",
+			args: args{
+				year: year,
+				name: puzzles.Day16.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day16.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day17",
+			args: args{
+				year: year,
+				name: puzzles.Day17.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day17.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day18",
+			args: args{
+				year: year,
+				name: puzzles.Day18.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day18.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day19",
+			args: args{
+				year: year,
+				name: puzzles.Day19.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day19.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day20",
+			args: args{
+				year: year,
+				name: puzzles.Day20.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day20.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day21",
+			args: args{
+				year: year,
+				name: puzzles.Day21.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day21.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day22",
+			args: args{
+				year: year,
+				name: puzzles.Day22.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day22.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day23",
+			args: args{
+				year: year,
+				name: puzzles.Day23.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day23.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day24",
+			args: args{
+				year: year,
+				name: puzzles.Day24.String(),
+			},
+			want: puzzles.Result{
+				Year:  year,
+				Name:  puzzles.Day24.String(),
+				Part1: "",
+				Part2: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "2021/day25",
 			args: args{
 				year: year,
 				name: puzzles.Day25.String(),
