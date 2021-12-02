@@ -162,6 +162,7 @@ func Test_hasNDiffLetters(t *testing.T) {
 		box2 string
 		n    int
 	}
+
 	tests := []struct {
 		name string
 		args args
@@ -186,6 +187,7 @@ func Test_hasNDiffLetters(t *testing.T) {
 			want: false,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := hasNDiffLetters(tt.args.box1, tt.args.box2, tt.args.n)
@@ -200,6 +202,7 @@ func Test_getCommonBoxesPart(t *testing.T) {
 		box1 string
 		box2 string
 	}
+
 	tests := []struct {
 		name string
 		args args
@@ -222,6 +225,7 @@ func Test_getCommonBoxesPart(t *testing.T) {
 			want: "",
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := getCommonBoxesPart(tt.args.box1, tt.args.box2)

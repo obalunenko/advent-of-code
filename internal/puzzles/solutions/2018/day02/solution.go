@@ -3,13 +3,10 @@ package day02
 
 import (
 	"bufio"
-	"context"
 	"errors"
 	"fmt"
 	"io"
 	"strconv"
-
-	"github.com/obalunenko/logger"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -43,7 +40,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		twoCount, threeCount int
 	)
 
-	for i, _ := range boxes {
+	for i := range boxes {
 		box := boxes[i]
 
 		if hasNSameLetters(box, two) {
@@ -88,12 +85,6 @@ loop:
 			}
 		}
 	}
-
-	logger.WithFields(context.Background(), logger.Fields{
-		"box1":   box1,
-		"box2":   box2,
-		"common": common,
-	}).Info("found boxes")
 
 	if common == "" {
 		return "", errNotFound
@@ -159,6 +150,7 @@ func makeBoxesList(input io.Reader) ([]string, error) {
 
 	return boxes, nil
 }
+
 func hasNSameLetters(s string, n int) bool {
 	if n <= 0 {
 		return false
