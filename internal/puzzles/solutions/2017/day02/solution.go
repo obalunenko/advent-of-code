@@ -126,5 +126,9 @@ func findChecksum(spreadsheet io.Reader, f checksumFunc) (string, error) {
 		checksum += n
 	}
 
+	if err := scanner.Err(); err != nil {
+		return "", fmt.Errorf("scanner error: %w", err)
+	}
+
 	return strconv.Itoa(checksum), nil
 }
