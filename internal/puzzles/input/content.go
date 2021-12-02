@@ -3,6 +3,7 @@ package input
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -11,6 +12,14 @@ import (
 	"time"
 
 	"github.com/obalunenko/logger"
+)
+
+var (
+
+	// ErrNotFound returns when puzzle input is not yet unlocked or invalid date passed.
+	ErrNotFound = errors.New("puzzle inout not found")
+	// ErrUnauthorized returns when session is empty or invalid.
+	ErrUnauthorized = errors.New("unauthorized")
 )
 
 // Date holds date info.
@@ -52,9 +61,9 @@ func Get(ctx context.Context, d Date, session string) ([]byte, error) {
 	case http.StatusOK:
 		return body, nil
 	case http.StatusNotFound:
-		return nil, fmt.Errorf("[%s] puzzle input not found", d)
+		return nil, fmt.Errorf("[%s]: %w", d, ErrNotFound)
 	case http.StatusBadRequest:
-		return nil, fmt.Errorf("unauthorized")
+		return nil, ErrUnauthorized
 	default:
 		return nil, fmt.Errorf("[%s] failed to get puzzle input[%s]", d, resp.Status)
 	}
