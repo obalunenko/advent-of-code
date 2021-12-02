@@ -216,6 +216,37 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
     
 </details>
 
+<details>
+  <summary>2021</summary>  
+    
+  - [ ] [Day 1: Sonar Sweep](https://adventofcode.com/2021/day/1)
+  - [ ] [Day 2: Dive!](https://adventofcode.com/2021/day/2)
+  - [ ] [Day 3: ?](https://adventofcode.com/2021/day/3)
+  - [ ] [Day 4: ?](https://adventofcode.com/2021/day/4)
+  - [ ] [Day 5: ?](https://adventofcode.com/2021/day/5)
+  - [ ] [Day 6: ?](https://adventofcode.com/2021/day/6)
+  - [ ] [Day 7: ?](https://adventofcode.com/2021/day/7)
+  - [ ] [Day 8: ?](https://adventofcode.com/2021/day/8)
+  - [ ] [Day 9: ?](https://adventofcode.com/2021/day/9)
+  - [ ] [Day 10: ?](https://adventofcode.com/2021/day/10)
+  - [ ] [Day 11: ?](https://adventofcode.com/2021/day/11)
+  - [ ] [Day 12: ?](https://adventofcode.com/2021/day/12)
+  - [ ] [Day 13: ?](https://adventofcode.com/2021/day/13)
+  - [ ] [Day 14: ?](https://adventofcode.com/2021/day/14)
+  - [ ] [Day 15: ?](https://adventofcode.com/2021/day/15)
+  - [ ] [Day 16: ?](https://adventofcode.com/2021/day/16)
+  - [ ] [Day 17: ?](https://adventofcode.com/2021/day/17)
+  - [ ] [Day 18: ?](https://adventofcode.com/2021/day/18)
+  - [ ] [Day 19: ?](https://adventofcode.com/2021/day/19)
+  - [ ] [Day 20: ?](https://adventofcode.com/2021/day/20)
+  - [ ] [Day 21: ?](https://adventofcode.com/2021/day/21)
+  - [ ] [Day 22: ?](https://adventofcode.com/2021/day/22)
+  - [ ] [Day 23: ?](https://adventofcode.com/2021/day/23)
+  - [ ] [Day 24: ?](https://adventofcode.com/2021/day/24)
+  - [ ] [Day 25: ?](https://adventofcode.com/2021/day/25)
+    
+</details>
+
 ## Usage of aoc-cli
 
 Download binary from [![Latest release artifacts](https://img.shields.io/badge/artifacts-download-blue.svg)](https://github.com/obalunenko/advent-of-code/releases/latest)
