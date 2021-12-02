@@ -248,11 +248,16 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 </details>
 
 ## Usage of aoc-cli
+### Preconditions
 
-Download binary from [![Latest release artifacts](https://img.shields.io/badge/artifacts-download-blue.svg)](https://github.com/obalunenko/advent-of-code/releases/latest)
-and execute
+1. Download binary from [![Latest release artifacts](https://img.shields.io/badge/artifacts-download-blue.svg)](https://github.com/obalunenko/advent-of-code/releases/latest)
+2. Session token
+Your https://adventofcode.com session token is required for downloading and caching the inputs.
 
-Run it and follow instructions
+2. Environment variable
+Set your Advent of Code session token in the environment variable `AOC_SESSION`, or pass explicitly via `-session` flag during `aoc-cli` execution
+
+3. Run `aoc-cli run` and follow instructions
 
 Cli support optional metrics, to enable them you can use following flags:
 
@@ -261,17 +266,31 @@ Cli support optional metrics, to enable them you can use following flags:
     --bench, -b    Enables benchmark metric
 ```
 
-All available flags:
+All available flags, commands and usage:
 
 ```text
-    COMMANDS:
-       help, h  Shows a list of commands or help for one command
+USAGE:
+   aoc-cli [global options] command [command options] [arguments...]
+   
+COMMANDS:
+   run      Runs advent-of-code application
+   help, h  Shows a list of commands or help for one command
 
-    GLOBAL OPTIONS:
-       --elapsed, -e  Enables elapsed time metric (default: false)
-       --bench, -b    Enables benchmark metric (default: false)
-       --help, -h     show help (default: false)
-       --version, -v  print the version (default: false)
+GLOBAL OPTIONS:
+   --help, -h     show help (default: false)
+   --version, -v  print the version (default: false)
+   
+NAME:
+   aoc-cli run - Runs advent-of-code application
+
+USAGE:
+   aoc-cli run [command options] [arguments...]
+
+OPTIONS:
+   --elapsed, -e              Enables elapsed time metric (default: false)
+   --bench, -b                Enables benchmark metric (default: false)
+   --session value, -s value  AOC auth session to get inputs (default: "<will get value from env ${AOC_SESSION} by default>") [$AOC_SESSION]
+   --help, -h     show help (default: false)
 ```
 
 
