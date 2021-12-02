@@ -248,11 +248,10 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 </details>
 
 ## Usage of aoc-cli
-### Preconditions
 
 1. Download binary from [![Latest release artifacts](https://img.shields.io/badge/artifacts-download-blue.svg)](https://github.com/obalunenko/advent-of-code/releases/latest)
 2. Session token
-Your https://adventofcode.com session token is required for downloading and caching the inputs.
+Your https://adventofcode.com session token is **required** for downloading and caching the inputs.
 
 2. Environment variable
 Set your Advent of Code session token in the environment variable `AOC_SESSION`, or pass explicitly via `-session` flag during `aoc-cli` execution
