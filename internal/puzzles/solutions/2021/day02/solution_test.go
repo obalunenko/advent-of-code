@@ -82,7 +82,7 @@ func Test_solution_Part2(t *testing.T) {
 			args: args{
 				input: strings.NewReader("forward 5\ndown 5\nforward 8\nup 3\ndown 8\nforward 2\n"),
 			},
-			want:    "",
+			want:    "900",
 			wantErr: false,
 		},
 	}
