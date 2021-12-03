@@ -75,7 +75,6 @@ func findIncreased(list []int, shift, window int) int {
 		}
 
 		if m2 > m1 {
-
 			increadsed++
 		}
 	}
