@@ -20,7 +20,7 @@
 // 	}
 //
 // Then to register solution in the list of all solutions: make a blank import of package with puzzle solution
-// at register.go
+// at register_<year>.go
 //
 // 	import  _ "github.com/obalunenko/advent-of-code/puzzles/solutions/day01"
 //
