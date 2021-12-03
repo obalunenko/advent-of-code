@@ -50,8 +50,6 @@ func Test_solution_Part1(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := s.Part1(tt.args.input)
 			if tt.wantErr {
@@ -90,8 +88,6 @@ func Test_solution_Part2(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := s.Part2(tt.args.input)
 			if tt.wantErr {

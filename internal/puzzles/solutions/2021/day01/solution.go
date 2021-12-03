@@ -25,44 +25,83 @@ func (s solution) Day() string {
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
+	list, err := makeMeasurementsList(input)
+	if err != nil {
+		return "", fmt.Errorf("make measurements list: %w", err)
+	}
+
+	const (
+		shift      = 1
+		windowSize = 1
+	)
+
+	increasednum := findIncreased(list, shift, windowSize)
+
+	return strconv.Itoa(increasednum), nil
+}
+
+func (s solution) Part2(input io.Reader) (string, error) {
+	list, err := makeMeasurementsList(input)
+	if err != nil {
+		return "", fmt.Errorf("make measurements list: %w", err)
+	}
+
+	const (
+		shift      = 1
+		windowSize = 3
+	)
+
+	increasednum := findIncreased(list, shift, windowSize)
+
+	return strconv.Itoa(increasednum), nil
+}
+
+func findIncreased(list []int, shift, window int) int {
+	var increadsed int
+
+	for i := 0; i <= len(list)-window; i += shift {
+		if i == 0 {
+			continue
+		}
+
+		var m1, m2 int
+
+		k := i
+		for j := window; j > 0; j-- {
+			m2 += list[k]
+			m1 += list[k-shift]
+
+			k++
+		}
+
+		if m2 > m1 {
+
+			increadsed++
+		}
+	}
+
+	return increadsed
+}
+
+func makeMeasurementsList(input io.Reader) ([]int, error) {
 	scanner := bufio.NewScanner(input)
 
-	var (
-		increasednum int
-		prev         int
-		idx          int
-	)
+	var measurements []int
 
 	for scanner.Scan() {
 		line := scanner.Text()
 
 		n, err := strconv.Atoi(line)
 		if err != nil {
-			return "", fmt.Errorf("atoi: %w", err)
+			return nil, fmt.Errorf("parse int: %w", err)
 		}
 
-		if idx == 0 {
-			prev = n
-			idx++
-
-			continue
-		}
-
-		if n > prev {
-			increasednum++
-		}
-
-		prev = n
-		idx++
+		measurements = append(measurements, n)
 	}
 
 	if err := scanner.Err(); err != nil {
-		return "", fmt.Errorf("scanner error: %w", err)
+		return nil, fmt.Errorf("scanner error: %w", err)
 	}
 
-	return strconv.Itoa(increasednum), nil
-}
-
-func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	return measurements, nil
 }
