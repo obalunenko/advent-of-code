@@ -30,7 +30,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		return "", fmt.Errorf("make diagnostic report: %w", err)
 	}
 
-	r := findRates(diagnostic)
+	r := findPowerConsumptionRates(diagnostic)
 
 	consumption, err := r.consumption()
 	if err != nil {
@@ -41,7 +41,19 @@ func (s solution) Part1(input io.Reader) (string, error) {
 }
 
 func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	diagnostic, err := makeDiagnostic(input)
+	if err != nil {
+		return "", fmt.Errorf("make diagnostic report: %w", err)
+	}
+
+	r := lifeSupportRate(diagnostic)
+
+	consumption, err := r.consumption()
+	if err != nil {
+		return "", fmt.Errorf("consumption calculate: %w", err)
+	}
+
+	return consumption, nil
 }
 
 func makeDiagnostic(input io.Reader) ([]string, error) {
@@ -63,19 +75,19 @@ func makeDiagnostic(input io.Reader) ([]string, error) {
 }
 
 type bitrates struct {
-	gamma   string
-	epsilon string
+	first  string
+	second string
 }
 
 func (b bitrates) consumption() (string, error) {
-	g, err := strconv.ParseInt(b.gamma, 2, 64)
+	g, err := strconv.ParseInt(b.first, 2, 64)
 	if err != nil {
-		return "", fmt.Errorf("parse gamma: %w", err)
+		return "", fmt.Errorf("parse first: %w", err)
 	}
 
-	e, err := strconv.ParseInt(b.epsilon, 2, 64)
+	e, err := strconv.ParseInt(b.second, 2, 64)
 	if err != nil {
-		return "", fmt.Errorf("parse epsilon: %w", err)
+		return "", fmt.Errorf("parse second: %w", err)
 	}
 
 	c := g * e
@@ -83,18 +95,18 @@ func (b bitrates) consumption() (string, error) {
 	return strconv.FormatInt(c, 10), nil
 }
 
-func findRates(diagnostic []string) bitrates {
+type (
+	bit string
+	pos int
+)
+
+const (
+	bit0 bit = "0"
+	bit1 bit = "1"
+)
+
+func findPowerConsumptionRates(diagnostic []string) bitrates {
 	var result bitrates
-
-	type (
-		bit string
-		pos int
-	)
-
-	const (
-		bit0 bit = "0"
-		bit1 bit = "1"
-	)
 
 	bitsStat := make(map[pos]map[bit]int)
 
@@ -112,13 +124,89 @@ func findRates(diagnostic []string) bitrates {
 		m := bitsStat[pos(i)]
 
 		if m[bit1] > m[bit0] {
-			result.gamma += string(bit1)
-			result.epsilon += string(bit0)
+			result.first += string(bit1)
+			result.second += string(bit0)
 		} else {
-			result.gamma += string(bit0)
-			result.epsilon += string(bit1)
+			result.first += string(bit0)
+			result.second += string(bit1)
 		}
 	}
 
 	return result
+}
+
+func lifeSupportRate(diagnostic []string) bitrates {
+
+	o2 := lifeRate(diagnostic, o2Criteria)
+	co2 := lifeRate(diagnostic, co2Criteria)
+
+	return bitrates{
+		first:  o2,
+		second: co2,
+	}
+
+}
+
+func lifeRate(diagnostic []string, criteriaFunc bitCriteriaFunc) string {
+	var result string
+
+	var idx pos
+
+	for len(diagnostic) != 1 {
+		bitstat := make(map[bit]int)
+
+		for i := range diagnostic {
+			runes := []rune(diagnostic[i])
+
+			b := bit(runes[idx])
+
+			bitstat[b]++
+		}
+
+		diagnostic = filterDiagnostic(diagnostic, idx, bitstat, criteriaFunc)
+
+		idx++
+	}
+
+	result = diagnostic[0]
+
+	return result
+}
+
+type bitCriteriaFunc func(bitstat map[bit]int) bit
+
+func o2Criteria(bitstat map[bit]int) bit {
+	common := bit1
+
+	if bitstat[bit0] > bitstat[bit1] {
+		common = bit0
+	}
+
+	return common
+}
+
+func co2Criteria(bitstat map[bit]int) bit {
+	common := bit0
+
+	if bitstat[bit1] < bitstat[bit0] {
+		common = bit1
+	}
+
+	return common
+}
+
+func filterDiagnostic(diagnostic []string, idx pos, bitstat map[bit]int, bfunc bitCriteriaFunc) []string {
+	common := bfunc(bitstat)
+
+	filtered := make([]string, 0, len(diagnostic))
+
+	for i := range diagnostic {
+		runes := []rune(diagnostic[i])
+
+		if bit(runes[idx]) == common {
+			filtered = append(filtered, diagnostic[i])
+		}
+	}
+
+	return filtered
 }
