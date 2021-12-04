@@ -61,7 +61,6 @@ func submarineDive(input io.Reader, subm submarineMover) (string, error) {
 	res := subm.position().x * subm.position().y
 
 	return strconv.Itoa(res), nil
-
 }
 
 type action struct {
