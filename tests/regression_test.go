@@ -2288,8 +2288,8 @@ func testcases2021() []testcase {
 			want: puzzles.Result{
 				Year:  year,
 				Name:  puzzles.Day03.String(),
-				Part1: "",
-				Part2: "",
+				Part1: "4103154",
+				Part2: "4245351",
 			},
 			wantErr: false,
 		},
