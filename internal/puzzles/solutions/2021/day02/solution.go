@@ -27,9 +27,19 @@ func (s solution) Day() string {
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
-	scanner := bufio.NewScanner(input)
-
 	subm := newSubmarine()
+
+	return submarineDive(input, &subm)
+}
+
+func (s solution) Part2(input io.Reader) (string, error) {
+	subm := newSubmarineWithAim()
+
+	return submarineDive(input, &subm)
+}
+
+func submarineDive(input io.Reader, subm submarineMover) (string, error) {
+	scanner := bufio.NewScanner(input)
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -48,13 +58,10 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		return "", fmt.Errorf("scanner error: %w", err)
 	}
 
-	res := subm.pos.x * subm.pos.y
+	res := subm.position().x * subm.position().y
 
 	return strconv.Itoa(res), nil
-}
 
-func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
 }
 
 type action struct {
@@ -126,8 +133,17 @@ func parseMove(s string) (move, error) {
 	return m, nil
 }
 
+type submarineMover interface {
+	move(act action) error
+	position() position
+}
+
 type submarine struct {
 	pos position
+}
+
+func (s *submarine) position() position {
+	return s.pos
 }
 
 func newSubmarine() submarine {
@@ -149,6 +165,34 @@ func (s *submarine) move(act action) error {
 		s.pos.x += act.steps
 	case moveDown:
 		s.pos.y += act.steps
+	default:
+		return errInvalidMove
+	}
+
+	return nil
+}
+
+type submarineWithAim struct {
+	submarine
+	aim int
+}
+
+func newSubmarineWithAim() submarineWithAim {
+	return submarineWithAim{
+		submarine: newSubmarine(),
+		aim:       0,
+	}
+}
+
+func (s *submarineWithAim) move(act action) error {
+	switch act.move {
+	case moveUp:
+		s.aim -= act.steps
+	case moveForward:
+		s.pos.x += act.steps
+		s.pos.y += s.aim * act.steps
+	case moveDown:
+		s.aim += act.steps
 	default:
 		return errInvalidMove
 	}
