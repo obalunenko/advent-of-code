@@ -222,7 +222,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
   - [x] [Day 1: Sonar Sweep](https://adventofcode.com/2021/day/1)
   - [x] [Day 2: Dive!](https://adventofcode.com/2021/day/2)
   - [ ] [Day 3: Binary Diagnostic](https://adventofcode.com/2021/day/3)
-  - [ ] [Day 4: ?](https://adventofcode.com/2021/day/4)
+  - [ ] [Day 4: Giant Squid](https://adventofcode.com/2021/day/4)
   - [ ] [Day 5: ?](https://adventofcode.com/2021/day/5)
   - [ ] [Day 6: ?](https://adventofcode.com/2021/day/6)
   - [ ] [Day 7: ?](https://adventofcode.com/2021/day/7)
