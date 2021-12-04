@@ -2291,7 +2291,7 @@ func testcases2021() []testcase {
 				Part1: "",
 				Part2: "",
 			},
-			wantErr: true,
+			wantErr: false,
 		},
 		{
 			name: "2021/day04",
