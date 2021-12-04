@@ -18,7 +18,7 @@ func (s solution) Year() string {
 }
 
 func (s solution) Day() string {
-	return puzzles.Day02.String()
+	return puzzles.Day03.String()
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
