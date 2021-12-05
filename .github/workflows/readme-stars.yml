@@ -1,8 +1,5 @@
 name: Update README ⭐
 on:
-  push:
-    branches:
-      - 'master'
   schedule:
     - cron: "0 */12 * * *"
   workflow_dispatch:
@@ -13,6 +10,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
+
+      - name: Update total stars stat
+        uses: joblo2213/aoc-badges-action@v3.0.0
+        with:
+          userid: ${{ secrets.AOC_USER_ID }}
+          session: ${{ secrets.AOC_SESSION }}
+          file: 'README.md'
+          starsRegex: '(?<=https:\/\/img\.shields\.io\/badge\/total%20stars%20⭐-)[0-9]+(?=-yellow)'
 
       - name: Upate 2015 year
         uses: k2bd/advent-readme-stars@v1.0.1
