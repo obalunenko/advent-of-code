@@ -29,6 +29,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 <details>
   <summary>2015</summary>  
+    <!--- advent_readme_stars table [${{ 2015 }}] --->
     
   - [x] [Day 1: Not Quite Lisp](https://adventofcode.com/2015/day/1)
   - [x] [Day 2: I Was Told There Would Be No Math](https://adventofcode.com/2015/day/2)
@@ -61,6 +62,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 <details>
   <summary>2016</summary>  
+    <!--- advent_readme_stars table [${{ 2016 }}] --->
     
   - [x] [Day 1: No Time for a Taxicab](https://adventofcode.com/2016/day/1)
   - [x] [Day 2: Bathroom Security](https://adventofcode.com/2016/day/2)
@@ -92,6 +94,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 <details>
   <summary>2017</summary>  
+    <!--- advent_readme_stars table [${{ 2017 }}] --->
     
   - [x] [Day 1: Inverse Captcha](https://adventofcode.com/2017/day/1)
   - [x] [Day 2: Corruption Checksum](https://adventofcode.com/2017/day/2)
@@ -123,6 +126,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 <details>
   <summary>2018</summary>  
+    <!--- advent_readme_stars table [${{ 2018 }}] --->
     
   - [x] [Day 1: Chronal Calibration](https://adventofcode.com/2018/day/1)
   - [x] [Day 2: Inventory Management System](https://adventofcode.com/2018/day/2)
@@ -155,6 +159,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 <details>
   <summary>2019</summary>  
+    <!--- advent_readme_stars table [${{ 2019 }}] --->
     
   - [x] [Day 1: The Tyranny of the Rocket Equation](https://adventofcode.com/2019/day/1)
   - [x] [Day 2: 1202 Program Alarm](https://adventofcode.com/2019/day/2)
@@ -187,6 +192,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 <details>
   <summary>2020</summary>  
+    <!--- advent_readme_stars table [${{ 2020 }}] --->
     
   - [x] [Day 1: Report Repair](https://adventofcode.com/2020/day/1)
   - [x] [Day 2: Password Philosophy](https://adventofcode.com/2020/day/2)
@@ -218,6 +224,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 <details>
   <summary>2021</summary>  
+    <!--- advent_readme_stars table [${{ 2021 }}] --->
     
   - [x] [Day 1: Sonar Sweep](https://adventofcode.com/2021/day/1)
   - [x] [Day 2: Dive!](https://adventofcode.com/2021/day/2)

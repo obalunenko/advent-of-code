@@ -1,0 +1,29 @@
+name: Update README ⭐
+on:
+  schedule:
+    - cron: "51 */4 * * *"  # Every 4 hours
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        os: [ 'ubuntu-20.04' ]
+        year: ['2015', '2016', '2017', '2018', '2019', '2020', '2021']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "##"
+          year: ${{ matrix.year }}
+          tableMarker: <!--- advent_readme_stars table [${{ matrix.year }}] --->
+          starSymbol: "⭐"
+      - uses: stefanzweifel/git-auto-commit-action@v4.12.0
+        with:
+          commit_message: Update README stars for ${{ matrix.year }} year.
