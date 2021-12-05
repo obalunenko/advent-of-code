@@ -100,7 +100,7 @@ func Test_findRates(t *testing.T) {
 	type args struct {
 		diagnostic []string
 	}
-	
+
 	tests := []struct {
 		name string
 		args args
