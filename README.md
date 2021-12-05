@@ -27,8 +27,6 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 ## Implemented solutions
 
-![](https://img.shields.io/badge/total%20stars%20⭐-6-yellow)
-
 <!--- advent_readme_stars table [2015] --->
 ## 2015 Results
 
