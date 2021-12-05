@@ -19,6 +19,7 @@ on:
       - 'Makefile'
       - '!**.*md'
       - '.github/workflows/**'
+      - '!.github/workflows/readme-stars.yml'
 
 jobs:
   testing:

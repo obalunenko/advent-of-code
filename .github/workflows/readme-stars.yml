@@ -1,30 +1,94 @@
 name: Update README ⭐
 on:
-  push:
   schedule:
     - cron: "0 */12 * * *"
   workflow_dispatch:
 
 jobs:
   update-readme:
-    strategy:
-      fail-fast: false
-      max-parallel: 2
-      matrix:
-        os: [ 'ubuntu-20.04' ]
-        year: ['2015', '2016', '2017', '2018', '2019', '2020', '2021']
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: k2bd/advent-readme-stars@v1.0.1
+      - name: Checkout
+        uses: actions/checkout@v2.4.0
+
+      - name: Upate 2015 year
+        uses: k2bd/advent-readme-stars@v1.0.1
         with:
           userId: ${{ secrets.AOC_USER_ID }}
           sessionCookie: ${{ secrets.AOC_SESSION }}
           readmeLocation: README.md
           headerPrefix: "##"
-          year: ${{ matrix.year }}
-          tableMarker: <!--- advent_readme_stars table [${{ matrix.year }}] --->
+          year: 2015
+          tableMarker: <!--- advent_readme_stars table [2015] --->
           starSymbol: "⭐"
-      - uses: stefanzweifel/git-auto-commit-action@v4.12.0
+
+      - name: Upate 2016 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "##"
+          year: 2016
+          tableMarker: <!--- advent_readme_stars table [2016] --->
+          starSymbol: "⭐"
+
+      - name: Upate 2017 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "##"
+          year: 2017
+          tableMarker: <!--- advent_readme_stars table [2017] --->
+          starSymbol: "⭐"
+
+      - name: Upate 2018 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "##"
+          year: 2018
+          tableMarker: <!--- advent_readme_stars table [2018] --->
+          starSymbol: "⭐"
+
+      - name: Upate 2019 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "##"
+          year: 2019
+          tableMarker: <!--- advent_readme_stars table [2019] --->
+          starSymbol: "⭐"
+
+      - name: Upate 2020 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "##"
+          year: 2020
+          tableMarker: <!--- advent_readme_stars table [2020] --->
+          starSymbol: "⭐"
+
+      - name: Upate 2021 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "##"
+          year: 2021
+          tableMarker: <!--- advent_readme_stars table [2021] --->
+          starSymbol: "⭐"
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4.12.0
         with:
           commit_message: Update README stars for ${{ matrix.year }} year.
