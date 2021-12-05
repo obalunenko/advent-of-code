@@ -18,7 +18,7 @@ jobs:
           userId: ${{ secrets.AOC_USER_ID }}
           sessionCookie: ${{ secrets.AOC_SESSION }}
           readmeLocation: README.md
-          headerPrefix: "##"
+          headerPrefix: "###"
           year: 2015
           tableMarker: <!--- advent_readme_stars table [2015] --->
           starSymbol: "⭐"
