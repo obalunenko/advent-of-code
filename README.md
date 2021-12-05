@@ -28,7 +28,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 ## Implemented solutions
 
 <!--- advent_readme_stars table [2015] --->
-## 2015 Results
+### 2015 Results
 
 | Day | Part 1 | Part 2 |
 | :---: | :---: | :---: |
