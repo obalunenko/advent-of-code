@@ -9,7 +9,7 @@ jobs:
   update-readme:
     strategy:
       fail-fast: false
-      max-parallel: 1
+      max-parallel: 2
       matrix:
         os: [ 'ubuntu-20.04' ]
         year: ['2015', '2016', '2017', '2018', '2019', '2020', '2021']
