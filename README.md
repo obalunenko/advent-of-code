@@ -29,30 +29,67 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 <details>
   <summary>2015</summary>  
+<!--- advent_readme_stars table [2015] --->
+## 2015 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2015/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2015/day/2) | ⭐ | ⭐ |
     <!--- advent_readme_stars table [2015] --->
 
 </details>
 
 <details>
   <summary>2016</summary>  
+<!--- advent_readme_stars table [2016] --->
+## 2016 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2016/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2016/day/2) | ⭐ | ⭐ |
     <!--- advent_readme_stars table [2016] --->
 
 </details>
 
 <details>
   <summary>2017</summary>  
+<!--- advent_readme_stars table [2017] --->
+## 2017 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2017/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2017/day/2) | ⭐ | ⭐ |
     <!--- advent_readme_stars table [2017] --->
 
 </details>
 
 <details>
   <summary>2018</summary>  
+<!--- advent_readme_stars table [2018] --->
+## 2018 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2018/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2018/day/2) | ⭐ | ⭐ |
     <!--- advent_readme_stars table [2018] --->
 
 </details>
 
 <details>
   <summary>2019</summary>  
+<!--- advent_readme_stars table [2019] --->
+## 2019 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2019/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2019/day/2) | ⭐ | ⭐ |
+| [Day 3](https://adventofcode.com/2019/day/3) | ⭐ | ⭐ |
+| [Day 4](https://adventofcode.com/2019/day/4) | ⭐ | ⭐ |
     <!--- advent_readme_stars table [2019] --->
 
 </details>
@@ -60,12 +97,27 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 <details>
   <summary>2020</summary>  
+<!--- advent_readme_stars table [2020] --->
+## 2020 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2020/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2020/day/2) | ⭐ | ⭐ |
     <!--- advent_readme_stars table [2020] --->
 
 </details>
 
 <details>
   <summary>2021</summary>  
+<!--- advent_readme_stars table [2021] --->
+## 2021 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2021/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2021/day/2) | ⭐ | ⭐ |
+| [Day 3](https://adventofcode.com/2021/day/3) | ⭐ | ⭐ |
     <!--- advent_readme_stars table [2021] --->
 
 </details>
