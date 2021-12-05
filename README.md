@@ -27,20 +27,72 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 ## Implemented solutions
 
-![](https://img.shields.io/badge/total%20stars%20⭐-0-yellow)
+![](https://img.shields.io/badge/total%20stars%20⭐-6-yellow)
 
+<!--- advent_readme_stars table [2015] --->
+## 2015 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2015/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2015/day/2) | ⭐ | ⭐ |
 <!--- advent_readme_stars table [2015] --->
 
 <!--- advent_readme_stars table [2016] --->
+## 2016 Results
 
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2016/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2016/day/2) | ⭐ | ⭐ |
+<!--- advent_readme_stars table [2016] --->
+
+<!--- advent_readme_stars table [2017] --->
+## 2017 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2017/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2017/day/2) | ⭐ | ⭐ |
 <!--- advent_readme_stars table [2017] --->
 
 <!--- advent_readme_stars table [2018] --->
+## 2018 Results
 
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2018/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2018/day/2) | ⭐ | ⭐ |
+<!--- advent_readme_stars table [2018] --->
+
+<!--- advent_readme_stars table [2019] --->
+## 2019 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2019/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2019/day/2) | ⭐ | ⭐ |
+| [Day 3](https://adventofcode.com/2019/day/3) | ⭐ | ⭐ |
+| [Day 4](https://adventofcode.com/2019/day/4) | ⭐ | ⭐ |
 <!--- advent_readme_stars table [2019] --->
 
 <!--- advent_readme_stars table [2020] --->
+## 2020 Results
 
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2020/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2020/day/2) | ⭐ | ⭐ |
+<!--- advent_readme_stars table [2020] --->
+
+<!--- advent_readme_stars table [2021] --->
+## 2021 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2021/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2021/day/2) | ⭐ | ⭐ |
+| [Day 3](https://adventofcode.com/2021/day/3) | ⭐ | ⭐ |
 <!--- advent_readme_stars table [2021] --->
 
 ## Usage of aoc-cli
