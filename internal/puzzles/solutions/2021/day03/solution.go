@@ -80,19 +80,25 @@ type bitrates struct {
 }
 
 func (b bitrates) consumption() (string, error) {
-	g, err := strconv.ParseInt(b.first, 2, 64)
+	const (
+		baseBin = 2
+		baseDec = 10
+		bitsize = 64
+	)
+
+	g, err := strconv.ParseInt(b.first, baseBin, bitsize)
 	if err != nil {
 		return "", fmt.Errorf("parse first: %w", err)
 	}
 
-	e, err := strconv.ParseInt(b.second, 2, 64)
+	e, err := strconv.ParseInt(b.second, baseBin, bitsize)
 	if err != nil {
 		return "", fmt.Errorf("parse second: %w", err)
 	}
 
 	c := g * e
 
-	return strconv.FormatInt(c, 10), nil
+	return strconv.FormatInt(c, baseDec), nil
 }
 
 type (
@@ -136,7 +142,6 @@ func findPowerConsumptionRates(diagnostic []string) bitrates {
 }
 
 func lifeSupportRate(diagnostic []string) bitrates {
-
 	o2 := lifeRate(diagnostic, o2Criteria)
 	co2 := lifeRate(diagnostic, co2Criteria)
 
@@ -144,13 +149,13 @@ func lifeSupportRate(diagnostic []string) bitrates {
 		first:  o2,
 		second: co2,
 	}
-
 }
 
 func lifeRate(diagnostic []string, criteriaFunc bitCriteriaFunc) string {
-	var result string
-
-	var idx pos
+	var (
+		result string
+		idx    pos
+	)
 
 	for len(diagnostic) != 1 {
 		bitstat := make(map[bit]int)

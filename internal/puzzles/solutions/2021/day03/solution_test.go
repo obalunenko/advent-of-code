@@ -1,7 +1,6 @@
 package day03
 
 import (
-	"fmt"
 	"io"
 	"strings"
 	"testing"
@@ -53,7 +52,7 @@ func Test_solution_Part1(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := s.Part1(tt.args.input)
-			if !tt.wantErr(t, err, fmt.Sprintf("s.Part1()")) {
+			if !tt.wantErr(t, err) {
 				return
 			}
 
@@ -101,6 +100,7 @@ func Test_findRates(t *testing.T) {
 	type args struct {
 		diagnostic []string
 	}
+	
 	tests := []struct {
 		name string
 		args args
@@ -130,6 +130,7 @@ func Test_findRates(t *testing.T) {
 			},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, findPowerConsumptionRates(tt.args.diagnostic), "findGammaRate(%v)", tt.args.diagnostic)
@@ -142,6 +143,7 @@ func Test_bitrates_consumption(t *testing.T) {
 		gamma   string
 		epsilon string
 	}
+
 	tests := []struct {
 		name    string
 		fields  fields
@@ -158,6 +160,7 @@ func Test_bitrates_consumption(t *testing.T) {
 			wantErr: assert.NoError,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			b := bitrates{
@@ -165,7 +168,7 @@ func Test_bitrates_consumption(t *testing.T) {
 				second: tt.fields.epsilon,
 			}
 			got, err := b.consumption()
-			if !tt.wantErr(t, err, fmt.Sprintf("consumption()")) {
+			if !tt.wantErr(t, err, "consumption()") {
 				return
 			}
 
@@ -194,6 +197,7 @@ func Test_lifeRate(t *testing.T) {
 		diagnostic   []string
 		criteriaFunc bitCriteriaFunc
 	}
+
 	tests := []struct {
 		name string
 		args args
@@ -216,6 +220,7 @@ func Test_lifeRate(t *testing.T) {
 			want: "01010",
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, lifeRate(tt.args.diagnostic, tt.args.criteriaFunc),
