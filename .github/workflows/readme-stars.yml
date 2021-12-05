@@ -12,6 +12,72 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
 
+      - name: Upate 2021 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "###"
+          year: 2021
+          tableMarker: <!--- advent_readme_stars table [2021] --->
+          starSymbol: "⭐"
+
+      - name: Upate 2020 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "###"
+          year: 2020
+          tableMarker: <!--- advent_readme_stars table [2020] --->
+          starSymbol: "⭐"
+
+      - name: Upate 2019 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "###"
+          year: 2019
+          tableMarker: <!--- advent_readme_stars table [2019] --->
+          starSymbol: "⭐"
+
+      - name: Upate 2018 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "###"
+          year: 2018
+          tableMarker: <!--- advent_readme_stars table [2018] --->
+          starSymbol: "⭐"
+
+      - name: Upate 2017 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "###"
+          year: 2017
+          tableMarker: <!--- advent_readme_stars table [2017] --->
+          starSymbol: "⭐"
+
+      - name: Upate 2016 year
+        uses: k2bd/advent-readme-stars@v1.0.1
+        with:
+          userId: ${{ secrets.AOC_USER_ID }}
+          sessionCookie: ${{ secrets.AOC_SESSION }}
+          readmeLocation: README.md
+          headerPrefix: "###"
+          year: 2016
+          tableMarker: <!--- advent_readme_stars table [2016] --->
+          starSymbol: "⭐"
+
       - name: Upate 2015 year
         uses: k2bd/advent-readme-stars@v1.0.1
         with:
@@ -23,71 +89,6 @@ jobs:
           tableMarker: <!--- advent_readme_stars table [2015] --->
           starSymbol: "⭐"
 
-      - name: Upate 2016 year
-        uses: k2bd/advent-readme-stars@v1.0.1
-        with:
-          userId: ${{ secrets.AOC_USER_ID }}
-          sessionCookie: ${{ secrets.AOC_SESSION }}
-          readmeLocation: README.md
-          headerPrefix: "##"
-          year: 2016
-          tableMarker: <!--- advent_readme_stars table [2016] --->
-          starSymbol: "⭐"
-
-      - name: Upate 2017 year
-        uses: k2bd/advent-readme-stars@v1.0.1
-        with:
-          userId: ${{ secrets.AOC_USER_ID }}
-          sessionCookie: ${{ secrets.AOC_SESSION }}
-          readmeLocation: README.md
-          headerPrefix: "##"
-          year: 2017
-          tableMarker: <!--- advent_readme_stars table [2017] --->
-          starSymbol: "⭐"
-
-      - name: Upate 2018 year
-        uses: k2bd/advent-readme-stars@v1.0.1
-        with:
-          userId: ${{ secrets.AOC_USER_ID }}
-          sessionCookie: ${{ secrets.AOC_SESSION }}
-          readmeLocation: README.md
-          headerPrefix: "##"
-          year: 2018
-          tableMarker: <!--- advent_readme_stars table [2018] --->
-          starSymbol: "⭐"
-
-      - name: Upate 2019 year
-        uses: k2bd/advent-readme-stars@v1.0.1
-        with:
-          userId: ${{ secrets.AOC_USER_ID }}
-          sessionCookie: ${{ secrets.AOC_SESSION }}
-          readmeLocation: README.md
-          headerPrefix: "##"
-          year: 2019
-          tableMarker: <!--- advent_readme_stars table [2019] --->
-          starSymbol: "⭐"
-
-      - name: Upate 2020 year
-        uses: k2bd/advent-readme-stars@v1.0.1
-        with:
-          userId: ${{ secrets.AOC_USER_ID }}
-          sessionCookie: ${{ secrets.AOC_SESSION }}
-          readmeLocation: README.md
-          headerPrefix: "##"
-          year: 2020
-          tableMarker: <!--- advent_readme_stars table [2020] --->
-          starSymbol: "⭐"
-
-      - name: Upate 2021 year
-        uses: k2bd/advent-readme-stars@v1.0.1
-        with:
-          userId: ${{ secrets.AOC_USER_ID }}
-          sessionCookie: ${{ secrets.AOC_SESSION }}
-          readmeLocation: README.md
-          headerPrefix: "##"
-          year: 2021
-          tableMarker: <!--- advent_readme_stars table [2021] --->
-          starSymbol: "⭐"
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4.12.0
