@@ -1,6 +1,8 @@
 name: Update README ⭐
 on:
   push:
+    branches:
+      - 'master'
   schedule:
     - cron: "0 */12 * * *"
   workflow_dispatch:
