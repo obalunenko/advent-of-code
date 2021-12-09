@@ -34,7 +34,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		return "", fmt.Errorf("new bingo game: %w", err)
 	}
 
-	won, num, err := game.start(ctx, rule(1))
+	won, num := game.start(ctx, rule(1))
 	if err != nil {
 		return "", fmt.Errorf("game start: %w", err)
 	}
@@ -52,7 +52,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 		return "", fmt.Errorf("new bingo game: %w", err)
 	}
 
-	won, num, err := game.start(ctx, rule(len(game.boards)))
+	won, num := game.start(ctx, rule(len(game.boards)))
 	if err != nil {
 		return "", fmt.Errorf("game start: %w", err)
 	}
@@ -79,7 +79,7 @@ type bingo struct {
 
 type winRule func(w winner) bool
 
-func (b *bingo) start(ctx context.Context, rule winRule) (*board, int, error) {
+func (b *bingo) start(ctx context.Context, rule winRule) (*board, int) {
 	players := make([]*player, 0, len(b.boards))
 
 	in := make(chan int)
@@ -112,7 +112,6 @@ func (b *bingo) start(ctx context.Context, rule winRule) (*board, int, error) {
 				p := players[i]
 
 				if !p.isActive() {
-
 					continue
 				}
 
@@ -123,23 +122,25 @@ func (b *bingo) start(ctx context.Context, rule winRule) (*board, int, error) {
 
 	realWin := make(chan winner)
 
-	go func(cancelFunc context.CancelFunc, in, out chan winner) {
-		for {
-			w := <-in
-
-			if rule(w) {
-				cancelFunc()
-
-				out <- w
-
-				return
-			}
-		}
-	}(cancel, boardWin, realWin)
+	go checkWinner(cancel, boardWin, realWin, rule)
 
 	w := <-realWin
 
-	return b.boards[w.id], w.num, nil
+	return b.boards[w.id], w.num
+}
+
+func checkWinner(cancelFunc context.CancelFunc, in, out chan winner, rule winRule) {
+	for {
+		w := <-in
+
+		if rule(w) {
+			cancelFunc()
+
+			out <- w
+
+			return
+		}
+	}
 }
 
 type player struct {
@@ -267,7 +268,7 @@ func (s *state) String() string {
 	return fmt.Sprintf("verticals=%v; horizontals=%v", s.verticals, s.horizontals)
 }
 
-func (s *state) update(ctx context.Context, p position) {
+func (s *state) update(_ context.Context, p position) {
 	s.verticals[p.horizontal]++
 	s.horizontals[p.vertical]++
 }
@@ -339,6 +340,7 @@ func newBingoGame(input io.Reader) (*bingo, error) {
 			bg.input = numbers
 		case emptyLine:
 			boardsNum++
+
 			bg.boards = append(bg.boards, newBoard())
 
 			cursor = 0

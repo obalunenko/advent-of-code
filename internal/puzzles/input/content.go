@@ -41,6 +41,11 @@ func Get(ctx context.Context, d Date, session string) ([]byte, error) {
 
 	client := http.DefaultClient
 
+	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
+	req = req.Clone(ctx)
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("send request: %w", err)
@@ -104,6 +109,9 @@ func createInputReq(ctx context.Context, d Date, sessionID string) (*http.Reques
 		Raw:        "",
 		Unparsed:   nil,
 	})
+
+	req.Header.Set("User-Agent",
+		"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36")
 
 	return req, nil
 }

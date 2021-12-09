@@ -1,8 +1,10 @@
+// Package utils provide common used functionality to work with files, readers and so on.
 package utils
 
 import (
 	"io"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -13,7 +15,7 @@ import (
 func ReaderFromFile(tb testing.TB, fpath string) io.Reader {
 	tb.Helper()
 
-	file, err := os.Open(fpath)
+	file, err := os.Open(filepath.Clean(fpath))
 	require.NoError(tb, err)
 
 	tb.Cleanup(func() {

@@ -188,9 +188,8 @@ func Test_bingo_start(t *testing.T) {
 	}
 
 	type expected struct {
-		board   *board
-		num     int
-		wantErr assert.ErrorAssertionFunc
+		board *board
+		num   int
 	}
 
 	tests := []struct {
@@ -259,8 +258,7 @@ func Test_bingo_start(t *testing.T) {
 						},
 					},
 				},
-				num:     24,
-				wantErr: assert.NoError,
+				num: 24,
 			},
 		},
 	}
@@ -269,10 +267,7 @@ func Test_bingo_start(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			b := bgame
 
-			gotBoard, gotNum, err := b.start(tt.args.ctx, rule(1))
-			if !tt.expected.wantErr(t, err, fmt.Sprintf("start(%v)", tt.args.ctx)) {
-				return
-			}
+			gotBoard, gotNum := b.start(tt.args.ctx, rule(1))
 
 			equalBoards(t, tt.expected.board, gotBoard)
 			assert.Equal(t, tt.expected.num, gotNum)
@@ -280,7 +275,7 @@ func Test_bingo_start(t *testing.T) {
 	}
 }
 
-func equalBoards(t testing.TB, expected *board, got *board) {
+func equalBoards(t testing.TB, expected, got *board) {
 	assert.Equal(t, expected.numbers, got.numbers, "numbers")
 
 	assert.Equal(t, fmt.Sprint(expected.state.horizontals), fmt.Sprint(got.state.horizontals), "horizontals")
