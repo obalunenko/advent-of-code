@@ -1,12 +1,14 @@
 package day04
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles/common/utils"
 )
@@ -119,30 +121,42 @@ func Test_newBingoGame(t *testing.T) {
 				input: []int{7, 4, 9, 5, 11, 17, 23, 2, 0, 14, 21, 24, 10, 16, 13, 6, 15, 25, 12, 22, 18, 20, 8, 19, 3, 26, 1},
 				boards: []*board{
 					{
-						numbers: [5][5]int{
-							{22, 13, 17, 11, 0},
-							{8, 2, 23, 4, 24},
-							{21, 9, 14, 16, 7},
-							{6, 10, 3, 18, 5},
-							{1, 12, 20, 15, 19},
+						numbers: [5][5]number{
+							{number{val: 22}, number{val: 13}, number{val: 17}, number{val: 11}, number{val: 0}},
+							{number{val: 8}, number{val: 2}, number{val: 23}, number{val: 4}, number{val: 24}},
+							{number{val: 21}, number{val: 9}, number{val: 14}, number{val: 16}, number{val: 7}},
+							{number{val: 6}, number{val: 10}, number{val: 3}, number{val: 18}, number{val: 5}},
+							{number{val: 1}, number{val: 12}, number{val: 20}, number{val: 15}, number{val: 19}},
+						},
+						state: state{
+							verticals:   map[int]int{},
+							horizontals: map[int]int{},
 						},
 					},
 					{
-						numbers: [5][5]int{
-							{3, 15, 0, 2, 22},
-							{9, 18, 13, 17, 5},
-							{19, 8, 7, 25, 23},
-							{20, 11, 10, 24, 4},
-							{14, 21, 16, 12, 6},
+						numbers: [5][5]number{
+							{number{val: 3}, number{val: 15}, number{val: 0}, number{val: 2}, number{val: 22}},
+							{number{val: 9}, number{val: 18}, number{val: 13}, number{val: 17}, number{val: 5}},
+							{number{val: 19}, number{val: 8}, number{val: 7}, number{val: 25}, number{val: 23}},
+							{number{val: 20}, number{val: 11}, number{val: 10}, number{val: 24}, number{val: 4}},
+							{number{val: 14}, number{val: 21}, number{val: 16}, number{val: 12}, number{val: 6}},
+						},
+						state: state{
+							verticals:   map[int]int{},
+							horizontals: map[int]int{},
 						},
 					},
 					{
-						numbers: [5][5]int{
-							{14, 21, 17, 24, 4},
-							{10, 16, 15, 9, 19},
-							{18, 8, 23, 26, 20},
-							{22, 11, 13, 6, 5},
-							{2, 0, 12, 3, 7},
+						numbers: [5][5]number{
+							{number{val: 14}, number{val: 21}, number{val: 17}, number{val: 24}, number{val: 4}},
+							{number{val: 10}, number{val: 16}, number{val: 15}, number{val: 9}, number{val: 19}},
+							{number{val: 18}, number{val: 8}, number{val: 23}, number{val: 26}, number{val: 20}},
+							{number{val: 22}, number{val: 11}, number{val: 13}, number{val: 6}, number{val: 5}},
+							{number{val: 2}, number{val: 0}, number{val: 12}, number{val: 3}, number{val: 7}},
+						},
+						state: state{
+							verticals:   map[int]int{},
+							horizontals: map[int]int{},
 						},
 					},
 				},
@@ -157,8 +171,194 @@ func Test_newBingoGame(t *testing.T) {
 			if !tt.wantErr(t, err, fmt.Sprintf("newBingoGame(%v)", tt.args.input)) {
 				return
 			}
-			
+
 			assert.Equalf(t, tt.want, got, "newBingoGame(%v)", tt.args.input)
+		})
+	}
+}
+
+func Test_bingo_start(t *testing.T) {
+	ctx := context.Background()
+
+	bgame, err := newBingoGame(utils.ReaderFromFile(t, filepath.Join("testdata", "input.txt")))
+	require.NoError(t, err)
+
+	type args struct {
+		ctx context.Context
+	}
+
+	type expected struct {
+		board   *board
+		num     int
+		wantErr assert.ErrorAssertionFunc
+	}
+
+	tests := []struct {
+		name     string
+		args     args
+		expected expected
+	}{
+		{
+			name: "",
+			args: args{
+				ctx: ctx,
+			},
+			expected: expected{
+				board: &board{
+					numbers: [5][5]number{
+						{
+							number{val: 14, isMarked: true},
+							number{val: 21, isMarked: true},
+							number{val: 17, isMarked: true},
+							number{val: 24, isMarked: true},
+							number{val: 4, isMarked: true},
+						},
+						{
+							number{val: 10},
+							number{val: 16},
+							number{val: 15},
+							number{val: 9, isMarked: true},
+							number{val: 19},
+						},
+						{
+							number{val: 18},
+							number{val: 8},
+							number{val: 23, isMarked: true},
+							number{val: 26},
+							number{val: 20},
+						},
+						{
+							number{val: 22},
+							number{val: 11, isMarked: true},
+							number{val: 13},
+							number{val: 6},
+							number{val: 5, isMarked: true},
+						},
+						{
+							number{val: 2, isMarked: true},
+							number{val: 0, isMarked: true},
+							number{val: 12},
+							number{val: 3},
+							number{val: 7, isMarked: true},
+						},
+					},
+					state: state{
+						verticals: map[int]int{
+							0: 2,
+							1: 3,
+							2: 2,
+							3: 2,
+							4: 3,
+						},
+						horizontals: map[int]int{
+							0: 5,
+							1: 1,
+							2: 1,
+							3: 2,
+							4: 3,
+						},
+					},
+				},
+				num:     24,
+				wantErr: assert.NoError,
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := bgame
+
+			gotBoard, gotNum, err := b.start(tt.args.ctx)
+			if !tt.expected.wantErr(t, err, fmt.Sprintf("start(%v)", tt.args.ctx)) {
+				return
+			}
+
+			equalBoards(t, tt.expected.board, gotBoard)
+			assert.Equal(t, tt.expected.num, gotNum)
+		})
+	}
+}
+
+func equalBoards(t testing.TB, expected *board, got *board) {
+	assert.Equal(t, expected.numbers, got.numbers, "numbers")
+
+	assert.Equal(t, fmt.Sprint(expected.state.horizontals), fmt.Sprint(got.state.horizontals), "horizontals")
+
+	assert.Equal(t, fmt.Sprint(expected.state.verticals), fmt.Sprint(got.state.verticals), "verticals")
+}
+
+func Test_board_sumMarked(t *testing.T) {
+	b := board{
+		numbers: [5][5]number{
+			{
+				number{val: 14, isMarked: true},
+				number{val: 21, isMarked: true},
+				number{val: 17, isMarked: true},
+				number{val: 24, isMarked: true},
+				number{val: 4, isMarked: true},
+			},
+			{
+				number{val: 10},
+				number{val: 16},
+				number{val: 15},
+				number{val: 9, isMarked: true},
+				number{val: 19},
+			},
+			{
+				number{val: 18},
+				number{val: 8},
+				number{val: 23, isMarked: true},
+				number{val: 26},
+				number{val: 20},
+			},
+			{
+				number{val: 22},
+				number{val: 11, isMarked: true},
+				number{val: 13},
+				number{val: 6},
+				number{val: 5, isMarked: true},
+			},
+			{
+				number{val: 2, isMarked: true},
+				number{val: 0, isMarked: true},
+				number{val: 12},
+				number{val: 3},
+				number{val: 7, isMarked: true},
+			},
+		},
+		state: state{
+			verticals: map[int]int{
+				0: 2,
+				1: 3,
+				2: 2,
+				3: 2,
+				4: 3,
+			},
+			horizontals: map[int]int{
+				0: 5,
+				1: 1,
+				2: 1,
+				3: 2,
+				4: 3,
+			},
+		},
+	}
+
+	tests := []struct {
+		name  string
+		board board
+		want  int
+	}{
+		{
+			name:  "",
+			board: b,
+			want:  188,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, tt.board.sumMarked(), "sumMarked()")
 		})
 	}
 }
