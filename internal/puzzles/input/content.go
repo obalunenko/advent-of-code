@@ -41,7 +41,11 @@ func Get(ctx context.Context, d Date, session string) ([]byte, error) {
 
 	client := http.DefaultClient
 
-	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+	const (
+		timeoutSecs = 5
+	)
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*timeoutSecs)
 	defer cancel()
 
 	req = req.Clone(ctx)

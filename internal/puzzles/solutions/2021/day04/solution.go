@@ -35,9 +35,6 @@ func (s solution) Part1(input io.Reader) (string, error) {
 	}
 
 	won, num := game.start(ctx, rule(1))
-	if err != nil {
-		return "", fmt.Errorf("game start: %w", err)
-	}
 
 	res := won.sumMarked() * num
 
@@ -53,9 +50,6 @@ func (s solution) Part2(input io.Reader) (string, error) {
 	}
 
 	won, num := game.start(ctx, rule(len(game.boards)))
-	if err != nil {
-		return "", fmt.Errorf("game start: %w", err)
-	}
 
 	res := won.sumMarked() * num
 
@@ -79,7 +73,7 @@ type bingo struct {
 
 type winRule func(w winner) bool
 
-func (b *bingo) start(ctx context.Context, rule winRule) (*board, int) {
+func (b *bingo) start(ctx context.Context, rule winRule) (wonBoard *board, lastNum int) {
 	players := make([]*player, 0, len(b.boards))
 
 	in := make(chan int)
@@ -126,7 +120,11 @@ func (b *bingo) start(ctx context.Context, rule winRule) (*board, int) {
 
 	w := <-realWin
 
-	return b.boards[w.id], w.num
+	wonBoard = b.boards[w.id]
+	
+	lastNum = w.num
+
+	return wonBoard, lastNum
 }
 
 func checkWinner(cancelFunc context.CancelFunc, in, out chan winner, rule winRule) {
