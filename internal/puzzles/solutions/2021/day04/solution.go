@@ -9,8 +9,6 @@ import (
 	"regexp"
 	"strconv"
 
-	log "github.com/obalunenko/logger"
-
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
@@ -36,7 +34,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		return "", fmt.Errorf("new bingo game: %w", err)
 	}
 
-	won, num, err := game.start(ctx)
+	won, num, err := game.start(ctx, rule(1))
 	if err != nil {
 		return "", fmt.Errorf("game start: %w", err)
 	}
@@ -47,7 +45,31 @@ func (s solution) Part1(input io.Reader) (string, error) {
 }
 
 func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	ctx := context.Background()
+
+	game, err := newBingoGame(input)
+	if err != nil {
+		return "", fmt.Errorf("new bingo game: %w", err)
+	}
+
+	won, num, err := game.start(ctx, rule(len(game.boards)))
+	if err != nil {
+		return "", fmt.Errorf("game start: %w", err)
+	}
+
+	res := won.sumMarked() * num
+
+	return strconv.Itoa(res), nil
+}
+
+func rule(boardsNum int) winRule {
+	var count int
+
+	return func(w winner) bool {
+		count++
+
+		return count == boardsNum
+	}
 }
 
 type bingo struct {
@@ -55,16 +77,18 @@ type bingo struct {
 	boards []*board
 }
 
-func (b *bingo) start(ctx context.Context) (*board, int, error) {
+type winRule func(w winner) bool
+
+func (b *bingo) start(ctx context.Context, rule winRule) (*board, int, error) {
 	players := make([]*player, 0, len(b.boards))
 
 	in := make(chan int)
-	won := make(chan winner)
+	boardWin := make(chan winner)
 
 	ctx, cancel := context.WithCancel(ctx)
 
 	for i := range b.boards {
-		players = append(players, newPlayer(ctx, i, won, b.boards[i]))
+		players = append(players, newPlayer(ctx, i, boardWin, b.boards[i]))
 	}
 
 	go func() {
@@ -78,29 +102,87 @@ func (b *bingo) start(ctx context.Context) (*board, int, error) {
 				in <- n
 			}
 		}
+
+		close(in)
 	}()
 
 	go func() {
 		for n := range in {
 			for i := range players {
-				players[i].input() <- n
+				p := players[i]
+
+				if !p.isActive() {
+
+					continue
+				}
+
+				p.input() <- n
 			}
 		}
-
 	}()
 
-	w := <-won
+	realWin := make(chan winner)
 
-	cancel()
+	go func(cancelFunc context.CancelFunc, in, out chan winner) {
+		for {
+			w := <-in
+
+			if rule(w) {
+				cancelFunc()
+
+				out <- w
+
+				return
+			}
+		}
+	}(cancel, boardWin, realWin)
+
+	w := <-realWin
 
 	return b.boards[w.id], w.num, nil
 }
 
 type player struct {
-	id  int
-	in  chan int
-	win chan winSig
-	b   *board
+	id     int
+	in     chan int
+	win    chan winSig
+	active bool
+	b      *board
+}
+
+func (p player) isActive() bool {
+	return p.active
+}
+
+func (p *player) input() chan int {
+	return p.in
+}
+
+func (p *player) play(ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			p.active = false
+
+			return
+		case num := <-p.in:
+			pos, ok := p.b.isPresent(num)
+			if ok {
+				p.b.state.update(ctx, pos)
+				p.b.numbers[pos.vertical][pos.horizontal].setMarked()
+			}
+
+			if p.b.state.isWon() {
+				p.win <- winSig{
+					num: num,
+				}
+
+				p.active = false
+
+				return
+			}
+		}
+	}
 }
 
 type winner struct {
@@ -114,15 +196,12 @@ type winSig struct {
 
 func newPlayer(ctx context.Context, id int, wonSig chan winner, b *board) *player {
 	p := player{
-		id:  id,
-		in:  make(chan int),
-		win: make(chan winSig),
-		b:   b,
+		id:     id,
+		in:     make(chan int),
+		win:    make(chan winSig),
+		active: true,
+		b:      b,
 	}
-
-	ctx = log.ContextWithLogger(ctx, log.WithFields(ctx, log.Fields{
-		"player_id": id,
-	}))
 
 	go func() {
 		sig := <-p.win
@@ -136,52 +215,6 @@ func newPlayer(ctx context.Context, id int, wonSig chan winner, b *board) *playe
 	go p.play(ctx)
 
 	return &p
-}
-
-func (p *player) input() chan int {
-	return p.in
-}
-
-func (p *player) play(ctx context.Context) {
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		case num := <-p.in:
-			pos, ok := p.b.isPresent(num)
-			log.WithFields(ctx, log.Fields{
-				"pos": pos.String(),
-				"num": num,
-			}).Debug("[INPUT] Received")
-
-			if ok {
-				log.WithFields(ctx, log.Fields{
-					"num":      num,
-					"position": pos.String(),
-				}).Debug("[FOUND]")
-
-				p.b.state.update(ctx, pos)
-				p.b.numbers[pos.vertical][pos.horizontal].setMarked()
-			} else {
-				log.WithFields(ctx, log.Fields{
-					"num": num,
-				}).Debug("[SKIP] Not found")
-			}
-
-			if p.b.state.isWon() {
-				log.WithFields(ctx, log.Fields{
-					"final_num": num,
-					"player_id": p.id,
-				}).Debug("Won")
-
-				p.win <- winSig{
-					num: num,
-				}
-
-				return
-			}
-		}
-	}
 }
 
 const (
@@ -235,18 +268,8 @@ func (s *state) String() string {
 }
 
 func (s *state) update(ctx context.Context, p position) {
-	log.WithFields(ctx, log.Fields{
-		"current_state": s.String(),
-		"position":      p.String(),
-	}).Debug("[STATE_BEFORE]")
-
 	s.verticals[p.horizontal]++
 	s.horizontals[p.vertical]++
-
-	log.WithFields(ctx, log.Fields{
-		"current_state": s.String(),
-		"position":      p.String(),
-	}).Debug("[STATE_AFTER]")
 }
 
 func (s state) isWon() bool {

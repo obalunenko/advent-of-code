@@ -84,7 +84,7 @@ func Test_solution_Part2(t *testing.T) {
 			args: args{
 				input: utils.ReaderFromFile(t, filepath.Join("testdata", "input.txt")),
 			},
-			want:    "",
+			want:    "1924",
 			wantErr: assert.NoError,
 		},
 	}
@@ -269,7 +269,7 @@ func Test_bingo_start(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			b := bgame
 
-			gotBoard, gotNum, err := b.start(tt.args.ctx)
+			gotBoard, gotNum, err := b.start(tt.args.ctx, rule(1))
 			if !tt.expected.wantErr(t, err, fmt.Sprintf("start(%v)", tt.args.ctx)) {
 				return
 			}
