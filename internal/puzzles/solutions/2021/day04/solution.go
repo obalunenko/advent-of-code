@@ -121,7 +121,7 @@ func (b *bingo) start(ctx context.Context, rule winRule) (wonBoard *board, lastN
 	w := <-realWin
 
 	wonBoard = b.boards[w.id]
-	
+
 	lastNum = w.num
 
 	return wonBoard, lastNum
