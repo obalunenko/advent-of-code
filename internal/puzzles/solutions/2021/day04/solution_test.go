@@ -129,8 +129,8 @@ func Test_newBingoGame(t *testing.T) {
 							{number{val: 1}, number{val: 12}, number{val: 20}, number{val: 15}, number{val: 19}},
 						},
 						state: state{
-							verticals:   map[int]int{},
-							horizontals: map[int]int{},
+							verticals:   [boardSize]int{},
+							horizontals: [boardSize]int{},
 						},
 					},
 					{
@@ -142,8 +142,8 @@ func Test_newBingoGame(t *testing.T) {
 							{number{val: 14}, number{val: 21}, number{val: 16}, number{val: 12}, number{val: 6}},
 						},
 						state: state{
-							verticals:   map[int]int{},
-							horizontals: map[int]int{},
+							verticals:   [boardSize]int{},
+							horizontals: [boardSize]int{},
 						},
 					},
 					{
@@ -155,8 +155,8 @@ func Test_newBingoGame(t *testing.T) {
 							{number{val: 2}, number{val: 0}, number{val: 12}, number{val: 3}, number{val: 7}},
 						},
 						state: state{
-							verticals:   map[int]int{},
-							horizontals: map[int]int{},
+							verticals:   [boardSize]int{},
+							horizontals: [boardSize]int{},
 						},
 					},
 				},
@@ -242,14 +242,14 @@ func Test_bingo_start(t *testing.T) {
 						},
 					},
 					state: state{
-						verticals: map[int]int{
+						verticals: [boardSize]int{
 							0: 2,
 							1: 3,
 							2: 2,
 							3: 2,
 							4: 3,
 						},
-						horizontals: map[int]int{
+						horizontals: [boardSize]int{
 							0: 5,
 							1: 1,
 							2: 1,
@@ -323,14 +323,14 @@ func Test_board_sumMarked(t *testing.T) {
 			},
 		},
 		state: state{
-			verticals: map[int]int{
+			verticals: [boardSize]int{
 				0: 2,
 				1: 3,
 				2: 2,
 				3: 2,
 				4: 3,
 			},
-			horizontals: map[int]int{
+			horizontals: [boardSize]int{
 				0: 5,
 				1: 1,
 				2: 1,
