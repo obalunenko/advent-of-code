@@ -121,7 +121,8 @@ func Test_newBingoGame(t *testing.T) {
 				input: []int{7, 4, 9, 5, 11, 17, 23, 2, 0, 14, 21, 24, 10, 16, 13, 6, 15, 25, 12, 22, 18, 20, 8, 19, 3, 26, 1},
 				boards: []*board{
 					{
-						numbers: [5][5]number{
+						id: 1,
+						numbers: [boardSize][boardSize]number{
 							{number{val: 22}, number{val: 13}, number{val: 17}, number{val: 11}, number{val: 0}},
 							{number{val: 8}, number{val: 2}, number{val: 23}, number{val: 4}, number{val: 24}},
 							{number{val: 21}, number{val: 9}, number{val: 14}, number{val: 16}, number{val: 7}},
@@ -134,7 +135,8 @@ func Test_newBingoGame(t *testing.T) {
 						},
 					},
 					{
-						numbers: [5][5]number{
+						id: 2,
+						numbers: [boardSize][boardSize]number{
 							{number{val: 3}, number{val: 15}, number{val: 0}, number{val: 2}, number{val: 22}},
 							{number{val: 9}, number{val: 18}, number{val: 13}, number{val: 17}, number{val: 5}},
 							{number{val: 19}, number{val: 8}, number{val: 7}, number{val: 25}, number{val: 23}},
@@ -147,7 +149,8 @@ func Test_newBingoGame(t *testing.T) {
 						},
 					},
 					{
-						numbers: [5][5]number{
+						id: 3,
+						numbers: [boardSize][boardSize]number{
 							{number{val: 14}, number{val: 21}, number{val: 17}, number{val: 24}, number{val: 4}},
 							{number{val: 10}, number{val: 16}, number{val: 15}, number{val: 9}, number{val: 19}},
 							{number{val: 18}, number{val: 8}, number{val: 23}, number{val: 26}, number{val: 20}},
@@ -185,6 +188,7 @@ func Test_bingo_start(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
+		wr  winRule
 	}
 
 	type expected struct {
@@ -201,9 +205,11 @@ func Test_bingo_start(t *testing.T) {
 			name: "",
 			args: args{
 				ctx: ctx,
+				wr:  rule(1),
 			},
 			expected: expected{
 				board: &board{
+					id: 3,
 					numbers: [5][5]number{
 						{
 							number{val: 14, isMarked: true},
@@ -267,7 +273,7 @@ func Test_bingo_start(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			b := bgame
 
-			gotBoard, gotNum := b.start(tt.args.ctx, rule(1))
+			gotBoard, gotNum := b.start(tt.args.ctx, tt.args.wr)
 
 			equalBoards(t, tt.expected.board, gotBoard)
 			assert.Equal(t, tt.expected.num, gotNum)
@@ -278,6 +284,8 @@ func Test_bingo_start(t *testing.T) {
 func equalBoards(t testing.TB, expected, got *board) {
 	assert.Equal(t, expected.numbers, got.numbers, "numbers")
 
+	assert.Equal(t, expected.id, got.id)
+
 	assert.Equal(t, fmt.Sprint(expected.state.horizontals), fmt.Sprint(got.state.horizontals), "horizontals")
 
 	assert.Equal(t, fmt.Sprint(expected.state.verticals), fmt.Sprint(got.state.verticals), "verticals")
@@ -285,6 +293,7 @@ func equalBoards(t testing.TB, expected, got *board) {
 
 func Test_board_sumMarked(t *testing.T) {
 	b := board{
+		id: 0,
 		numbers: [5][5]number{
 			{
 				number{val: 14, isMarked: true},

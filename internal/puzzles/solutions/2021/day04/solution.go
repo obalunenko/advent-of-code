@@ -243,6 +243,7 @@ func (n *number) setMarked() {
 }
 
 type board struct {
+	id      int
 	numbers [boardSize][boardSize]number
 	state   state
 }
@@ -273,6 +274,13 @@ func (p position) String() string {
 type state struct {
 	verticals   [boardSize]int
 	horizontals [boardSize]int
+}
+
+func newState() state {
+	return state{
+		verticals:   [boardSize]int{},
+		horizontals: [boardSize]int{},
+	}
 }
 
 func (s *state) String() string {
@@ -352,7 +360,7 @@ func newBingoGame(input io.Reader) (*bingo, error) {
 		case emptyLine:
 			boardsNum++
 
-			bg.boards = append(bg.boards, newBoard())
+			bg.boards = append(bg.boards, newBoard(boardsNum))
 
 			cursor = 0
 		case boardLine:
@@ -376,13 +384,11 @@ func newBingoGame(input io.Reader) (*bingo, error) {
 	return &bg, nil
 }
 
-func newBoard() *board {
+func newBoard(id int) *board {
 	return &board{
-		numbers: [5][5]number{},
-		state: state{
-			verticals:   [boardSize]int{},
-			horizontals: [boardSize]int{},
-		},
+		id:      id,
+		numbers: [boardSize][boardSize]number{},
+		state:   newState(),
 	}
 }
 
