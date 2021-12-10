@@ -1,13 +1,12 @@
 package day01
 
 import (
-	"io"
-	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+
+	"github.com/obalunenko/advent-of-code/internal/puzzles/common/utils"
 )
 
 func Test_solution_Year(t *testing.T) {
@@ -200,15 +199,6 @@ func Test_calcPart2(t *testing.T) {
 	close(in)
 }
 
-func readerFromFile(tb testing.TB, fpath string) io.Reader {
-	tb.Helper()
-
-	file, err := os.Open(fpath)
-	require.NoError(tb, err)
-
-	return file
-}
-
 func Test_calc(t *testing.T) {
 	type args struct {
 		inputPath string
@@ -245,7 +235,7 @@ func Test_calc(t *testing.T) {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
-			input := readerFromFile(t, tt.args.inputPath)
+			input := utils.ReaderFromFile(t, tt.args.inputPath)
 			got, err := calc(input, tt.args.calcFn)
 
 			if tt.wantErr {
