@@ -284,7 +284,7 @@ func Test_bingo_start(t *testing.T) {
 func equalBoards(t testing.TB, expected, got *board) {
 	assert.Equal(t, expected.numbers, got.numbers, "numbers")
 
-	assert.Equal(t, expected.id, got.id)
+	assert.Equal(t, expected.id, got.id, "id")
 
 	assert.Equal(t, fmt.Sprint(expected.state.horizontals), fmt.Sprint(got.state.horizontals), "horizontals")
 

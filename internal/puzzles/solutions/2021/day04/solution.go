@@ -142,7 +142,7 @@ type player struct {
 	mu     *sync.Mutex
 	id     int
 	in     chan int
-	win    chan winSig
+	win    chan winner
 	active bool
 	b      *board
 }
@@ -184,7 +184,8 @@ func (p *player) play(ctx context.Context) {
 			}
 
 			if p.b.state.isWon() {
-				p.win <- winSig{
+				p.win <- winner{
+					id:  p.id,
 					num: num,
 				}
 
@@ -201,28 +202,15 @@ type winner struct {
 	num int
 }
 
-type winSig struct {
-	num int
-}
-
 func newPlayer(ctx context.Context, id int, wonSig chan winner, b *board) *player {
 	p := player{
 		mu:     &sync.Mutex{},
 		id:     id,
 		in:     make(chan int),
-		win:    make(chan winSig),
+		win:    wonSig,
 		active: true,
 		b:      b,
 	}
-
-	go func() {
-		sig := <-p.win
-
-		wonSig <- winner{
-			id:  p.id,
-			num: sig.num,
-		}
-	}()
 
 	go p.play(ctx)
 
