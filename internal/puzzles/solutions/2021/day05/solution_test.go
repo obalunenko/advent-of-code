@@ -46,7 +46,7 @@ func Test_solution_Part1(t *testing.T) {
 			args: args{
 				input: utils.ReaderFromFile(t, filepath.Join("testdata", "input.txt")),
 			},
-			want:    "4512",
+			want:    "5",
 			wantErr: assert.NoError,
 		},
 	}
@@ -81,7 +81,7 @@ func Test_solution_Part2(t *testing.T) {
 			args: args{
 				input: utils.ReaderFromFile(t, filepath.Join("testdata", "input.txt")),
 			},
-			want:    "1924",
+			want:    "",
 			wantErr: assert.NoError,
 		},
 	}

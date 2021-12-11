@@ -4,7 +4,7 @@ _Implemented solution for puzzle https://adventofcode.com/{year}/day/{day}_
 
 ## Github Issue
 
-_If any, add a JIRA ticket number._
+_If any, add a GitHub issue number._
 
 ## Possible failures/side-effects
 
