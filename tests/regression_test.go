@@ -2303,7 +2303,7 @@ func testcases2021() []testcase {
 				Year:  year,
 				Name:  puzzles.Day04.String(),
 				Part1: "58374",
-				Part2: "",
+				Part2: "11377",
 			},
 			wantErr: false,
 		},

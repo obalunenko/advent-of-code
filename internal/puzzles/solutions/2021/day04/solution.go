@@ -8,6 +8,7 @@ import (
 	"io"
 	"regexp"
 	"strconv"
+	"sync"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -105,10 +106,6 @@ func (b *bingo) start(ctx context.Context, rule winRule) (wonBoard *board, lastN
 			for i := range players {
 				p := players[i]
 
-				if !p.isActive() {
-					continue
-				}
-
 				p.input() <- n
 			}
 		}
@@ -142,15 +139,20 @@ func checkWinner(cancelFunc context.CancelFunc, in, out chan winner, rule winRul
 }
 
 type player struct {
+	mu     *sync.Mutex
 	id     int
 	in     chan int
-	win    chan winSig
+	win    chan winner
 	active bool
 	b      *board
 }
 
-func (p player) isActive() bool {
+func (p *player) isActive() bool {
 	return p.active
+}
+
+func (p *player) setInactive() {
+	p.active = false
 }
 
 func (p *player) input() chan int {
@@ -161,25 +163,36 @@ func (p *player) play(ctx context.Context) {
 	for {
 		select {
 		case <-ctx.Done():
-			p.active = false
+			p.mu.Lock()
 
-			return
+			p.setInactive()
+
+			p.mu.Unlock()
 		case num := <-p.in:
+			p.mu.Lock()
+			if !p.isActive() {
+				p.mu.Unlock()
+
+				continue
+			}
+
 			pos, ok := p.b.isPresent(num)
 			if ok {
 				p.b.state.update(ctx, pos)
+
 				p.b.numbers[pos.vertical][pos.horizontal].setMarked()
 			}
 
 			if p.b.state.isWon() {
-				p.win <- winSig{
+				p.win <- winner{
+					id:  p.id,
 					num: num,
 				}
 
-				p.active = false
-
-				return
+				p.setInactive()
 			}
+
+			p.mu.Unlock()
 		}
 	}
 }
@@ -189,27 +202,15 @@ type winner struct {
 	num int
 }
 
-type winSig struct {
-	num int
-}
-
 func newPlayer(ctx context.Context, id int, wonSig chan winner, b *board) *player {
 	p := player{
+		mu:     &sync.Mutex{},
 		id:     id,
 		in:     make(chan int),
-		win:    make(chan winSig),
+		win:    wonSig,
 		active: true,
 		b:      b,
 	}
-
-	go func() {
-		sig := <-p.win
-
-		wonSig <- winner{
-			id:  p.id,
-			num: sig.num,
-		}
-	}()
 
 	go p.play(ctx)
 
@@ -230,6 +231,7 @@ func (n *number) setMarked() {
 }
 
 type board struct {
+	id      int
 	numbers [boardSize][boardSize]number
 	state   state
 }
@@ -258,8 +260,15 @@ func (p position) String() string {
 }
 
 type state struct {
-	verticals   map[int]int
-	horizontals map[int]int
+	verticals   [boardSize]int
+	horizontals [boardSize]int
+}
+
+func newState() state {
+	return state{
+		verticals:   [boardSize]int{},
+		horizontals: [boardSize]int{},
+	}
 }
 
 func (s *state) String() string {
@@ -271,7 +280,7 @@ func (s *state) update(_ context.Context, p position) {
 	s.horizontals[p.vertical]++
 }
 
-func (s state) isWon() bool {
+func (s *state) isWon() bool {
 	for i := 0; i < boardSize; i++ {
 		if s.verticals[i] == boardSize || s.horizontals[i] == boardSize {
 			return true
@@ -339,7 +348,7 @@ func newBingoGame(input io.Reader) (*bingo, error) {
 		case emptyLine:
 			boardsNum++
 
-			bg.boards = append(bg.boards, newBoard())
+			bg.boards = append(bg.boards, newBoard(boardsNum))
 
 			cursor = 0
 		case boardLine:
@@ -363,13 +372,11 @@ func newBingoGame(input io.Reader) (*bingo, error) {
 	return &bg, nil
 }
 
-func newBoard() *board {
+func newBoard(id int) *board {
 	return &board{
-		numbers: [5][5]number{},
-		state: state{
-			verticals:   make(map[int]int),
-			horizontals: make(map[int]int),
-		},
+		id:      id,
+		numbers: [boardSize][boardSize]number{},
+		state:   newState(),
 	}
 }
 
