@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -37,17 +38,114 @@ func (s solution) Part1(input io.Reader) (string, error) {
 
 	d := drawDiagram(lines)
 
-	zones := d.dangerZones(part1DangerZone)
+	zones := d.dangerZones(isDangerZone)
 
 	return strconv.Itoa(zones), nil
 }
 
 func (s solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	lines, err := getLines(input)
+	if err != nil {
+		return "", fmt.Errorf("get lines: %w", err)
+	}
+
+	lines = filterLines(lines, part2Filter)
+
+	d := drawDiagram(lines)
+
+	zones := d.dangerZones(isDangerZone)
+
+	return strconv.Itoa(zones), nil
 }
 
 type position struct {
 	x, y int
+}
+
+var reg = regexp.MustCompile(`(?s)\d+,\d+`)
+
+func parseCoordinates(s string) (position, error) {
+	const (
+		cNum  = 2
+		delim = ","
+		xpos  = 0
+		ypos  = 1
+	)
+
+	spl := strings.Split(s, delim)
+	if len(spl) != cNum {
+		return position{}, errors.New("wrong coordinates pair")
+	}
+
+	x, err := strconv.Atoi(spl[xpos])
+	if err != nil {
+		return position{}, fmt.Errorf("parse x to int: %w", err)
+	}
+
+	y, err := strconv.Atoi(spl[ypos])
+	if err != nil {
+		return position{}, fmt.Errorf("parse y to int: %w", err)
+	}
+
+	return position{
+		x: x,
+		y: y,
+	}, nil
+}
+
+func getLines(input io.Reader) ([]line, error) {
+	scanner := bufio.NewScanner(input)
+
+	var lines []line
+
+	const (
+		startpos = 0
+		endpos   = 1
+	)
+
+	for scanner.Scan() {
+		l := scanner.Text()
+
+		coordinates, err := parseLine(l)
+		if err != nil {
+			return nil, fmt.Errorf("get numbers: %w", err)
+		}
+
+		lines = append(lines, line{
+			start: coordinates[startpos],
+			end:   coordinates[endpos],
+		})
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("scanner error: %w", err)
+	}
+
+	return lines, nil
+}
+
+func parseLine(line string) ([]position, error) {
+	const (
+		matchNum = 2
+	)
+
+	res := make([]position, 0, matchNum)
+
+	matches := reg.FindAllString(line, -1)
+	if len(matches) != matchNum {
+		return nil, errors.New("wrong coordinates line")
+	}
+
+	for i := range matches {
+		coordinates, err := parseCoordinates(matches[i])
+		if err != nil {
+			return nil, fmt.Errorf("parse coordinates: %w", err)
+		}
+
+		res = append(res, coordinates)
+	}
+
+	return res, nil
 }
 
 type line struct {
@@ -55,14 +153,47 @@ type line struct {
 	end   position
 }
 
-type diagram struct {
-	data [][]int
+func (l line) isHorizontal() bool {
+	return l.start.y == l.end.y
+}
+
+func (l line) isVertical() bool {
+	return l.start.x == l.end.x
+}
+
+func (l line) isDiagonal() bool {
+	return math.Abs(float64(l.start.x-l.end.x)) == math.Abs(float64(l.start.y-l.end.y))
+}
+
+type filterFunc func(l line) bool
+
+func part1Filter(l line) bool {
+	return l.isHorizontal() || l.isVertical()
+}
+
+func part2Filter(l line) bool {
+	return part1Filter(l) || l.isDiagonal()
+}
+
+func filterLines(lines []line, filter filterFunc) []line {
+	filtered := lines[:0]
+	for _, x := range lines {
+		if filter(x) {
+			filtered = append(filtered, x)
+		}
+	}
+
+	return filtered
 }
 
 type dangerFunc func(n int) bool
 
-func part1DangerZone(n int) bool {
+func isDangerZone(n int) bool {
 	return n > 1
+}
+
+type diagram struct {
+	data [][]int
 }
 
 func (d diagram) dangerZones(f dangerFunc) int {
@@ -112,17 +243,21 @@ func (d diagram) String() string {
 
 func (d *diagram) draw(lines []line) {
 	for _, l := range lines {
-		if l.start.x == l.end.x {
-			d.drawY(l)
+		if l.isVertical() {
+			d.drawVertical(l)
 		}
 
-		if l.start.y == l.end.y {
-			d.drawX(l)
+		if l.isHorizontal() {
+			d.drawHorizontal(l)
+		}
+
+		if l.isDiagonal() {
+			d.drawDiagonal(l)
 		}
 	}
 }
 
-func (d *diagram) drawX(l line) {
+func (d *diagram) drawHorizontal(l line) {
 	y := l.start.y
 
 	x1, x2 := l.start.x, l.end.x
@@ -135,7 +270,7 @@ func (d *diagram) drawX(l line) {
 	}
 }
 
-func (d *diagram) drawY(l line) {
+func (d *diagram) drawVertical(l line) {
 	x := l.start.x
 
 	y1, y2 := l.start.y, l.end.y
@@ -145,6 +280,39 @@ func (d *diagram) drawY(l line) {
 
 	for i := y1; i <= y2; i++ {
 		d.data[i][x]++
+	}
+}
+
+func (d *diagram) drawDiagonal(l line) {
+	x1 := l.start.x
+	y1 := l.start.y
+
+	x2 := l.end.x
+	y2 := l.end.y
+
+	diffX := x1 - x2
+	diffY := y1 - y2
+
+	incrX := -1
+	if diffX < 0 {
+		incrX *= -1
+	}
+
+	incrY := -1
+	if diffY < 0 {
+		incrY *= -1
+	}
+
+	i, j := x1, y1
+
+	for {
+		d.data[j][i]++
+
+		if math.Abs(float64(i-x2)) == 0 && math.Abs(float64(j-y2)) == 0 {
+			break
+		}
+
+		i, j = i+incrX, j+incrY
 	}
 }
 
@@ -201,107 +369,4 @@ func getBounds(lines []line) position {
 		x: maxX,
 		y: maxY,
 	}
-}
-
-func getLines(input io.Reader) ([]line, error) {
-	scanner := bufio.NewScanner(input)
-
-	var lines []line
-
-	const (
-		startpos = 0
-		endpos   = 1
-	)
-
-	for scanner.Scan() {
-		l := scanner.Text()
-
-		coordinates, err := parseLine(l)
-		if err != nil {
-			return nil, fmt.Errorf("get numbers: %w", err)
-		}
-
-		lines = append(lines, line{
-			start: coordinates[startpos],
-			end:   coordinates[endpos],
-		})
-	}
-
-	if err := scanner.Err(); err != nil {
-		return nil, fmt.Errorf("scanner error: %w", err)
-	}
-
-	return lines, nil
-}
-
-var reg = regexp.MustCompile(`(?s)\d+,\d+`)
-
-func parseLine(line string) ([]position, error) {
-	const (
-		matchNum = 2
-	)
-
-	res := make([]position, 0, matchNum)
-
-	matches := reg.FindAllString(line, -1)
-	if len(matches) != matchNum {
-		return nil, errors.New("wrong coordinates line")
-	}
-
-	for i := range matches {
-		coordinates, err := parseCoordinates(matches[i])
-		if err != nil {
-			return nil, fmt.Errorf("parse coordinates: %w", err)
-		}
-
-		res = append(res, coordinates)
-	}
-
-	return res, nil
-}
-
-func parseCoordinates(s string) (position, error) {
-	const (
-		cNum  = 2
-		delim = ","
-		xpos  = 0
-		ypos  = 1
-	)
-
-	spl := strings.Split(s, delim)
-	if len(spl) != cNum {
-		return position{}, errors.New("wrong coordinates pair")
-	}
-
-	x, err := strconv.Atoi(spl[xpos])
-	if err != nil {
-		return position{}, fmt.Errorf("parse x to int: %w", err)
-	}
-
-	y, err := strconv.Atoi(spl[ypos])
-	if err != nil {
-		return position{}, fmt.Errorf("parse y to int: %w", err)
-	}
-
-	return position{
-		x: x,
-		y: y,
-	}, nil
-}
-
-type filterFunc func(l line) bool
-
-func part1Filter(l line) bool {
-	return l.start.x == l.end.x || l.start.y == l.end.y
-}
-
-func filterLines(lines []line, filter filterFunc) []line {
-	filtered := lines[:0]
-	for _, x := range lines {
-		if filter(x) {
-			filtered = append(filtered, x)
-		}
-	}
-
-	return filtered
 }

@@ -210,48 +210,7 @@ func Test_getLines(t *testing.T) {
 			args: args{
 				input: utils.ReaderFromFile(t, filepath.Join("testdata", "input.txt")),
 			},
-			want: []line{
-				{
-					start: position{x: 0, y: 9},
-					end:   position{x: 5, y: 9},
-				},
-				{
-					start: position{x: 8, y: 0},
-					end:   position{x: 0, y: 8},
-				},
-				{
-					start: position{x: 9, y: 4},
-					end:   position{x: 3, y: 4},
-				},
-				{
-					start: position{x: 2, y: 2},
-					end:   position{x: 2, y: 1},
-				},
-				{
-					start: position{x: 7, y: 0},
-					end:   position{x: 7, y: 4},
-				},
-				{
-					start: position{x: 6, y: 4},
-					end:   position{x: 2, y: 0},
-				},
-				{
-					start: position{x: 0, y: 9},
-					end:   position{x: 2, y: 9},
-				},
-				{
-					start: position{x: 3, y: 4},
-					end:   position{x: 1, y: 4},
-				},
-				{
-					start: position{x: 0, y: 0},
-					end:   position{x: 8, y: 8},
-				},
-				{
-					start: position{x: 5, y: 5},
-					end:   position{x: 8, y: 2},
-				},
-			},
+			want:    getTestLines(t),
 			wantErr: assert.NoError,
 		},
 	}
@@ -324,6 +283,52 @@ func Test_newDiagram(t *testing.T) {
 	}
 }
 
+func getTestLines(tb testing.TB) []line {
+	tb.Helper()
+
+	return []line{
+		{
+			start: position{x: 0, y: 9},
+			end:   position{x: 5, y: 9},
+		},
+		{
+			start: position{x: 8, y: 0},
+			end:   position{x: 0, y: 8},
+		},
+		{
+			start: position{x: 9, y: 4},
+			end:   position{x: 3, y: 4},
+		},
+		{
+			start: position{x: 2, y: 2},
+			end:   position{x: 2, y: 1},
+		},
+		{
+			start: position{x: 7, y: 0},
+			end:   position{x: 7, y: 4},
+		},
+		{
+			start: position{x: 6, y: 4},
+			end:   position{x: 2, y: 0},
+		},
+		{
+			start: position{x: 0, y: 9},
+			end:   position{x: 2, y: 9},
+		},
+		{
+			start: position{x: 3, y: 4},
+			end:   position{x: 1, y: 4},
+		},
+		{
+			start: position{x: 0, y: 0},
+			end:   position{x: 8, y: 8},
+		},
+		{
+			start: position{x: 5, y: 5},
+			end:   position{x: 8, y: 2},
+		},
+	}
+}
 func Test_filterLines(t *testing.T) {
 	type args struct {
 		lines  []line
@@ -338,48 +343,7 @@ func Test_filterLines(t *testing.T) {
 		{
 			name: "",
 			args: args{
-				lines: []line{
-					{
-						start: position{x: 0, y: 9},
-						end:   position{x: 5, y: 9},
-					},
-					{
-						start: position{x: 8, y: 0},
-						end:   position{x: 0, y: 8},
-					},
-					{
-						start: position{x: 9, y: 4},
-						end:   position{x: 3, y: 4},
-					},
-					{
-						start: position{x: 2, y: 2},
-						end:   position{x: 2, y: 1},
-					},
-					{
-						start: position{x: 7, y: 0},
-						end:   position{x: 7, y: 4},
-					},
-					{
-						start: position{x: 6, y: 4},
-						end:   position{x: 2, y: 0},
-					},
-					{
-						start: position{x: 0, y: 9},
-						end:   position{x: 2, y: 9},
-					},
-					{
-						start: position{x: 3, y: 4},
-						end:   position{x: 1, y: 4},
-					},
-					{
-						start: position{x: 0, y: 0},
-						end:   position{x: 8, y: 8},
-					},
-					{
-						start: position{x: 5, y: 5},
-						end:   position{x: 8, y: 2},
-					},
-				},
+				lines:  getTestLines(t),
 				filter: part1Filter,
 			},
 			want: []line{
@@ -406,6 +370,55 @@ func Test_filterLines(t *testing.T) {
 				{
 					start: position{x: 3, y: 4},
 					end:   position{x: 1, y: 4},
+				},
+			},
+		},
+		{
+			name: "",
+			args: args{
+				lines:  getTestLines(t),
+				filter: part2Filter,
+			},
+			want: []line{
+				{
+					start: position{x: 0, y: 9},
+					end:   position{x: 5, y: 9},
+				},
+				{
+					start: position{x: 8, y: 0},
+					end:   position{x: 0, y: 8},
+				},
+				{
+					start: position{x: 9, y: 4},
+					end:   position{x: 3, y: 4},
+				},
+				{
+					start: position{x: 2, y: 2},
+					end:   position{x: 2, y: 1},
+				},
+				{
+					start: position{x: 7, y: 0},
+					end:   position{x: 7, y: 4},
+				},
+				{
+					start: position{x: 6, y: 4},
+					end:   position{x: 2, y: 0},
+				},
+				{
+					start: position{x: 0, y: 9},
+					end:   position{x: 2, y: 9},
+				},
+				{
+					start: position{x: 3, y: 4},
+					end:   position{x: 1, y: 4},
+				},
+				{
+					start: position{x: 0, y: 0},
+					end:   position{x: 8, y: 8},
+				},
+				{
+					start: position{x: 5, y: 5},
+					end:   position{x: 8, y: 2},
 				},
 			},
 		},
@@ -508,7 +521,7 @@ func Test_drawDiagram(t *testing.T) {
 		wantDiagramPath string
 	}{
 		{
-			name: "",
+			name: "part 1 diagram",
 			args: args{
 				lines: []line{
 					{
@@ -538,6 +551,54 @@ func Test_drawDiagram(t *testing.T) {
 				},
 			},
 			wantDiagramPath: filepath.Join("testdata", "diagram_part1.txt"),
+		},
+		{
+			name: "part 2 diagram",
+			args: args{
+				lines: []line{
+					{
+						start: position{x: 0, y: 9},
+						end:   position{x: 5, y: 9},
+					},
+					{
+						start: position{x: 8, y: 0},
+						end:   position{x: 0, y: 8},
+					},
+					{
+						start: position{x: 9, y: 4},
+						end:   position{x: 3, y: 4},
+					},
+					{
+						start: position{x: 2, y: 2},
+						end:   position{x: 2, y: 1},
+					},
+					{
+						start: position{x: 7, y: 0},
+						end:   position{x: 7, y: 4},
+					},
+					{
+						start: position{x: 6, y: 4},
+						end:   position{x: 2, y: 0},
+					},
+					{
+						start: position{x: 0, y: 9},
+						end:   position{x: 2, y: 9},
+					},
+					{
+						start: position{x: 3, y: 4},
+						end:   position{x: 1, y: 4},
+					},
+					{
+						start: position{x: 0, y: 0},
+						end:   position{x: 8, y: 8},
+					},
+					{
+						start: position{x: 5, y: 5},
+						end:   position{x: 8, y: 2},
+					},
+				},
+			},
+			wantDiagramPath: filepath.Join("testdata", "diagram_part2.txt"),
 		},
 	}
 
@@ -579,7 +640,7 @@ func Test_diagram_dangerZones(t *testing.T) {
 				},
 			},
 			args: args{
-				f: part1DangerZone,
+				f: isDangerZone,
 			},
 			want: 2,
 		},
@@ -591,6 +652,192 @@ func Test_diagram_dangerZones(t *testing.T) {
 				data: tt.fields.data,
 			}
 			assert.Equalf(t, tt.want, d.dangerZones(tt.args.f), "dangerZones(%v)", tt.args.f)
+		})
+	}
+}
+
+func Test_diagram_drawDiagonal(t *testing.T) {
+	type fields struct {
+		diagram diagram
+	}
+
+	type args struct {
+		l line
+	}
+	tests := []struct {
+		name     string
+		fields   fields
+		args     args
+		expected diagram
+	}{
+		{
+			name: "8,0 -> 0,8",
+			fields: fields{
+				diagram: newDiagram(9, 9),
+			},
+			args: args{
+				l: line{
+					start: position{
+						x: 8,
+						y: 0,
+					},
+					end: position{
+						x: 0,
+						y: 8,
+					},
+				},
+			},
+			expected: diagram{
+				data: [][]int{
+					{0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+					{0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+					{0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+					{0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+					{0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+					{0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+					{0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+					{0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+					{1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				},
+			},
+		},
+		{
+			name: "1,1 -> 3,3",
+			fields: fields{
+				diagram: newDiagram(9, 9),
+			},
+			args: args{
+				l: line{
+					start: position{
+						x: 1,
+						y: 1,
+					},
+					end: position{
+						x: 3,
+						y: 3,
+					},
+				},
+			},
+			expected: diagram{
+				data: [][]int{
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				},
+			},
+		},
+		{
+			name: "9,7 -> 7,9",
+			fields: fields{
+				diagram: newDiagram(9, 9),
+			},
+			args: args{
+				l: line{
+					start: position{
+						x: 9,
+						y: 7,
+					},
+					end: position{
+						x: 7,
+						y: 9,
+					},
+				},
+			},
+			expected: diagram{
+				data: [][]int{
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, // 7
+					{0, 0, 0, 0, 0, 0, 0, 0, 1, 0}, // 8
+					{0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, // 9
+				},
+			},
+		},
+		{
+			name: "8,0 -> 0,8",
+			fields: fields{
+				diagram: newDiagram(9, 9),
+			},
+			args: args{
+				l: line{
+					start: position{
+						x: 8,
+						y: 0,
+					},
+					end: position{
+						x: 0,
+						y: 8,
+					},
+				},
+			},
+			expected: diagram{
+				data: [][]int{
+					{0, 0, 0, 0, 0, 0, 0, 0, 1, 0}, // 0
+					{0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, // 1
+					{0, 0, 0, 0, 0, 0, 1, 0, 0, 0}, // 2
+					{0, 0, 0, 0, 0, 1, 0, 0, 0, 0}, // 3
+					{0, 0, 0, 0, 1, 0, 0, 0, 0, 0}, // 4
+					{0, 0, 0, 1, 0, 0, 0, 0, 0, 0}, // 5
+					{0, 0, 1, 0, 0, 0, 0, 0, 0, 0}, // 6
+					{0, 1, 0, 0, 0, 0, 0, 0, 0, 0}, // 7
+					{1, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 8
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 9
+					// 0 1 2  3  4  5  6  7  8  9
+				},
+			},
+		},
+		{
+			name: "6,4 -> 2,0",
+			fields: fields{
+				diagram: newDiagram(9, 9),
+			},
+			args: args{
+				l: line{
+					start: position{
+						x: 6,
+						y: 4,
+					},
+					end: position{
+						x: 2,
+						y: 0,
+					},
+				},
+			},
+			expected: diagram{
+				data: [][]int{
+					{0, 0, 1, 0, 0, 0, 0, 0, 0, 0}, // 0
+					{0, 0, 0, 1, 0, 0, 0, 0, 0, 0}, // 1
+					{0, 0, 0, 0, 1, 0, 0, 0, 0, 0}, // 2
+					{0, 0, 0, 0, 0, 1, 0, 0, 0, 0}, // 3
+					{0, 0, 0, 0, 0, 0, 1, 0, 0, 0}, // 4
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 5
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 6
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 7
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 8
+					{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 9
+					// 0 1 2  3  4  5  6  7  8  9
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.fields.diagram.drawDiagonal(tt.args.l)
+
+			assert.Equal(t, tt.expected, tt.fields.diagram)
 		})
 	}
 }
