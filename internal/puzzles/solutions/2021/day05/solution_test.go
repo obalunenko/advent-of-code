@@ -83,7 +83,7 @@ func Test_solution_Part2(t *testing.T) {
 			args: args{
 				input: utils.ReaderFromFile(t, filepath.Join("testdata", "input.txt")),
 			},
-			want:    "",
+			want:    "12",
 			wantErr: assert.NoError,
 		},
 	}
@@ -537,7 +537,7 @@ func Test_drawDiagram(t *testing.T) {
 					},
 				},
 			},
-			wantDiagramPath: filepath.Join("testdata", "expected-diagram.txt"),
+			wantDiagramPath: filepath.Join("testdata", "diagram_part1.txt"),
 		},
 	}
 
