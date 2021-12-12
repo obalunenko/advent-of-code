@@ -451,6 +451,7 @@ func Test_diagram_String(t *testing.T) {
 				".1.2.",
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, tt.d.String(), "String()")
@@ -462,6 +463,7 @@ func Test_getBounds(t *testing.T) {
 	type args struct {
 		lines []line
 	}
+
 	tests := []struct {
 		name string
 		args args
@@ -503,6 +505,7 @@ func Test_getBounds(t *testing.T) {
 			},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, getBounds(tt.args.lines), "getBounds(%v)", tt.args.lines)
@@ -664,6 +667,7 @@ func Test_diagram_drawDiagonal(t *testing.T) {
 	type args struct {
 		l line
 	}
+
 	tests := []struct {
 		name     string
 		fields   fields
@@ -833,6 +837,7 @@ func Test_diagram_drawDiagonal(t *testing.T) {
 			},
 		},
 	}
+	
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.fields.diagram.drawDiagonal(tt.args.l)

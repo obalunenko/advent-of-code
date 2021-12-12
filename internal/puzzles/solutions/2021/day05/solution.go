@@ -177,6 +177,7 @@ func part2Filter(l line) bool {
 
 func filterLines(lines []line, filter filterFunc) []line {
 	filtered := lines[:0]
+
 	for _, x := range lines {
 		if filter(x) {
 			filtered = append(filtered, x)
@@ -329,7 +330,6 @@ func newDiagram(maxX, maxY int) diagram {
 }
 
 func drawDiagram(lines []line) diagram {
-
 	// get max x,y
 	bounds := getBounds(lines)
 
