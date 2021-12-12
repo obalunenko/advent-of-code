@@ -10,9 +10,9 @@ export AOC_REGRESSION_ENABLED=true
 
 REGRESSION_TESTS_PKG=$(go list -m)/tests
 
-GOTEST="go test "
+GOTEST="go test -v"
 if command -v "gotestsum" &>/dev/null; then
-  GOTEST="gotestsum --format pkgname --"
+  GOTEST="gotestsum --format testname --"
 fi
 
 ${GOTEST} -race "${REGRESSION_TESTS_PKG}"
