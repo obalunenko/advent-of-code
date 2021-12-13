@@ -48,8 +48,18 @@ changelog:
     - '^test:'
     - '^chore'
     - Merge pull request
+    - Merge remote-tracking branch
     - Merge branch
     - go mod tidy
+  groups:
+    - title: 'New Features'
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: 'Bug fixes'
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 10
+    - title: Other work
+      order: 999
 
 dockers:
 - image_templates:
@@ -209,10 +219,15 @@ publishers:
     - 'FURY_TOKEN={{ .Env.FURY_TOKEN }}'
     cmd: ./scripts/fury-upload.sh {{ .ArtifactName }}
 
+milestones:
+  - close: true
+
 release:
   extra_files:
     - glob: ./cosign.pub
   footer: |
+    **Full Changelog**: https://github.com/goreleaser/goreleaser/compare/{{ .PreviousTag }}...{{ .Tag }}
+
     ## What to do next?
 
     - Check out the [GoReleaser Pro](https://goreleaser.com/pro) distribution;
