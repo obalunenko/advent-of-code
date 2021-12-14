@@ -26,11 +26,15 @@ func (solution) Year() string {
 }
 
 func (solution) Part1(input io.Reader) (string, error) {
-	return observeFishSchool(input, 80)
+	const daysObserve = 80
+
+	return observeFishSchool(input, daysObserve)
 }
 
 func (solution) Part2(input io.Reader) (string, error) {
-	return observeFishSchool(input, 256)
+	const daysObserve = 256
+
+	return observeFishSchool(input, daysObserve)
 }
 
 func observeFishSchool(input io.Reader, days int) (string, error) {
@@ -75,15 +79,22 @@ func parseSchoolFishesStates(input io.Reader) ([]int, error) {
 	return res, nil
 }
 
+type school struct {
+	days   int
+	fishes map[int]int
+}
+
+func newSchool(daysToReproduce int) *school {
+	return &school{
+		days:   daysToReproduce,
+		fishes: make(map[int]int),
+	}
+}
+
 func (s *school) addElderFishes(fishes []int) {
 	for _, st := range fishes {
 		s.fishes[st]++
 	}
-}
-
-type school struct {
-	days   int
-	fishes map[int]int
 }
 
 func (s *school) getFishes() int {
@@ -106,13 +117,5 @@ func (s *school) populate() {
 		s.fishes[8] += s.fishes[-1]
 		s.fishes[6] += s.fishes[-1]
 		s.fishes[-1] = 0
-	}
-}
-
-func newSchool(daysToReproduce int) *school {
-
-	return &school{
-		days:   daysToReproduce,
-		fishes: make(map[int]int),
 	}
 }
