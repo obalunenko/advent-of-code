@@ -31,14 +31,20 @@ func (d Date) String() string {
 	return path.Join(d.Year, d.Day)
 }
 
+// ClientDo provides the interface for custom HTTP client implementations.
+type ClientDo interface {
+	Do(*http.Request) (*http.Response, error)
+}
+
+// Client is the default Client and is used by Get, Head, and Post.
+var Client ClientDo = http.DefaultClient
+
 // Get returns puzzle input.
 func Get(ctx context.Context, d Date, session string) ([]byte, error) {
 	req, err := createInputReq(ctx, d, session)
 	if err != nil {
 		return nil, fmt.Errorf("create input request: %w", err)
 	}
-
-	client := http.DefaultClient
 
 	const (
 		timeoutSecs = 5
@@ -49,7 +55,7 @@ func Get(ctx context.Context, d Date, session string) ([]byte, error) {
 
 	req = req.Clone(ctx)
 
-	resp, err := client.Do(req)
+	resp, err := Client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("send request: %w", err)
 	}

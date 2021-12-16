@@ -36,7 +36,7 @@ func SessionFromContext(ctx context.Context) string {
 type optsCtxKey struct{}
 
 // ContextWithOptions adds options to context.
-func ContextWithOptions(ctx context.Context, opts []puzzles.RunOption) context.Context {
+func ContextWithOptions(ctx context.Context, opts ...puzzles.RunOption) context.Context {
 	if len(opts) == 0 {
 		return ctx
 	}
