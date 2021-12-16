@@ -73,6 +73,10 @@ func part2(input io.Reader) (string, error) {
 		res += b.ribbon()
 	}
 
+	if err := scanner.Err(); err != nil {
+		return "", fmt.Errorf("scanner error: %w", err)
+	}
+
 	return strconv.Itoa(res), nil
 }
 

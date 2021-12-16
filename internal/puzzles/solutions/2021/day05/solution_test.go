@@ -1,10 +1,12 @@
 package day05
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"path/filepath"
 	"testing"
+	"testing/iotest"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -51,6 +53,14 @@ func Test_solution_Part1(t *testing.T) {
 			want:    "5",
 			wantErr: assert.NoError,
 		},
+		{
+			name: "",
+			args: args{
+				input: iotest.ErrReader(errors.New("custom error")),
+			},
+			want:    "",
+			wantErr: assert.Error,
+		},
 	}
 
 	for _, tt := range tests {
@@ -85,6 +95,14 @@ func Test_solution_Part2(t *testing.T) {
 			},
 			want:    "12",
 			wantErr: assert.NoError,
+		},
+		{
+			name: "",
+			args: args{
+				input: iotest.ErrReader(errors.New("custom error")),
+			},
+			want:    "",
+			wantErr: assert.Error,
 		},
 	}
 
@@ -212,6 +230,14 @@ func Test_getLines(t *testing.T) {
 			},
 			want:    getTestLines(t),
 			wantErr: assert.NoError,
+		},
+		{
+			name: "",
+			args: args{
+				input: iotest.ErrReader(errors.New("custom error")),
+			},
+			want:    nil,
+			wantErr: assert.Error,
 		},
 	}
 

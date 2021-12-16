@@ -152,6 +152,10 @@ func pwdCount(input io.Reader, validationFunc pwdValidationFunc) (int, error) {
 		operations++
 	}
 
+	if err := scanner.Err(); err != nil {
+		return 0, fmt.Errorf("scanner error: %w", err)
+	}
+
 	close(inchan)
 
 	for {

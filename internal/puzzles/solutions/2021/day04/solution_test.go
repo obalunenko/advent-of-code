@@ -2,10 +2,12 @@ package day04
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"path/filepath"
 	"testing"
+	"testing/iotest"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -52,6 +54,14 @@ func Test_solution_Part1(t *testing.T) {
 			want:    "4512",
 			wantErr: assert.NoError,
 		},
+		{
+			name: "",
+			args: args{
+				input: iotest.ErrReader(errors.New("custom error")),
+			},
+			want:    "",
+			wantErr: assert.Error,
+		},
 	}
 
 	for _, tt := range tests {
@@ -86,6 +96,14 @@ func Test_solution_Part2(t *testing.T) {
 			},
 			want:    "1924",
 			wantErr: assert.NoError,
+		},
+		{
+			name: "",
+			args: args{
+				input: iotest.ErrReader(errors.New("custom error")),
+			},
+			want:    "",
+			wantErr: assert.Error,
 		},
 	}
 
@@ -165,6 +183,14 @@ func Test_newBingoGame(t *testing.T) {
 				},
 			},
 			wantErr: assert.NoError,
+		},
+		{
+			name: "",
+			args: args{
+				input: iotest.ErrReader(errors.New("custom error")),
+			},
+			want:    nil,
+			wantErr: assert.Error,
 		},
 	}
 

@@ -215,5 +215,9 @@ func runWires(input io.Reader) ([]map[pos]int, error) {
 		res = append(res, w.m)
 	}
 
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("scanner error: %w", err)
+	}
+
 	return res, nil
 }
