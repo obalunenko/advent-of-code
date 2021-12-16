@@ -1,9 +1,11 @@
 package day03
 
 import (
+	"errors"
 	"io"
 	"strings"
 	"testing"
+	"testing/iotest"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -65,6 +67,14 @@ func Test_solution_Part1(t *testing.T) {
 			},
 			want:    "135",
 			wantErr: false,
+		},
+		{
+			name: "",
+			args: args{
+				input: iotest.ErrReader(errors.New("custom error")),
+			},
+			want:    "",
+			wantErr: true,
 		},
 	}
 
@@ -160,6 +170,14 @@ func Test_solution_Part2(t *testing.T) {
 			},
 			want:    "410",
 			wantErr: false,
+		},
+		{
+			name: "",
+			args: args{
+				input: iotest.ErrReader(errors.New("custom error")),
+			},
+			want:    "",
+			wantErr: true,
 		},
 	}
 
