@@ -10,8 +10,8 @@ import (
 	_ "github.com/matm/gocov-html"
 	_ "github.com/mattn/goveralls"
 	_ "github.com/obalunenko/coverbadger/cmd/coverbadger"
-	_ "github.com/vasi-stripe/gogroup/cmd/gogroup"
 	_ "golang.org/x/tools/cmd/cover"
+	_ "golang.org/x/tools/cmd/goimports"
 	_ "golang.org/x/tools/cmd/stringer"
 	_ "gotest.tools/gotestsum"
 )
