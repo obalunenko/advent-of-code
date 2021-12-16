@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"strings"
 	"testing"
@@ -38,8 +37,12 @@ func (m mockSolver) Year() string {
 	return m.year
 }
 
-func (m mockSolver) Part1(input io.Reader) (string, error) {
-	split, err := read(input)
+func (m mockSolver) Day() string {
+	return m.name
+}
+
+func (m mockSolver) Part1(in io.Reader) (string, error) {
+	split, err := read(in)
 	if err != nil {
 		return "", err
 	}
@@ -47,8 +50,17 @@ func (m mockSolver) Part1(input io.Reader) (string, error) {
 	return split[1], nil
 }
 
-func read(input io.Reader) ([]string, error) {
-	all, err := io.ReadAll(input)
+func (m mockSolver) Part2(in io.Reader) (string, error) {
+	split, err := read(in)
+	if err != nil {
+		return "", err
+	}
+
+	return split[2], nil
+}
+
+func read(in io.Reader) ([]string, error) {
+	all, err := io.ReadAll(in)
 	if err != nil {
 		return nil, err
 	}
@@ -60,19 +72,6 @@ func read(input io.Reader) ([]string, error) {
 	}
 
 	return split, nil
-}
-
-func (m mockSolver) Part2(input io.Reader) (string, error) {
-	split, err := read(input)
-	if err != nil {
-		return "", err
-	}
-
-	return split[2], nil
-}
-
-func (m mockSolver) Day() string {
-	return m.name
 }
 
 func TestRun(t *testing.T) {
@@ -90,7 +89,7 @@ func TestRun(t *testing.T) {
 		puzzles.UnregisterAllSolvers(t)
 	})
 
-	r := ioutil.NopCloser(strings.NewReader("1,2,3"))
+	r := io.NopCloser(strings.NewReader("1,2,3"))
 
 	input.Client = &mockHTTPClient{
 		MockDo: func(req *http.Request) (*http.Response, error) {
