@@ -10,6 +10,10 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
+func nilContext() context.Context {
+	return nil
+}
+
 func TestContext(t *testing.T) {
 	sess := "test_session"
 
@@ -18,7 +22,7 @@ func TestContext(t *testing.T) {
 	got := command.SessionFromContext(ctx)
 	assert.Equal(t, sess, got)
 
-	got = command.SessionFromContext(nil)
+	got = command.SessionFromContext(nilContext())
 	assert.Equal(t, "", got)
 
 	got = command.SessionFromContext(context.Background())
@@ -31,7 +35,7 @@ func TestContext(t *testing.T) {
 	gotopts := command.OptionsFromContext(ctx)
 	assert.Equal(t, []puzzles.RunOption{opt}, gotopts)
 
-	gotopts = command.OptionsFromContext(nil)
+	gotopts = command.OptionsFromContext(nilContext())
 	assert.Equal(t, []puzzles.RunOption{}, gotopts)
 
 	gotopts = command.OptionsFromContext(context.Background())

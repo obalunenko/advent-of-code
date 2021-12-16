@@ -147,7 +147,7 @@ func TestRun(t *testing.T) {
 			name: "mockSolver",
 		})
 	})
-	
+
 	defer puzzles.UnregisterAllSolvers(t)
 
 	s, err := puzzles.GetSolver("2019", "mockSolver")
