@@ -96,14 +96,25 @@ func GetYears() []string {
 	return list
 }
 
+var (
+	// ErrYearMissed returns when year is empty.
+	ErrYearMissed = errors.New("empty puzzle year")
+	// ErrDayMissed returns when day is empty.
+	ErrDayMissed = errors.New("empty puzzle day")
+	// ErrUnknownYear returns when no puzzle find for year.
+	ErrUnknownYear = errors.New("unknown puzzle year")
+	// ErrUnknownDay returns when no puzzle find for day.
+	ErrUnknownDay = errors.New("unknown puzzle day")
+)
+
 // GetSolver returns registered solver by passed puzzle day.
 func GetSolver(year, day string) (Solver, error) {
 	if year == "" {
-		return nil, errors.New("empty puzzle year")
+		return nil, ErrYearMissed
 	}
 
 	if day == "" {
-		return nil, errors.New("empty puzzle day")
+		return nil, ErrDayMissed
 	}
 
 	solversMu.Lock()
@@ -112,12 +123,12 @@ func GetSolver(year, day string) (Solver, error) {
 	solversYear, exist := solvers[year]
 
 	if !exist {
-		return nil, fmt.Errorf("unknown puzzle year [%s]", year)
+		return nil, fmt.Errorf("%s: %w", year, ErrUnknownYear)
 	}
 
 	s, exist := solversYear[day]
 	if !exist {
-		return nil, fmt.Errorf("unknown puzzle day [%s]", day)
+		return nil, fmt.Errorf("%s: %w", day, ErrUnknownDay)
 	}
 
 	return s, nil

@@ -1,6 +1,7 @@
 package puzzles_test
 
 import (
+	"errors"
 	"io"
 	"strings"
 	"testing"
@@ -87,6 +88,10 @@ func makeAndRegisterSolvers(tb testing.TB) {
 func TestGetSolver(t *testing.T) {
 	makeAndRegisterSolvers(t)
 
+	require.Panics(t, func() {
+		puzzles.Register(nil)
+	})
+
 	// get existing solver
 	gotSolver, err := puzzles.GetSolver("2019", "mock")
 	assert.NoError(t, err)
@@ -111,6 +116,18 @@ func TestGetSolver(t *testing.T) {
 	gotSolver, err = puzzles.GetSolver("2018", "not-existed")
 	assert.Error(t, err)
 	assert.IsType(t, nil, gotSolver)
+
+	// get empty year solver
+	gotSolver, err = puzzles.GetSolver("", "anotherMock")
+	assert.Error(t, err)
+	assert.True(t, errors.Is(err, puzzles.ErrYearMissed))
+	assert.Empty(t, gotSolver)
+
+	// get empty day solver
+	gotSolver, err = puzzles.GetSolver("2019", "")
+	assert.Error(t, err)
+	assert.True(t, errors.Is(err, puzzles.ErrDayMissed))
+	assert.Empty(t, gotSolver)
 
 	assert.Panics(t, func() {
 		puzzles.UnregisterAllSolvers(nil)
