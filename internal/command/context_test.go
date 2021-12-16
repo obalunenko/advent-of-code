@@ -18,10 +18,22 @@ func TestContext(t *testing.T) {
 	got := command.SessionFromContext(ctx)
 	assert.Equal(t, sess, got)
 
+	got = command.SessionFromContext(nil)
+	assert.Equal(t, "", got)
+
+	got = command.SessionFromContext(context.Background())
+	assert.Equal(t, "", got)
+
 	opt := puzzles.WithElapsed()
 
 	ctx = command.ContextWithOptions(ctx, opt)
 
 	gotopts := command.OptionsFromContext(ctx)
 	assert.Equal(t, []puzzles.RunOption{opt}, gotopts)
+
+	gotopts = command.OptionsFromContext(nil)
+	assert.Equal(t, []puzzles.RunOption{}, gotopts)
+
+	gotopts = command.OptionsFromContext(context.Background())
+	assert.Equal(t, []puzzles.RunOption{}, gotopts)
 }
