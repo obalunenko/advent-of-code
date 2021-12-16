@@ -5,6 +5,7 @@ import (
 	"io"
 	"strings"
 	"testing"
+	"testing/iotest"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -139,6 +140,14 @@ func TestRun(t *testing.T) {
 		year: "2019",
 		name: "mockSolver",
 	})
+
+	assert.Panics(t, func() {
+		puzzles.Register(mockSolver{
+			year: "2019",
+			name: "mockSolver",
+		})
+	})
+	
 	defer puzzles.UnregisterAllSolvers(t)
 
 	s, err := puzzles.GetSolver("2019", "mockSolver")
@@ -168,6 +177,20 @@ func TestRun(t *testing.T) {
 				Part2: "part 2 of mockSolver",
 			},
 			wantErr: false,
+		},
+		{
+			name: "",
+			args: args{
+				solver: s,
+				input:  io.NopCloser(iotest.ErrReader(errors.New("custom error"))),
+			},
+			want: puzzles.Result{
+				Year:  "2019",
+				Name:  "mockSolver",
+				Part1: "part 1 of mockSolver",
+				Part2: "part 2 of mockSolver",
+			},
+			wantErr: true,
 		},
 	}
 

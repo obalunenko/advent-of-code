@@ -28,15 +28,15 @@ var (
 // If Register is called twice with the same name or if solver is nil,
 // it panics.
 func Register(solver Solver) {
+	if solver == nil {
+		panic("puzzle: Register solver is nil")
+	}
+
 	year := solver.Year()
 	name := solver.Day()
 
 	solversMu.Lock()
 	defer solversMu.Unlock()
-
-	if solver == nil {
-		panic("puzzle: Register solver is nil")
-	}
 
 	yearSolvers, exist := solvers[year]
 	if !exist {
