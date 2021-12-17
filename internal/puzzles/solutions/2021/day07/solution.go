@@ -106,6 +106,9 @@ func makeMatrix(crabs []int) [][]int {
 }
 
 type swarm struct {
+	// FIXME(@obalunenko): For matrix creation find the most far crab an use it as max in header, each unit increments 1.
+	// 	For calculation use modifier - number of crabs on each position.
+	crabsPePos  map[int]int
 	crabsMatrix [][]int
 }
 
