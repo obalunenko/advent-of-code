@@ -6,6 +6,8 @@ import (
 	"io"
 	"sort"
 	"strconv"
+	"strings"
+	"text/tabwriter"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 	"github.com/obalunenko/advent-of-code/internal/puzzles/common/utils"
@@ -33,7 +35,9 @@ func (solution) Part1(input io.Reader) (string, error) {
 
 	s := makeSwarm(crabs)
 
-	s.calcDistances()
+	s.calcDistances(part1Cost)
+
+	fmt.Println(s.String())
 
 	cost := s.minDistanceCost()
 
@@ -41,7 +45,20 @@ func (solution) Part1(input io.Reader) (string, error) {
 }
 
 func (solution) Part2(input io.Reader) (string, error) {
-	return "", puzzles.ErrNotImplemented
+	crabs, err := getCrabs(input)
+	if err != nil {
+		return "", fmt.Errorf("get crabs: %w", err)
+	}
+
+	s := makeSwarm(crabs)
+
+	s.calcDistances(part2Cost)
+
+	fmt.Println(s.String())
+
+	cost := s.minDistanceCost()
+
+	return strconv.Itoa(cost), nil
 }
 
 func getCrabs(input io.Reader) ([]int, error) {
@@ -92,13 +109,60 @@ type swarm struct {
 	crabsMatrix [][]int
 }
 
+func (s swarm) String() string {
+	var buf strings.Builder
+
+	w := tabwriter.NewWriter(&buf, 0, 0, 1, ' ', tabwriter.TabIndent)
+
+	for _, m := range s.crabsMatrix {
+		for _, n := range m {
+			s := "\t"
+
+			if n != undef {
+				s = strconv.Itoa(n)
+			}
+
+			if _, err := fmt.Fprintf(w, `| %s |`, s); err != nil {
+				panic(err)
+			}
+		}
+
+		if _, err := fmt.Fprintln(w); err != nil {
+			panic(err)
+		}
+	}
+
+	if err := w.Flush(); err != nil {
+		panic(err)
+	}
+
+	return buf.String()
+}
+
 func makeSwarm(crabs []int) swarm {
 	return swarm{
 		crabsMatrix: makeMatrix(crabs),
 	}
 }
 
-func (s *swarm) calcDistances() {
+type fuelCostFunc func(p int) int
+
+func part1Cost(p int) int {
+	return p
+}
+
+func part2Cost(p int) int {
+	// a_{n}=a_{1}+(n-1)d
+	// a(4) = 1 + (4-1)*1
+	an := 1 + 1*(p-1)
+
+	// s_{n}=(a_{1}+a_{n})/2*n
+	s := ((1 + an) * p) / 2
+
+	return s
+}
+
+func (s *swarm) calcDistances(cost fuelCostFunc) {
 	for i := 1; i < len(s.crabsMatrix); i++ {
 		for j := 1; j < len(s.crabsMatrix); j++ {
 			p := s.crabsMatrix[i][0] - s.crabsMatrix[0][j]
@@ -106,7 +170,7 @@ func (s *swarm) calcDistances() {
 				p *= -1
 			}
 
-			s.crabsMatrix[i][j] = p
+			s.crabsMatrix[i][j] = cost(p)
 		}
 	}
 }

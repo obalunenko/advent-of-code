@@ -87,9 +87,9 @@ func Test_solution_Part2(t *testing.T) {
 		{
 			name: "test example from description",
 			args: args{
-				input: strings.NewReader(""),
+				input: strings.NewReader("16,1,2,0,4,2,7,1,2,14"),
 			},
-			want:    "",
+			want:    "168",
 			wantErr: assert.NoError,
 		},
 		{
@@ -150,9 +150,15 @@ func Test_swarm_calcDistances(t *testing.T) {
 	type fields struct {
 		crabsMatrix [][]int
 	}
+
+	type args struct {
+		costFunc fuelCostFunc
+	}
+
 	tests := []struct {
 		name     string
 		fields   fields
+		args     args
 		expected *swarm
 	}{
 		{
@@ -166,6 +172,9 @@ func Test_swarm_calcDistances(t *testing.T) {
 					{4, 0, 0, 0, 0},
 				},
 			},
+			args: args{
+				costFunc: part1Cost,
+			},
 			expected: &swarm{
 				crabsMatrix: [][]int{
 					{undef, 1, 2, 3, 4},
@@ -176,6 +185,30 @@ func Test_swarm_calcDistances(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "",
+			fields: fields{
+				crabsMatrix: [][]int{
+					{undef, 1, 2, 3, 4},
+					{1, 0, 0, 0, 0},
+					{2, 0, 0, 0, 0},
+					{3, 0, 0, 0, 0},
+					{4, 0, 0, 0, 0},
+				},
+			},
+			args: args{
+				costFunc: part2Cost,
+			},
+			expected: &swarm{
+				crabsMatrix: [][]int{
+					{undef, 1, 2, 3, 4},
+					{1, 0, 1, 3, 6},
+					{2, 1, 0, 1, 3},
+					{3, 3, 1, 0, 1},
+					{4, 6, 3, 1, 0},
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -183,7 +216,8 @@ func Test_swarm_calcDistances(t *testing.T) {
 			s := &swarm{
 				crabsMatrix: tt.fields.crabsMatrix,
 			}
-			s.calcDistances()
+
+			s.calcDistances(tt.args.costFunc)
 
 			assert.Equal(t, tt.expected, s)
 		})
@@ -220,6 +254,96 @@ func Test_swarm_minDistanceCost(t *testing.T) {
 			}
 
 			assert.Equalf(t, tt.want, s.minDistanceCost(), "minDistanceCost()")
+		})
+	}
+}
+
+func Test_part1Cost(t *testing.T) {
+	type args struct {
+		p int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "",
+			args: args{
+				p: 2,
+			},
+			want: 2,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, part1Cost(tt.args.p), "part1Cost(%v)", tt.args.p)
+		})
+	}
+}
+
+func Test_part2Cost(t *testing.T) {
+	type args struct {
+		p int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "",
+			args: args{
+				p: 3,
+			},
+			want: 6,
+		},
+		{
+			name: "",
+			args: args{
+				p: 4,
+			},
+			want: 10,
+		},
+		{
+			name: "",
+			args: args{
+				p: 5,
+			},
+			want: 15,
+		},
+		{
+			name: "",
+			args: args{
+				p: 9,
+			},
+			want: 45,
+		},
+		{
+			name: "",
+			args: args{
+				p: 11,
+			},
+			want: 66,
+		},
+		{
+			name: "",
+			args: args{
+				p: 16,
+			},
+			want: 136,
+		},
+		{
+			name: "",
+			args: args{
+				p: 15,
+			},
+			want: 120,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, part2Cost(tt.args.p), "part1Cost(%v)", tt.args.p)
 		})
 	}
 }
