@@ -73,9 +73,21 @@ func menu(ctx context.Context) cli.ActionFunc {
 
 		years := puzzles.GetYears()
 
+		items := append(years, exit)
+
+		searcher := func(input string, index int) bool {
+			itm := items[index]
+
+			itm = strings.ReplaceAll(strings.ToLower(itm), " ", "")
+
+			input = strings.ReplaceAll(strings.ToLower(input), " ", "")
+
+			return strings.Contains(itm, input)
+		}
+
 		prompt := promptui.Select{
 			Label:             "Years menu (exit' for exit)",
-			Items:             append(years, exit),
+			Items:             items,
 			Size:              pageSize,
 			CursorPos:         0,
 			IsVimMode:         false,
@@ -83,9 +95,9 @@ func menu(ctx context.Context) cli.ActionFunc {
 			HideSelected:      false,
 			Templates:         nil,
 			Keys:              nil,
-			Searcher:          nil,
+			Searcher:          searcher,
 			StartInSearchMode: false,
-			Pointer:           nil,
+			Pointer:           promptui.DefaultCursor,
 			Stdin:             nil,
 			Stdout:            nil,
 		}
@@ -97,9 +109,21 @@ func menu(ctx context.Context) cli.ActionFunc {
 func menuPuzzle(ctx context.Context, year string) error {
 	solvers := puzzles.DaysByYear(year)
 
+	items := append(solvers, back, exit)
+
+	searcher := func(input string, index int) bool {
+		itm := items[index]
+
+		itm = strings.ReplaceAll(strings.ToLower(itm), " ", "")
+
+		input = strings.ReplaceAll(strings.ToLower(input), " ", "")
+
+		return strings.Contains(itm, input)
+	}
+
 	prompt := promptui.Select{
 		Label:             "Puzzles menu (exit' for exit; back - to return to year selection)",
-		Items:             append(solvers, back, exit),
+		Items:             items,
 		Size:              pageSize,
 		CursorPos:         0,
 		IsVimMode:         false,
@@ -107,7 +131,7 @@ func menuPuzzle(ctx context.Context, year string) error {
 		HideSelected:      false,
 		Templates:         nil,
 		Keys:              nil,
-		Searcher:          nil,
+		Searcher:          searcher,
 		StartInSearchMode: false,
 		Pointer:           promptui.DefaultCursor,
 		Stdin:             nil,
