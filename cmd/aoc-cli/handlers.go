@@ -11,7 +11,7 @@ import (
 
 	"github.com/briandowns/spinner"
 	"github.com/manifoldco/promptui"
-	"github.com/manifoldco/promptui/list"
+	promptlist "github.com/manifoldco/promptui/list"
 	log "github.com/obalunenko/logger"
 	"github.com/urfave/cli/v2"
 
@@ -97,29 +97,6 @@ func menu(ctx context.Context) cli.ActionFunc {
 	}
 }
 
-func makeMenuItemsList(list []string, commands ...string) []string {
-	items := make([]string, 0, len(list)+len(commands))
-
-	items = append(items, list...)
-
-	items = append(items, commands...)
-
-	return items
-}
-
-func searcher(items []string) list.Searcher {
-	return func(input string, index int) bool {
-
-		itm := items[index]
-
-		itm = strings.ReplaceAll(strings.ToLower(itm), " ", "")
-
-		input = strings.ReplaceAll(strings.ToLower(input), " ", "")
-
-		return strings.Contains(itm, input)
-	}
-}
-
 func menuPuzzle(ctx context.Context, year string) error {
 	solvers := puzzles.DaysByYear(year)
 
@@ -143,6 +120,28 @@ func menuPuzzle(ctx context.Context, year string) error {
 	}
 
 	return handlePuzzleChoices(ctx, year, prompt)
+}
+
+func makeMenuItemsList(list []string, commands ...string) []string {
+	items := make([]string, 0, len(list)+len(commands))
+
+	items = append(items, list...)
+
+	items = append(items, commands...)
+
+	return items
+}
+
+func searcher(items []string) promptlist.Searcher {
+	return func(input string, index int) bool {
+		itm := items[index]
+
+		itm = strings.ReplaceAll(strings.ToLower(itm), " ", "")
+
+		input = strings.ReplaceAll(strings.ToLower(input), " ", "")
+
+		return strings.Contains(itm, input)
+	}
 }
 
 func handleYearChoices(ctx context.Context, opt promptui.Select) error {
