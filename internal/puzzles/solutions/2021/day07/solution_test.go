@@ -127,15 +127,15 @@ func Test_makeMatrix(t *testing.T) {
 			name: "",
 			args: args{
 				crabs: []int{
-					1, 45, 3, 4,
+					1, 1, 0, 5,
 				},
 			},
 			want: [][]int{
-				{undef, 1, 45, 3, 4},
-				{1, 0, 0, 0, 0},
-				{45, 0, 0, 0, 0},
-				{3, 0, 0, 0, 0},
-				{4, 0, 0, 0, 0},
+				{undef, 0, 1, 2, 3, 4, 5},
+				{0, 0, 0, 0, 0, 0, 0},
+				{1, 0, 0, 0, 0, 0, 0},
+				{1, 0, 0, 0, 0, 0, 0},
+				{5, 0, 0, 0, 0, 0, 0},
 			},
 		},
 	}
@@ -148,7 +148,7 @@ func Test_makeMatrix(t *testing.T) {
 
 func Test_swarm_calcDistances(t *testing.T) {
 	type fields struct {
-		crabsMatrix [][]int
+		crabs []int
 	}
 
 	type args struct {
@@ -159,53 +159,26 @@ func Test_swarm_calcDistances(t *testing.T) {
 		name     string
 		fields   fields
 		args     args
-		expected *swarm
+		expected swarm
 	}{
 		{
 			name: "",
 			fields: fields{
-				crabsMatrix: [][]int{
-					{undef, 1, 2, 3, 4},
-					{1, 0, 0, 0, 0},
-					{2, 0, 0, 0, 0},
-					{3, 0, 0, 0, 0},
-					{4, 0, 0, 0, 0},
-				},
+				crabs: []int{1, 1, 0, 5},
 			},
+
 			args: args{
 				costFunc: part1Cost,
 			},
-			expected: &swarm{
+			expected: swarm{
+				crabsNum:     4,
+				distancesNum: 6,
 				crabsMatrix: [][]int{
-					{undef, 1, 2, 3, 4},
-					{1, 0, 1, 2, 3},
-					{2, 1, 0, 1, 2},
-					{3, 2, 1, 0, 1},
-					{4, 3, 2, 1, 0},
-				},
-			},
-		},
-		{
-			name: "",
-			fields: fields{
-				crabsMatrix: [][]int{
-					{undef, 1, 2, 3, 4},
-					{1, 0, 0, 0, 0},
-					{2, 0, 0, 0, 0},
-					{3, 0, 0, 0, 0},
-					{4, 0, 0, 0, 0},
-				},
-			},
-			args: args{
-				costFunc: part2Cost,
-			},
-			expected: &swarm{
-				crabsMatrix: [][]int{
-					{undef, 1, 2, 3, 4},
-					{1, 0, 1, 3, 6},
-					{2, 1, 0, 1, 3},
-					{3, 3, 1, 0, 1},
-					{4, 6, 3, 1, 0},
+					{undef, 0, 1, 2, 3, 4, 5},
+					{0, 0, 1, 2, 3, 4, 5},
+					{1, 1, 0, 1, 2, 3, 4},
+					{1, 1, 0, 1, 2, 3, 4},
+					{5, 5, 4, 3, 2, 1, 0},
 				},
 			},
 		},
@@ -213,47 +186,11 @@ func Test_swarm_calcDistances(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &swarm{
-				crabsMatrix: tt.fields.crabsMatrix,
-			}
+			s := makeSwarm(tt.fields.crabs)
 
 			s.calcDistances(tt.args.costFunc)
 
 			assert.Equal(t, tt.expected, s)
-		})
-	}
-}
-
-func Test_swarm_minDistanceCost(t *testing.T) {
-	type fields struct {
-		crabsMatrix [][]int
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		want   int
-	}{
-		{
-			name: "",
-			fields: fields{
-				crabsMatrix: [][]int{
-					{undef, 1, 2, 3, 4},
-					{1, 0, 1, 2, 3},
-					{2, 1, 0, 1, 2},
-					{3, 2, 1, 0, 1},
-					{4, 3, 2, 1, 0},
-				},
-			},
-			want: 4,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := swarm{
-				crabsMatrix: tt.fields.crabsMatrix,
-			}
-
-			assert.Equalf(t, tt.want, s.minDistanceCost(), "minDistanceCost()")
 		})
 	}
 }
@@ -344,6 +281,71 @@ func Test_part2Cost(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, part2Cost(tt.args.p), "part1Cost(%v)", tt.args.p)
+		})
+	}
+}
+
+func Test_makeSwarm(t *testing.T) {
+	type args struct {
+		crabs []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want swarm
+	}{
+		{
+			name: "",
+			args: args{
+				crabs: []int{1, 1, 0, 5},
+			},
+			want: swarm{
+				crabsNum:     4,
+				distancesNum: 6,
+				crabsMatrix: [][]int{
+					{undef, 0, 1, 2, 3, 4, 5},
+					{0, 0, 0, 0, 0, 0, 0},
+					{1, 0, 0, 0, 0, 0, 0},
+					{1, 0, 0, 0, 0, 0, 0},
+					{5, 0, 0, 0, 0, 0, 0},
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, makeSwarm(tt.args.crabs), "makeSwarm(%v)", tt.args.crabs)
+		})
+	}
+}
+
+func Test_minDistanceCost(t *testing.T) {
+	type args struct {
+		matrix [][]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "",
+			args: args{
+				matrix: [][]int{
+					{undef, 0, 1, 2, 3, 4, 5},
+					{0, 0, 1, 2, 3, 4, 5},
+					{1, 1, 0, 1, 2, 3, 4},
+					{1, 1, 0, 1, 2, 3, 4},
+					{5, 5, 4, 3, 2, 1, 0},
+				},
+			},
+			want: 5,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, minDistanceCost(tt.args.matrix), "minDistanceCost(%v)", tt.args.matrix)
 		})
 	}
 }

@@ -37,8 +37,6 @@ func (solution) Part1(input io.Reader) (string, error) {
 
 	s.calcDistances(part1Cost)
 
-	fmt.Println(s.String())
-
 	cost := s.minDistanceCost()
 
 	return strconv.Itoa(cost), nil
@@ -54,8 +52,6 @@ func (solution) Part2(input io.Reader) (string, error) {
 
 	s.calcDistances(part2Cost)
 
-	fmt.Println(s.String())
-
 	cost := s.minDistanceCost()
 
 	return strconv.Itoa(cost), nil
@@ -67,8 +63,6 @@ func getCrabs(input io.Reader) ([]int, error) {
 		return nil, fmt.Errorf("parse int slice from reader: %w", err)
 	}
 
-	sort.Ints(crabs)
-
 	return crabs, nil
 }
 
@@ -78,38 +72,50 @@ const (
 
 func makeMatrix(crabs []int) [][]int {
 	const (
-		header    = 1
-		headerPos = 0 // matrix[y][x] - where 0 - x
+		header = 1
 	)
 
-	cnum := len(crabs) + header
+	sort.Ints(crabs)
 
-	matrix := make([][]int, cnum)
+	cnum := len(crabs)
 
-	// matrix[i][j]
-	for i := 0; i < cnum; i++ {
-		matrix[i] = make([]int, cnum)
+	max := crabs[cnum-1]
 
-		for j := 0; j < cnum; j++ {
-			switch {
-			case i == headerPos && j == headerPos:
-				matrix[i][j] = undef
-			case i == headerPos:
-				matrix[i][j] = crabs[j-1]
-			case j == headerPos:
-				matrix[i][j] = crabs[i-1]
+	matrix := make([][]int, cnum+header)
+
+	// matrix[i][j].
+	// 	i - crabs; j - all positions from 0 to max
+	for i := 0; i < cnum+header; i++ {
+		matrix[i] = make([]int, max+header+1)
+
+		if i == 0 {
+			matrix[i][0] = undef
+
+			for j := 1; j <= max+header; j++ {
+				matrix[i][j] = j - 1
 			}
+
+			continue
 		}
+
+		matrix[i][0] = crabs[i-1]
 	}
 
 	return matrix
 }
 
 type swarm struct {
-	// FIXME(@obalunenko): For matrix creation find the most far crab an use it as max in header, each unit increments 1.
-	// 	For calculation use modifier - number of crabs on each position.
-	crabsPePos  map[int]int
-	crabsMatrix [][]int
+	crabsNum     int
+	distancesNum int
+	crabsMatrix  [][]int
+}
+
+func (s swarm) getMatrixILen() int {
+	return s.crabsNum + 1
+}
+
+func (s swarm) getMatrixJLen() int {
+	return s.distancesNum + 1
 }
 
 func (s swarm) String() string {
@@ -143,8 +149,16 @@ func (s swarm) String() string {
 }
 
 func makeSwarm(crabs []int) swarm {
+	matrix := makeMatrix(crabs)
+
+	crabsNum := len(matrix)
+
+	distNum := len(matrix[0])
+
 	return swarm{
-		crabsMatrix: makeMatrix(crabs),
+		crabsNum:     crabsNum - 1,
+		distancesNum: distNum - 1,
+		crabsMatrix:  matrix,
 	}
 }
 
@@ -166,8 +180,8 @@ func part2Cost(p int) int {
 }
 
 func (s *swarm) calcDistances(cost fuelCostFunc) {
-	for i := 1; i < len(s.crabsMatrix); i++ {
-		for j := 1; j < len(s.crabsMatrix); j++ {
+	for i := 1; i < s.getMatrixILen(); i++ {
+		for j := 1; j < s.getMatrixJLen(); j++ {
 			p := s.crabsMatrix[i][0] - s.crabsMatrix[0][j]
 			if p < 0 {
 				p *= -1
@@ -179,16 +193,23 @@ func (s *swarm) calcDistances(cost fuelCostFunc) {
 }
 
 func (s swarm) minDistanceCost() int {
+	return minDistanceCost(s.crabsMatrix)
+}
+
+func minDistanceCost(matrix [][]int) int {
 	var min int
 
-	for i := 1; i < len(s.crabsMatrix); i++ {
+	ilen := len(matrix)
+	jlen := len(matrix[0])
+
+	for j := 1; j < jlen; j++ {
 		var f int
 
-		for j := 1; j < len(s.crabsMatrix); j++ {
-			f += s.crabsMatrix[i][j]
+		for i := 1; i < ilen; i++ {
+			f += matrix[i][j]
 		}
 
-		if i == 1 {
+		if j == 1 {
 			min = f
 		}
 
