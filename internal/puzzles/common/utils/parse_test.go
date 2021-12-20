@@ -67,6 +67,15 @@ func TestParseInts(t *testing.T) {
 			want:    nil,
 			wantErr: assert.Error,
 		},
+		{
+			name: "broken int",
+			args: args{
+				in:  strings.NewReader("1,\n2\n3\n4\n5"),
+				sep: "",
+			},
+			want:    nil,
+			wantErr: assert.Error,
+		},
 	}
 
 	for _, tt := range tests {
