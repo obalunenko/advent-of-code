@@ -30,7 +30,7 @@ func TestReaderFromFile(t *testing.T) {
 			want: strings.NewReader("Hello there!\n"),
 		},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ReaderFromFile(tt.args.tb, tt.args.fpath)
