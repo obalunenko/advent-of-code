@@ -6,8 +6,6 @@ import (
 	"io"
 	"sort"
 	"strconv"
-	"strings"
-	"text/tabwriter"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 	"github.com/obalunenko/advent-of-code/internal/puzzles/common/utils"
@@ -116,36 +114,6 @@ func (s swarm) getMatrixILen() int {
 
 func (s swarm) getMatrixJLen() int {
 	return s.distancesNum + 1
-}
-
-func (s swarm) String() string {
-	var buf strings.Builder
-
-	w := tabwriter.NewWriter(&buf, 0, 0, 1, ' ', tabwriter.TabIndent)
-
-	for _, m := range s.crabsMatrix {
-		for _, n := range m {
-			s := "\t"
-
-			if n != undef {
-				s = strconv.Itoa(n)
-			}
-
-			if _, err := fmt.Fprintf(w, `| %s |`, s); err != nil {
-				panic(err)
-			}
-		}
-
-		if _, err := fmt.Fprintln(w); err != nil {
-			panic(err)
-		}
-	}
-
-	if err := w.Flush(); err != nil {
-		panic(err)
-	}
-
-	return buf.String()
 }
 
 func makeSwarm(crabs []int) swarm {
