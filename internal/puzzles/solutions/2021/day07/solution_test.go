@@ -118,6 +118,7 @@ func Test_makeMatrix(t *testing.T) {
 	type args struct {
 		crabs []int
 	}
+
 	tests := []struct {
 		name string
 		args args
@@ -139,6 +140,7 @@ func Test_makeMatrix(t *testing.T) {
 			},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, makeMatrix(tt.args.crabs), "makeMatrix(%v)", tt.args.crabs)
@@ -199,6 +201,7 @@ func Test_part1Cost(t *testing.T) {
 	type args struct {
 		p int
 	}
+
 	tests := []struct {
 		name string
 		args args
@@ -212,6 +215,7 @@ func Test_part1Cost(t *testing.T) {
 			want: 2,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, part1Cost(tt.args.p), "part1Cost(%v)", tt.args.p)
@@ -223,6 +227,7 @@ func Test_part2Cost(t *testing.T) {
 	type args struct {
 		p int
 	}
+
 	tests := []struct {
 		name string
 		args args
@@ -278,6 +283,7 @@ func Test_part2Cost(t *testing.T) {
 			want: 120,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, part2Cost(tt.args.p), "part1Cost(%v)", tt.args.p)
@@ -289,6 +295,7 @@ func Test_makeSwarm(t *testing.T) {
 	type args struct {
 		crabs []int
 	}
+
 	tests := []struct {
 		name string
 		args args
@@ -312,6 +319,7 @@ func Test_makeSwarm(t *testing.T) {
 			},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, makeSwarm(tt.args.crabs), "makeSwarm(%v)", tt.args.crabs)
@@ -323,6 +331,7 @@ func Test_minDistanceCost(t *testing.T) {
 	type args struct {
 		matrix [][]int
 	}
+
 	tests := []struct {
 		name string
 		args args

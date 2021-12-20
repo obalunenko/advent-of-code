@@ -169,11 +169,10 @@ func part1Cost(p int) int {
 }
 
 func part2Cost(p int) int {
-	// a_{n}=a_{1}+(n-1)d
-	// a(4) = 1 + (4-1)*1
+	// formula a_{n}=a_{1}+(n-1)d
 	an := 1 + 1*(p-1)
 
-	// s_{n}=(a_{1}+a_{n})/2*n
+	// formula s_{n}=(a_{1}+a_{n})/2*n
 	s := ((1 + an) * p) / 2
 
 	return s
