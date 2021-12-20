@@ -36,16 +36,16 @@ func (s solution) Part2(input io.Reader) (string, error) {
 func part2(input io.Reader) (string, error) {
 	kpd := loadKeypadPart2()
 
-	return getPassword(kpd, input)
+	return getDoorCode(kpd, input)
 }
 
 func part1(input io.Reader) (string, error) {
 	kpd := loadKeypadPart1()
 
-	return getPassword(kpd, input)
+	return getDoorCode(kpd, input)
 }
 
-func getPassword(kpd keypad, input io.Reader) (string, error) {
+func getDoorCode(kpd keypad, input io.Reader) (string, error) {
 	reader := bufio.NewReader(input)
 
 	var pwd strings.Builder
