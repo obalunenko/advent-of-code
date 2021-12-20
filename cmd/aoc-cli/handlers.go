@@ -11,6 +11,7 @@ import (
 
 	"github.com/briandowns/spinner"
 	"github.com/manifoldco/promptui"
+	promptlist "github.com/manifoldco/promptui/list"
 	log "github.com/obalunenko/logger"
 	"github.com/urfave/cli/v2"
 
@@ -73,9 +74,11 @@ func menu(ctx context.Context) cli.ActionFunc {
 
 		years := puzzles.GetYears()
 
+		items := makeMenuItemsList(years, exit)
+
 		prompt := promptui.Select{
 			Label:             "Years menu (exit' for exit)",
-			Items:             append(years, exit),
+			Items:             items,
 			Size:              pageSize,
 			CursorPos:         0,
 			IsVimMode:         false,
@@ -83,9 +86,9 @@ func menu(ctx context.Context) cli.ActionFunc {
 			HideSelected:      false,
 			Templates:         nil,
 			Keys:              nil,
-			Searcher:          nil,
+			Searcher:          searcher(items),
 			StartInSearchMode: false,
-			Pointer:           nil,
+			Pointer:           promptui.DefaultCursor,
 			Stdin:             nil,
 			Stdout:            nil,
 		}
@@ -97,9 +100,11 @@ func menu(ctx context.Context) cli.ActionFunc {
 func menuPuzzle(ctx context.Context, year string) error {
 	solvers := puzzles.DaysByYear(year)
 
+	items := makeMenuItemsList(solvers, back, exit)
+
 	prompt := promptui.Select{
 		Label:             "Puzzles menu (exit' for exit; back - to return to year selection)",
-		Items:             append(solvers, back, exit),
+		Items:             items,
 		Size:              pageSize,
 		CursorPos:         0,
 		IsVimMode:         false,
@@ -107,7 +112,7 @@ func menuPuzzle(ctx context.Context, year string) error {
 		HideSelected:      false,
 		Templates:         nil,
 		Keys:              nil,
-		Searcher:          nil,
+		Searcher:          searcher(items),
 		StartInSearchMode: false,
 		Pointer:           promptui.DefaultCursor,
 		Stdin:             nil,
@@ -115,6 +120,28 @@ func menuPuzzle(ctx context.Context, year string) error {
 	}
 
 	return handlePuzzleChoices(ctx, year, prompt)
+}
+
+func makeMenuItemsList(list []string, commands ...string) []string {
+	items := make([]string, 0, len(list)+len(commands))
+
+	items = append(items, list...)
+
+	items = append(items, commands...)
+
+	return items
+}
+
+func searcher(items []string) promptlist.Searcher {
+	return func(input string, index int) bool {
+		itm := items[index]
+
+		itm = strings.ReplaceAll(strings.ToLower(itm), " ", "")
+
+		input = strings.ReplaceAll(strings.ToLower(input), " ", "")
+
+		return strings.Contains(itm, input)
+	}
 }
 
 func handleYearChoices(ctx context.Context, opt promptui.Select) error {
