@@ -152,17 +152,12 @@ tasks:
           Cmd: '{{.rpm}} goreleaser-*.aarch64.rpm'
       - task: goreleaser:test:pkg
         vars:
-          Platform: 'arm/6'
-          Image: fedora
-          Cmd: '{{.rpm}} goreleaser-*.armv6hl.rpm'
-      - task: goreleaser:test:pkg
-        vars:
           Platform: 'arm/7'
           Image: fedora
           Cmd: '{{.rpm}} goreleaser-*.armv7hl.rpm'
 
   goreleaser:test:deb:
-    desc: Tests rpm packages
+    desc: Tests deb packages
     vars:
       dpkg: 'dpkg --ignore-depends=git -i'
     cmds:
@@ -178,17 +173,12 @@ tasks:
           Cmd: '{{.dpkg}} goreleaser*_arm64.deb'
       - task: goreleaser:test:pkg
         vars:
-          Platform: 'arm/6'
-          Image: debian
-          Cmd: '{{.dpkg}} goreleaser*_armel.deb'
-      - task: goreleaser:test:pkg
-        vars:
           Platform: 'arm/7'
           Image: ubuntu
           Cmd: '{{.dpkg}} goreleaser*_armhf.deb'
 
   goreleaser:test:apk:
-    desc: Tests rpm packages
+    desc: Tests apk packages
     vars:
       apk: 'apk add --allow-untrusted -U'
     cmds:
@@ -207,11 +197,6 @@ tasks:
           Platform: 'arm64'
           Image: alpine
           Cmd: '{{.apk}} goreleaser*_aarch64.apk'
-      - task: goreleaser:test:pkg
-        vars:
-          Platform: 'arm/6'
-          Image: alpine
-          Cmd: '{{.apk}} goreleaser*_armhf.apk'
       - task: goreleaser:test:pkg
         vars:
           Platform: 'arm/7'
