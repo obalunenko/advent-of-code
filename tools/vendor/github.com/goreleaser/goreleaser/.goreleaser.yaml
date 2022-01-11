@@ -25,7 +25,6 @@ builds:
     - arm
     - arm64
   goarm:
-    - "6"
     - "7"
   mod_timestamp: '{{ .CommitTimestamp }}'
   flags:
@@ -34,7 +33,7 @@ builds:
     - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
 
 universal_binaries:
-- replace: true
+- replace: false
 
 checksum:
   name_template: 'checksums.txt'
@@ -133,6 +132,7 @@ brews:
       owner: goreleaser
       name: homebrew-tap
     folder: Formula
+    goarm: "7"
     homepage:  https://goreleaser.com
     description: Deliver Go binaries as fast and easily as possible
     license: MIT
@@ -201,15 +201,31 @@ snapcrafts:
     confinement: classic
     publish: true
 
+sboms:
+  - artifacts: archive
+
 signs:
 - cmd: cosign
-  stdin: '{{ .Env.COSIGN_PWD }}'
-  args: ["sign-blob", "-key=cosign.key", "-output=${signature}", "${artifact}"]
+  env:
+  - COSIGN_EXPERIMENTAL=1
+  certificate: '${artifact}.pem'
+  output: true
   artifacts: checksum
+  args:
+    - sign-blob
+    - '--output-certificate=${certificate}'
+    - '--output-signature=${signature}'
+    - '${artifact}'
 
 docker_signs:
-- artifacts: manifests
-  stdin: '{{ .Env.COSIGN_PWD }}'
+- cmd: cosign
+  env:
+  - COSIGN_EXPERIMENTAL=1
+  artifacts: manifests
+  output: true
+  args:
+  - 'sign'
+  - '${artifact}'
 
 publishers:
   - name: fury.io
@@ -223,17 +239,15 @@ milestones:
   - close: true
 
 release:
-  extra_files:
-    - glob: ./cosign.pub
   footer: |
     **Full Changelog**: https://github.com/goreleaser/goreleaser/compare/{{ .PreviousTag }}...{{ .Tag }}
 
     ## What to do next?
 
-    - Check out the [GoReleaser Pro](https://goreleaser.com/pro) distribution;
-    - Join our [Discord server](https://discord.gg/RGEBtg8vQ6);
-    - Follow us on [Twitter](https://twitter.com/goreleaser);
-    - Read the [documentation](https://goreleaser.com/intro/).
+    - Read the [documentation](https://goreleaser.com/intro/)
+    - Check out the [GoReleaser Pro](https://goreleaser.com/pro) distribution
+    - Join our [Discord server](https://discord.gg/RGEBtg8vQ6)
+    - Follow us on [Twitter](https://twitter.com/goreleaser)
 
 announce:
   skip: "{{gt .Patch 0}}"

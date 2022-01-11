@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/apex/log"
@@ -76,11 +77,14 @@ func (Pipe) Run(ctx *context.Context) error {
 					artifact.ByType(artifact.UploadableSourceArchive),
 					artifact.ByType(artifact.Checksum),
 					artifact.ByType(artifact.LinuxPackage),
+					artifact.ByType(artifact.SBOM),
 				))
 			case "archive":
 				filters = append(filters, artifact.ByType(artifact.UploadableArchive))
 			case "binary":
 				filters = append(filters, artifact.ByType(artifact.UploadableBinary))
+			case "sbom":
+				filters = append(filters, artifact.ByType(artifact.SBOM))
 			case "package":
 				filters = append(filters, artifact.ByType(artifact.LinuxPackage))
 			case "none": // TODO(caarlos0): this is not very useful, lets remove it.
@@ -95,11 +99,22 @@ func (Pipe) Run(ctx *context.Context) error {
 			return sign(ctx, cfg, ctx.Artifacts.Filter(artifact.And(filters...)).List())
 		})
 	}
-	return g.Wait()
+	if err := g.Wait(); err != nil {
+		return err
+	}
+
+	return ctx.Artifacts.
+		Filter(artifact.ByType(artifact.Checksum)).
+		Visit(func(a *artifact.Artifact) error {
+			return a.Refresh()
+		})
 }
 
 func sign(ctx *context.Context, cfg config.Sign, artifacts []*artifact.Artifact) error {
 	for _, a := range artifacts {
+		if err := a.Refresh(); err != nil {
+			return err
+		}
 		artifacts, err := signone(ctx, cfg, a)
 		if err != nil {
 			return err
@@ -109,6 +124,29 @@ func sign(ctx *context.Context, cfg config.Sign, artifacts []*artifact.Artifact)
 		}
 	}
 	return nil
+}
+
+func relativeToDist(dist, f string) (string, error) {
+	af, err := filepath.Abs(f)
+	if err != nil {
+		return "", err
+	}
+	df, err := filepath.Abs(dist)
+	if err != nil {
+		return "", err
+	}
+	if strings.HasPrefix(af, df) {
+		return f, nil
+	}
+	return filepath.Join(dist, f), nil
+}
+
+func tmplPath(ctx *context.Context, env map[string]string, s string) (string, error) {
+	result, err := tmpl.New(ctx).WithEnv(env).Apply(expand(s, env))
+	if err != nil || result == "" {
+		return "", err
+	}
+	return relativeToDist(ctx.Config.Dist, result)
 }
 
 func signone(ctx *context.Context, cfg config.Sign, art *artifact.Artifact) ([]*artifact.Artifact, error) {
@@ -126,13 +164,13 @@ func signone(ctx *context.Context, cfg config.Sign, art *artifact.Artifact) ([]*
 		env[k] = v
 	}
 
-	name, err := tmpl.New(ctx).WithEnv(env).Apply(expand(cfg.Signature, env))
+	name, err := tmplPath(ctx, env, cfg.Signature)
 	if err != nil {
 		return nil, fmt.Errorf("sign failed: %s: %w", art.Name, err)
 	}
 	env["signature"] = name
 
-	cert, err := tmpl.New(ctx).WithEnv(env).Apply(expand(cfg.Certificate, env))
+	cert, err := tmplPath(ctx, env, cfg.Certificate)
 	if err != nil {
 		return nil, fmt.Errorf("sign failed: %s: %w", art.Name, err)
 	}
@@ -166,6 +204,12 @@ func signone(ctx *context.Context, cfg config.Sign, art *artifact.Artifact) ([]*
 	}
 
 	fields := log.Fields{"cmd": cfg.Cmd, "artifact": art.Name}
+	if name != "" {
+		fields["signature"] = name
+	}
+	if cert != "" {
+		fields["certificate"] = cert
+	}
 
 	// The GoASTScanner flags this as a security risk.
 	// However, this works as intended. The nosec annotation
@@ -174,8 +218,8 @@ func signone(ctx *context.Context, cfg config.Sign, art *artifact.Artifact) ([]*
 	cmd := exec.CommandContext(ctx, cfg.Cmd, args...)
 	var b bytes.Buffer
 	w := gio.Safe(&b)
-	cmd.Stderr = io.MultiWriter(logext.NewWriter(fields, logext.Error), w)
-	cmd.Stdout = io.MultiWriter(logext.NewWriter(fields, logext.Info), w)
+	cmd.Stderr = io.MultiWriter(logext.NewConditionalWriter(fields, logext.Error, cfg.Output), w)
+	cmd.Stdout = io.MultiWriter(logext.NewConditionalWriter(fields, logext.Info, cfg.Output), w)
 	if stdin != nil {
 		cmd.Stdin = stdin
 	}
@@ -185,24 +229,22 @@ func signone(ctx *context.Context, cfg config.Sign, art *artifact.Artifact) ([]*
 		return nil, fmt.Errorf("sign: %s failed: %w: %s", cfg.Cmd, err, b.String())
 	}
 
-	if cfg.Signature == "" {
-		return nil, nil
-	}
+	var result []*artifact.Artifact
 
-	// re-execute template results, using artifact name as artifact so they eval to the actual needed file name.
+	// re-execute template results, using artifact desc as artifact so they eval to the actual needed file desc.
 	env["artifact"] = art.Name
 	name, _ = tmpl.New(ctx).WithEnv(env).Apply(expand(cfg.Signature, env))   // could never error as it passed the previous check
 	cert, _ = tmpl.New(ctx).WithEnv(env).Apply(expand(cfg.Certificate, env)) // could never error as it passed the previous check
 
-	result := []*artifact.Artifact{
-		{
+	if cfg.Signature != "" {
+		result = append(result, &artifact.Artifact{
 			Type: artifact.Signature,
 			Name: name,
 			Path: env["signature"],
 			Extra: map[string]interface{}{
 				artifact.ExtraID: cfg.ID,
 			},
-		},
+		})
 	}
 
 	if cert != "" {
