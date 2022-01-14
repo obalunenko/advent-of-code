@@ -22,8 +22,8 @@ jobs:
           sessionCookie: ${{ secrets.AOC_SESSION }}
           readmeLocation: README.md
           headerPrefix: "###"
-          year: ${YEAR}
-          tableMarker: <!--- advent_readme_stars table [${YEAR}] --->
+          year: $YEAR
+          tableMarker: <!--- advent_readme_stars table [$YEAR] --->
           starSymbol: "⭐"
 
       - name: Upate 2020 year
@@ -36,8 +36,8 @@ jobs:
           sessionCookie: ${{ secrets.AOC_SESSION }}
           readmeLocation: README.md
           headerPrefix: "###"
-          year: ${YEAR}
-          tableMarker: <!--- advent_readme_stars table [${YEAR}] --->
+          year: $YEAR
+          tableMarker: <!--- advent_readme_stars table [$YEAR] --->
           starSymbol: "⭐"
 
       - name: Upate 2019 year
@@ -50,8 +50,8 @@ jobs:
           sessionCookie: ${{ secrets.AOC_SESSION }}
           readmeLocation: README.md
           headerPrefix: "###"
-          year: ${YEAR}
-          tableMarker: <!--- advent_readme_stars table [${YEAR}] --->
+          year: $YEAR
+          tableMarker: <!--- advent_readme_stars table [$YEAR] --->
           starSymbol: "⭐"
 
       - name: Upate 2018 year
@@ -64,8 +64,8 @@ jobs:
           sessionCookie: ${{ secrets.AOC_SESSION }}
           readmeLocation: README.md
           headerPrefix: "###"
-          year: ${YEAR}
-          tableMarker: <!--- advent_readme_stars table [${YEAR}] --->
+          year: $YEAR
+          tableMarker: <!--- advent_readme_stars table [$YEAR] --->
           starSymbol: "⭐"
 
       - name: Upate 2017 year
@@ -78,8 +78,8 @@ jobs:
           sessionCookie: ${{ secrets.AOC_SESSION }}
           readmeLocation: README.md
           headerPrefix: "###"
-          year: ${YEAR}
-          tableMarker: <!--- advent_readme_stars table [${YEAR}] --->
+          year: $YEAR
+          tableMarker: <!--- advent_readme_stars table [$YEAR] --->
           starSymbol: "⭐"
 
       - name: Upate 2016 year
@@ -92,8 +92,8 @@ jobs:
           sessionCookie: ${{ secrets.AOC_SESSION }}
           readmeLocation: README.md
           headerPrefix: "###"
-          year: ${YEAR}
-          tableMarker: <!--- advent_readme_stars table [${YEAR}] --->
+          year: $YEAR
+          tableMarker: <!--- advent_readme_stars table [$YEAR] --->
           starSymbol: "⭐"
 
       - name: Upate 2015 year
@@ -106,8 +106,8 @@ jobs:
           sessionCookie: ${{ secrets.AOC_SESSION }}
           readmeLocation: README.md
           headerPrefix: "###"
-          year: ${YEAR}
-          tableMarker: <!--- advent_readme_stars table [${YEAR}] --->
+          year: $YEAR
+          tableMarker: <!--- advent_readme_stars table [$YEAR] --->
           starSymbol: "⭐"
 
       - name: Commit changes
