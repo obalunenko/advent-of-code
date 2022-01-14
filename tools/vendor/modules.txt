@@ -677,7 +677,7 @@ github.com/goreleaser/chglog
 # github.com/goreleaser/fileglob v1.2.0
 ## explicit; go 1.16
 github.com/goreleaser/fileglob
-# github.com/goreleaser/goreleaser v1.3.0
+# github.com/goreleaser/goreleaser v1.3.1
 ## explicit; go 1.17
 github.com/goreleaser/goreleaser
 github.com/goreleaser/goreleaser/cmd
@@ -724,6 +724,7 @@ github.com/goreleaser/goreleaser/internal/pipe/linkedin
 github.com/goreleaser/goreleaser/internal/pipe/mattermost
 github.com/goreleaser/goreleaser/internal/pipe/milestone
 github.com/goreleaser/goreleaser/internal/pipe/nfpm
+github.com/goreleaser/goreleaser/internal/pipe/prebuild
 github.com/goreleaser/goreleaser/internal/pipe/project
 github.com/goreleaser/goreleaser/internal/pipe/publish
 github.com/goreleaser/goreleaser/internal/pipe/reddit
