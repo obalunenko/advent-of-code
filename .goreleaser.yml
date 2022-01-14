@@ -3,7 +3,7 @@ release:
     owner: obalunenko
     name: advent-of-code
   footer: |
-    **Full Changelog**: https://github.com/obalunenkog/advent-of-code/compare/{{ .PreviousTag }}...{{ .Tag }}
+    **Full Changelog**: https://github.com/obalunenko/advent-of-code/compare/{{ .PreviousTag }}...{{ .Tag }}
 
 gomod:
   proxy: true
