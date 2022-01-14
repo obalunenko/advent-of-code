@@ -186,12 +186,14 @@ func (d direction) strikeTo(t turn) direction {
 }
 
 type cab struct {
+	mu     *sync.Mutex
 	curDir direction
 	n      navigator
 }
 
 func newCab() cab {
 	return cab{
+		mu:     &sync.Mutex{},
 		curDir: northDirection,
 		n:      newNavigator(),
 	}
@@ -204,6 +206,9 @@ const (
 )
 
 func (c *cab) Move(t turn, steps int) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
 	c.curDir = c.curDir.strikeTo(t)
 	if !c.curDir.isValid() {
 		return errInvalidDirect
