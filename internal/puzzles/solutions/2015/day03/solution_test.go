@@ -104,11 +104,27 @@ func Test_solution_Part2(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "test example from description",
+			name: "^v delivers presents to 3 houses, because Santa goes north, and then Robo-Santa goes south.",
 			args: args{
-				input: strings.NewReader(""),
+				input: strings.NewReader("^v\n"),
 			},
-			want:    "",
+			want:    "3",
+			wantErr: false,
+		},
+		{
+			name: "^>v< now delivers presents to 3 houses, and Santa and Robo-Santa end up back where they started.",
+			args: args{
+				input: strings.NewReader("^>v<\n"),
+			},
+			want:    "3",
+			wantErr: false,
+		},
+		{
+			name: "^v^v^v^v^v now delivers presents to 11 houses, with Santa going one direction and Robo-Santa going the other.",
+			args: args{
+				input: strings.NewReader("^v^v^v^v^v\n"),
+			},
+			want:    "11",
 			wantErr: false,
 		},
 		{
