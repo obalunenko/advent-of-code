@@ -74,14 +74,11 @@ func makeAddressesList(input io.Reader) ([]string, error) {
 			return nil, fmt.Errorf("read rune: %w", err)
 		}
 
-		m := string(r)
-
 		if r == '\n' {
-
 			continue
 		}
 
-		list = append(list, m)
+		list = append(list, string(r))
 	}
 
 	return list, nil
@@ -98,7 +95,7 @@ func newGrid() grid {
 	}
 }
 
-var errUnknownDirecton = errors.New("unknown direction")
+var errUnknownDirection = errors.New("unknown direction")
 
 func (g *grid) move(m string) error {
 	const (
@@ -109,7 +106,6 @@ func (g *grid) move(m string) error {
 	)
 
 	switch m {
-
 	case north:
 		g.y++
 	case south:
@@ -119,7 +115,7 @@ func (g *grid) move(m string) error {
 	case east:
 		g.x++
 	default:
-		return errUnknownDirecton
+		return errUnknownDirection
 	}
 
 	return nil
@@ -129,9 +125,9 @@ type santaDelivery struct {
 	santas []deliveryman
 }
 
-func newSantaDelivery(santas []deliveryman) santaDelivery {
+func newSantaDelivery(deliverymen []deliveryman) santaDelivery {
 	return santaDelivery{
-		santas: santas,
+		santas: deliverymen,
 	}
 }
 
@@ -160,7 +156,6 @@ func (s *santaDelivery) housesVisited() int {
 		for address, count := range snt.housesVisited() {
 			total[address] += count
 		}
-
 	}
 
 	return len(total)
