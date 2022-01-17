@@ -26,29 +26,30 @@ func (solution) Year() string {
 }
 
 func (solution) Part1(input io.Reader) (string, error) {
-	addresses, err := makeAddressesList(input)
-	if err != nil {
-		return "", fmt.Errorf("make addresses: %w", err)
-	}
+	const santaNum = 1
 
-	delivery := newSantaDelivery([]deliveryman{newSanta()})
-
-	if err = delivery.deliver(addresses); err != nil {
-		return "", fmt.Errorf("deliver: %w", err)
-	}
-
-	visited := delivery.housesVisited()
-
-	return strconv.Itoa(visited), nil
+	return solve(input, santaNum)
 }
 
 func (solution) Part2(input io.Reader) (string, error) {
+	const santaNum = 2
+
+	return solve(input, santaNum)
+}
+
+func solve(input io.Reader, santaNum int) (string, error) {
 	addresses, err := makeAddressesList(input)
 	if err != nil {
 		return "", fmt.Errorf("make addresses: %w", err)
 	}
 
-	delivery := newSantaDelivery([]deliveryman{newSanta(), newSanta()})
+	deliverymen := make([]deliveryman, 0, santaNum)
+
+	for i := 0; i < santaNum; i++ {
+		deliverymen = append(deliverymen, newSanta())
+	}
+
+	delivery := newSantaDelivery(deliverymen)
 
 	if err = delivery.deliver(addresses); err != nil {
 		return "", fmt.Errorf("deliver: %w", err)
