@@ -95,7 +95,7 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 | :---: | :---: | :---: |
 | [Day 1](https://adventofcode.com/2015/day/1) | ⭐ | ⭐ |
 | [Day 2](https://adventofcode.com/2015/day/2) | ⭐ | ⭐ |
-| [Day 3](https://adventofcode.com/2015/day/3) | ⭐ |   |
+| [Day 3](https://adventofcode.com/2015/day/3) | ⭐ | ⭐ |
 <!--- advent_readme_stars table [2015] --->
 
 ## Usage of aoc-cli
