@@ -4,6 +4,18 @@ on:
   push:
     branches:
       - 'master'
+    paths:
+      - 'scripts/**'
+      - 'tools/**'
+      - '**/*.go'
+      - '**/*.gohtml'
+      - '**/*.proto'
+      - 'go.mod'
+      - 'go.sum'
+      - 'Makefile'
+      - '!**.*md'
+      - '.github/workflows/**'
+      - '!.github/workflows/readme-stars.yml'
   pull_request:
     types: [ opened, synchronize, reopened ]
     branches:
