@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - 'master'
+    paths:
+      - "!**"
+      - "internal/puzzles/**"
+      - ".github/workflows/readme-stars.yml"
   workflow_dispatch:
 
 jobs:
