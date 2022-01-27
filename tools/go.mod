@@ -9,7 +9,7 @@ require (
 	github.com/matm/gocov-html v0.0.0-20200509184451-71874e2e203b
 	github.com/mattn/goveralls v0.0.11
 	github.com/obalunenko/coverbadger v1.1.0
-	golang.org/x/tools v0.1.8
+	golang.org/x/tools v0.1.9
 	gotest.tools/gotestsum v1.7.0
 )
 
