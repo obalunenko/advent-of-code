@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/axw/gocov v1.0.0
 	github.com/golangci/golangci-lint v1.44.0
-	github.com/goreleaser/goreleaser v1.3.1
+	github.com/goreleaser/goreleaser v1.4.1
 	github.com/matm/gocov-html v0.0.0-20200509184451-71874e2e203b
 	github.com/mattn/goveralls v0.0.11
 	github.com/obalunenko/coverbadger v1.1.0
@@ -192,6 +192,8 @@ require (
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/moricho/tparallel v0.2.1 // indirect
+	github.com/muesli/mango v0.0.0-20220118122812-f367188b892e // indirect
+	github.com/muesli/roff v0.1.0 // indirect
 	github.com/nakabonne/nestif v0.3.1 // indirect
 	github.com/nbutton23/zxcvbn-go v0.0.0-20210217022336-fa2cb2858354 // indirect
 	github.com/nishanths/exhaustive v0.7.11 // indirect
