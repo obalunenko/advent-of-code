@@ -688,9 +688,6 @@ Architecture: {{.Info.Arch}}
 {{- if .Info.Maintainer}}
 Maintainer: {{.Info.Maintainer}}
 {{- end }}
-{{- if .Info.Vendor}}
-Vendor: {{.Info.Vendor}}
-{{- end }}
 Installed-Size: {{.InstalledSize}}
 {{- with .Info.Replaces}}
 Replaces: {{join .}}
@@ -732,7 +729,7 @@ func writeControl(w io.Writer, data controlData) error {
 			return strings.Trim(strings.Join(strs, ", "), " ")
 		},
 		"multiline": func(strs string) string {
-			ret := strings.ReplaceAll(strs, "\n", "\n  ")
+			ret := strings.ReplaceAll(strs, "\n", "\n ")
 			return strings.Trim(ret, " \n")
 		},
 	})
