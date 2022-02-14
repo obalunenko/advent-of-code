@@ -69,6 +69,11 @@ dockers:
   use: buildx
   build_flag_templates:
   - "--pull"
+  - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/goreleaser/goreleaser/main/README.md"
+  - "--label=io.artifacthub.package.logo-url=https://goreleaser.com/static/avatar.png"
+  - "--label=io.artifacthub.package.maintainers=[{\"name\":\"Carlos Alexandro Becker\",\"email\":\"carlos@carlosbecker.dev\"}]"
+  - "--label=io.artifacthub.package.license=MIT"
+  - "--label=org.opencontainers.image.description=Deliver Go binaries as fast and easily as possible"
   - "--label=org.opencontainers.image.created={{.Date}}"
   - "--label=org.opencontainers.image.name={{.ProjectName}}"
   - "--label=org.opencontainers.image.revision={{.FullCommit}}"
@@ -84,6 +89,11 @@ dockers:
   use: buildx
   build_flag_templates:
   - "--pull"
+  - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/goreleaser/goreleaser/main/README.md"
+  - "--label=io.artifacthub.package.logo-url=https://goreleaser.com/static/avatar.png"
+  - "--label=io.artifacthub.package.maintainers=[{\"name\":\"Carlos Alexandro Becker\",\"email\":\"carlos@carlosbecker.dev\"}]"
+  - "--label=io.artifacthub.package.license=MIT"
+  - "--label=org.opencontainers.image.description=Deliver Go binaries as fast and easily as possible"
   - "--label=org.opencontainers.image.created={{.Date}}"
   - "--label=org.opencontainers.image.name={{.ProjectName}}"
   - "--label=org.opencontainers.image.revision={{.FullCommit}}"
@@ -200,19 +210,36 @@ nfpms:
   - file_name_template: '{{ .ConventionalFileName }}'
     id: packages
     homepage:  https://goreleaser.com
-    description: Deliver Go binaries as fast and easily as possible
-    maintainer: Carlos Alexandro Becker <root@carlosbecker.com>
+    description: |-
+      Deliver Go binaries as fast and easily as possible.
+      GoReleaser allows you to release easily build, package, publish and
+      announce to several places at one go.
+    maintainer: Carlos Alexandro Becker <carlos@becker.software>
     license: MIT
     vendor: GoReleaser
+    bindir: /usr/bin
+    section: utils
     contents:
       - src: ./completions/goreleaser.bash
-        dst: /etc/bash_completion.d/goreleaser
+        dst: /usr/share/bash-completion/completions/goreleaser
+        file_info:
+          mode: 0644
       - src: ./completions/goreleaser.fish
         dst: /usr/share/fish/completions/goreleaser.fish
+        file_info:
+          mode: 0644
       - src: ./completions/goreleaser.zsh
-        dst: /usr/local/share/zsh/site-functions/_goreleaser
+        dst:  /usr/share/zsh/vendor-completions/_goreleaser
+        file_info:
+          mode: 0644
       - src: ./manpages/goreleaser.1.gz
         dst: /usr/share/man/man1/goreleaser.1.gz
+        file_info:
+          mode: 0644
+      - src: ./LICENSE.md
+        dst: /usr/share/doc/goreleaser/copyright
+        file_info:
+          mode: 0644
     formats:
     - apk
     - deb
@@ -221,6 +248,10 @@ nfpms:
     - git
     recommends:
     - golang
+    deb:
+      lintian_overrides:
+        - statically-linked-binary
+        - changelog-file-missing-in-native-package
 
 snapcrafts:
   - name_template: '{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'

@@ -147,6 +147,11 @@ func create(ctx *context.Context, fpm config.NFPM, format string, binaries []*ar
 		return err
 	}
 
+	maintainer, err := t.Apply(fpm.Maintainer)
+	if err != nil {
+		return err
+	}
+
 	debKeyFile, err := t.Apply(overridden.Deb.Signature.KeyFile)
 	if err != nil {
 		return err
@@ -181,6 +186,30 @@ func create(ctx *context.Context, fpm config.NFPM, format string, binaries []*ar
 		})
 	}
 
+	if len(fpm.Deb.Lintian) > 0 {
+		lines := make([]string, 0, len(fpm.Deb.Lintian))
+		for _, ov := range fpm.Deb.Lintian {
+			lines = append(lines, fmt.Sprintf("%s: %s", fpm.PackageName, ov))
+		}
+		lintianPath := filepath.Join(ctx.Config.Dist, "deb", fpm.PackageName, ".lintian")
+		if err := os.MkdirAll(filepath.Dir(lintianPath), 0o755); err != nil {
+			return fmt.Errorf("failed to write lintian file: %w", err)
+		}
+		if err := os.WriteFile(lintianPath, []byte(strings.Join(lines, "\n")), 0o644); err != nil {
+			return fmt.Errorf("failed to write lintian file: %w", err)
+		}
+
+		log.Infof("creating %q", lintianPath)
+		contents = append(contents, &files.Content{
+			Source:      lintianPath,
+			Destination: filepath.Join("./usr/share/lintian/overrides", fpm.PackageName),
+			Packager:    "deb",
+			FileInfo: &files.ContentFileInfo{
+				Mode: 0o644,
+			},
+		})
+	}
+
 	log := log.WithField("package", fpm.PackageName).WithField("format", format).WithField("arch", arch)
 
 	// FPM meta package should not contain binaries at all
@@ -192,6 +221,9 @@ func create(ctx *context.Context, fpm config.NFPM, format string, binaries []*ar
 			contents = append(contents, &files.Content{
 				Source:      filepath.ToSlash(src),
 				Destination: filepath.ToSlash(dst),
+				FileInfo: &files.ContentFileInfo{
+					Mode: 0o755,
+				},
 			})
 		}
 	}
@@ -209,7 +241,7 @@ func create(ctx *context.Context, fpm config.NFPM, format string, binaries []*ar
 		Release:         fpm.Release,
 		Prerelease:      fpm.Prerelease,
 		VersionMetadata: fpm.VersionMetadata,
-		Maintainer:      fpm.Maintainer,
+		Maintainer:      maintainer,
 		Description:     description,
 		Vendor:          fpm.Vendor,
 		Homepage:        homepage,
