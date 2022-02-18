@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/urfave/cli/v2"
+
+	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
 const (
@@ -48,7 +50,7 @@ func cmdRunFlags() []cli.Flag {
 		Name:        flagSession,
 		Aliases:     []string{flagShortSession},
 		Usage:       "AOC auth session to get inputs",
-		EnvVars:     []string{"AOC_SESSION"},
+		EnvVars:     []string{puzzles.AOCSession},
 		FilePath:    "",
 		Required:    true,
 		Hidden:      false,

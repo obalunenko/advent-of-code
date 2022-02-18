@@ -25,15 +25,19 @@ type testcase struct {
 	wantErr bool
 }
 
+const (
+	regressionEnabled = "AOC_REGRESSION_ENABLED"
+)
+
 // Regression tests for all puzzles. Check that answers still correct.
 func TestRun(t *testing.T) {
-	if !getenv.BoolOrDefault("AOC_REGRESSION_ENABLED", false) {
-		t.Skip("Regression test disabled")
+	if !getenv.BoolOrDefault(regressionEnabled, false) {
+		t.Skipf("%s disabled", regressionEnabled)
 	}
 
-	session := getenv.StringOrDefault("AOC_SESSION", "")
+	session := getenv.StringOrDefault(puzzles.AOCSession, "")
 	if session == "" {
-		t.Fatal("AOC_SESSION not set")
+		t.Fatalf("%s not set", puzzles.AOCSession)
 	}
 
 	ctx := command.ContextWithSession(context.Background(), session)
