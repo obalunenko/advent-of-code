@@ -61,4 +61,7 @@ const (
 	unsolved   = "not solved"
 	undefined  = "undefined"
 	inProgress = "in progress"
+
+	// AOCSession env variable name.
+	AOCSession = "AOC_SESSION"
 )
