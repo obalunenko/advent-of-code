@@ -279,7 +279,7 @@ type RPM struct {
 	Scripts     RPMScripts   `yaml:"scripts,omitempty" jsonschema:"title=rpm-specific scripts"`
 	Group       string       `yaml:"group,omitempty" jsonschema:"title=package group,example=Unspecified"`
 	Summary     string       `yaml:"summary,omitempty" jsonschema:"title=package summary"`
-	Compression string       `yaml:"compression,omitempty" jsonschema:"title=compression algorithm to be used,enum=gzip,enum=lzma,enum=xz,default=gzip"`
+	Compression string       `yaml:"compression,omitempty" jsonschema:"title=compression algorithm to be used,enum=gzip,enum=lzma,enum=xz,default=gzip:-1"`
 	Signature   RPMSignature `yaml:"signature,omitempty" jsonschema:"title=rpm signature"`
 	Packager    string       `yaml:"packager,omitempty" jsonschema:"title=organization that actually packaged the software"`
 }
@@ -390,7 +390,7 @@ func Validate(info *Info) (err error) {
 	if len(info.EmptyFolders) > 0 {
 		deprecation.Println("'empty_folders' is deprecated and " +
 			"will be removed in a future version, create content with type 'dir' and " +
-			"directoy name as 'dst' instead")
+			"directory name as 'dst' instead")
 
 		for _, emptyFolder := range info.EmptyFolders {
 			if contents.ContainsDestination(emptyFolder) {

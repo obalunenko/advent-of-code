@@ -41,6 +41,7 @@ const (
 	summary         = "Summary"
 	tagSubject      = "TagSubject"
 	tagContents     = "TagContents"
+	tagBody         = "TagBody"
 	releaseURL      = "ReleaseURL"
 	major           = "Major"
 	minor           = "Minor"
@@ -93,6 +94,7 @@ func New(ctx *context.Context) *Template {
 			summary:         ctx.Git.Summary,
 			tagSubject:      ctx.Git.TagSubject,
 			tagContents:     ctx.Git.TagContents,
+			tagBody:         ctx.Git.TagBody,
 			releaseURL:      ctx.ReleaseURL,
 			env:             ctx.Env,
 			date:            ctx.Date.UTC().Format(time.RFC3339),
@@ -177,16 +179,18 @@ func (t *Template) Apply(s string) (string, error) {
 			"time": func(s string) string {
 				return time.Now().UTC().Format(s)
 			},
-			"tolower":    strings.ToLower,
-			"toupper":    strings.ToUpper,
-			"trim":       strings.TrimSpace,
-			"trimprefix": strings.TrimPrefix,
-			"trimsuffix": strings.TrimSuffix,
-			"dir":        filepath.Dir,
-			"abs":        filepath.Abs,
-			"incmajor":   incMajor,
-			"incminor":   incMinor,
-			"incpatch":   incPatch,
+			"tolower":       strings.ToLower,
+			"toupper":       strings.ToUpper,
+			"trim":          strings.TrimSpace,
+			"trimprefix":    strings.TrimPrefix,
+			"trimsuffix":    strings.TrimSuffix,
+			"dir":           filepath.Dir,
+			"abs":           filepath.Abs,
+			"incmajor":      incMajor,
+			"incminor":      incMinor,
+			"incpatch":      incPatch,
+			"filter":        filter(false),
+			"reverseFilter": filter(true),
 		}).
 		Parse(s)
 	if err != nil {
@@ -257,4 +261,22 @@ func prefix(v string) string {
 		return "v"
 	}
 	return ""
+}
+
+func filter(reverse bool) func(content, exp string) string {
+	return func(content, exp string) string {
+		re := regexp.MustCompilePOSIX(exp)
+		var lines []string
+		for _, line := range strings.Split(content, "\n") {
+			if reverse && re.MatchString(line) {
+				continue
+			}
+			if !reverse && !re.MatchString(line) {
+				continue
+			}
+			lines = append(lines, line)
+		}
+
+		return strings.Join(lines, "\n")
+	}
 }
