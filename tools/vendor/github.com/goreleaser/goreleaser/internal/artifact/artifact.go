@@ -379,6 +379,40 @@ func ByIDs(ids ...string) Filter {
 	return Or(filters...)
 }
 
+// ByBinaryLikeArtifacts filter artifacts down to artifacts that are Binary, UploadableBinary, or UniversalBinary,
+// deduplicating artifacts by path (preferring UploadableBinary over all others). Note: this filter is unique in the
+// sense that it cannot act in isolation of the state of other artifacts; the filter requires the whole list of
+// artifacts in advance to perform deduplication.
+func ByBinaryLikeArtifacts(arts Artifacts) Filter {
+	// find all of the paths for any uploadable binary artifacts
+	uploadableBins := arts.Filter(ByType(UploadableBinary)).List()
+	uploadableBinPaths := map[string]struct{}{}
+	for _, a := range uploadableBins {
+		uploadableBinPaths[a.Path] = struct{}{}
+	}
+
+	// we want to keep any matching artifact that is not a binary that already has a path accounted for
+	// by another uploadable binary. We always prefer uploadable binary artifacts over binary artifacts.
+	deduplicateByPath := func(a *Artifact) bool {
+		if a.Type == UploadableBinary {
+			return true
+		}
+		_, ok := uploadableBinPaths[a.Path]
+		return !ok
+	}
+
+	return And(
+		// allow all of the binary-like artifacts as possible...
+		Or(
+			ByType(Binary),
+			ByType(UploadableBinary),
+			ByType(UniversalBinary),
+		),
+		// ... but remove any duplicates found
+		deduplicateByPath,
+	)
+}
+
 // Or performs an OR between all given filters.
 func Or(filters ...Filter) Filter {
 	return func(a *Artifact) bool {
