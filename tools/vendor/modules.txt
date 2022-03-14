@@ -687,7 +687,7 @@ github.com/goreleaser/chglog
 # github.com/goreleaser/fileglob v1.3.0
 ## explicit; go 1.16
 github.com/goreleaser/fileglob
-# github.com/goreleaser/goreleaser v1.6.1
+# github.com/goreleaser/goreleaser v1.6.3
 ## explicit; go 1.17
 github.com/goreleaser/goreleaser
 github.com/goreleaser/goreleaser/cmd
