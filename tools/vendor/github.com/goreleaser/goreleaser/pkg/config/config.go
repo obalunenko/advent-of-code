@@ -169,6 +169,7 @@ type Homebrew struct {
 	CustomBlock           string               `yaml:"custom_block,omitempty"`
 	IDs                   []string             `yaml:"ids,omitempty"`
 	Goarm                 string               `yaml:"goarm,omitempty"`
+	Service               string               `yaml:"service,omitempty"`
 }
 
 // Krew contains the krew section.
@@ -786,7 +787,6 @@ type Docker struct {
 	Files              []string `yaml:"extra_files,omitempty"`
 	BuildFlagTemplates []string `yaml:"build_flag_templates,omitempty"`
 	PushFlags          []string `yaml:"push_flags,omitempty"`
-	Buildx             bool     `yaml:"use_buildx,omitempty"` // deprecated: use Use instead
 	Use                string   `yaml:"use,omitempty"`
 }
 
@@ -852,6 +852,7 @@ type Blob struct {
 type Upload struct {
 	Name               string            `yaml:"name,omitempty"`
 	IDs                []string          `yaml:"ids,omitempty"`
+	Exts               []string          `yaml:"exts,omitempty"`
 	Target             string            `yaml:"target,omitempty"`
 	Username           string            `yaml:"username,omitempty"`
 	Mode               string            `yaml:"mode,omitempty"`
@@ -937,6 +938,7 @@ type GoMod struct {
 	Proxy    bool     `yaml:"proxy,omitempty"`
 	Env      []string `yaml:"env,omitempty"`
 	GoBinary string   `yaml:"gobinary,omitempty"`
+	Mod      string   `yaml:"mod,omitempty"`
 }
 
 type Announce struct {
