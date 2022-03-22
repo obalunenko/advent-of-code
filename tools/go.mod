@@ -8,7 +8,7 @@ require (
 	github.com/goreleaser/goreleaser v1.7.0
 	github.com/matm/gocov-html v0.0.0-20200509184451-71874e2e203b
 	github.com/mattn/goveralls v0.0.11
-	github.com/obalunenko/coverbadger v1.1.0
+	github.com/obalunenko/coverbadger v1.2.0
 	golang.org/x/tools v0.1.10
 	gotest.tools/gotestsum v1.7.0
 )
