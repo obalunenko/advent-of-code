@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/axw/gocov v1.0.0
-	github.com/golangci/golangci-lint v1.45.1
+	github.com/golangci/golangci-lint v1.45.2
 	github.com/goreleaser/goreleaser v1.7.0
 	github.com/matm/gocov-html v0.0.0-20200509184451-71874e2e203b
 	github.com/mattn/goveralls v0.0.11
