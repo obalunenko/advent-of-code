@@ -24,8 +24,9 @@ import (
 )
 
 const (
-	defaultNameTemplate       = "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
-	defaultBinaryNameTemplate = "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
+	defaultNameTemplateSuffix = `{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ with .Arm }}v{{ . }}{{ end }}{{ with .Mips }}_{{ . }}{{ end }}{{ if not (eq .Amd64 "v1") }}{{ .Amd64 }}{{ end }}`
+	defaultNameTemplate       = "{{ .ProjectName }}_" + defaultNameTemplateSuffix
+	defaultBinaryNameTemplate = "{{ .Binary }}_" + defaultNameTemplateSuffix
 )
 
 // ErrArchiveDifferentBinaryCount happens when an archive uses several builds which have different goos/goarch/etc sets,
@@ -73,11 +74,6 @@ func (Pipe) Default(ctx *context.Context) error {
 				archive.NameTemplate = defaultBinaryNameTemplate
 			}
 		}
-		if len(archive.Builds) == 0 {
-			for _, build := range ctx.Config.Builds {
-				archive.Builds = append(archive.Builds, build.ID)
-			}
-		}
 		ids.Inc(archive.ID)
 	}
 	return ids.Validate()
@@ -88,15 +84,14 @@ func (Pipe) Run(ctx *context.Context) error {
 	g := semerrgroup.New(ctx.Parallelism)
 	for i, archive := range ctx.Config.Archives {
 		archive := archive
-		artifacts := ctx.Artifacts.Filter(
-			artifact.And(
-				artifact.Or(
-					artifact.ByType(artifact.Binary),
-					artifact.ByType(artifact.UniversalBinary),
-				),
-				artifact.ByIDs(archive.Builds...),
-			),
-		).GroupByPlatform()
+		filter := []artifact.Filter{artifact.Or(
+			artifact.ByType(artifact.Binary),
+			artifact.ByType(artifact.UniversalBinary),
+		)}
+		if len(archive.Builds) > 0 {
+			filter = append(filter, artifact.ByIDs(archive.Builds...))
+		}
+		artifacts := ctx.Artifacts.Filter(artifact.And(filter...)).GroupByPlatform()
 		if err := checkArtifacts(artifacts); err != nil && !archive.AllowDifferentBinaryCount {
 			return fmt.Errorf("invalid archive: %d: %w", i, ErrArchiveDifferentBinaryCount)
 		}
@@ -184,13 +179,14 @@ func create(ctx *context.Context, arch config.Archive, binaries []*artifact.Arti
 		bins = append(bins, binary.Name)
 	}
 	ctx.Artifacts.Add(&artifact.Artifact{
-		Type:   artifact.UploadableArchive,
-		Name:   folder + "." + format,
-		Path:   archivePath,
-		Goos:   binaries[0].Goos,
-		Goarch: binaries[0].Goarch,
-		Goarm:  binaries[0].Goarm,
-		Gomips: binaries[0].Gomips,
+		Type:    artifact.UploadableArchive,
+		Name:    folder + "." + format,
+		Path:    archivePath,
+		Goos:    binaries[0].Goos,
+		Goarch:  binaries[0].Goarch,
+		Goarm:   binaries[0].Goarm,
+		Gomips:  binaries[0].Gomips,
+		Goamd64: binaries[0].Goamd64,
 		Extra: map[string]interface{}{
 			artifact.ExtraBuilds:    binaries,
 			artifact.ExtraID:        arch.ID,
@@ -227,13 +223,14 @@ func skip(ctx *context.Context, archive config.Archive, binaries []*artifact.Art
 			WithField("name", finalName).
 			Info("skip archiving")
 		ctx.Artifacts.Add(&artifact.Artifact{
-			Type:   artifact.UploadableBinary,
-			Name:   finalName,
-			Path:   binary.Path,
-			Goos:   binary.Goos,
-			Goarch: binary.Goarch,
-			Goarm:  binary.Goarm,
-			Gomips: binary.Gomips,
+			Type:    artifact.UploadableBinary,
+			Name:    finalName,
+			Path:    binary.Path,
+			Goos:    binary.Goos,
+			Goarch:  binary.Goarch,
+			Goarm:   binary.Goarm,
+			Gomips:  binary.Gomips,
+			Goamd64: binary.Goamd64,
 			Extra: map[string]interface{}{
 				artifact.ExtraBuilds:   []*artifact.Artifact{binary},
 				artifact.ExtraID:       archive.ID,

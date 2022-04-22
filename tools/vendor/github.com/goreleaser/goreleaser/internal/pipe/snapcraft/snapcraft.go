@@ -12,14 +12,13 @@ import (
 	"strings"
 
 	"github.com/apex/log"
-	"gopkg.in/yaml.v2"
-
 	"github.com/goreleaser/goreleaser/internal/artifact"
 	"github.com/goreleaser/goreleaser/internal/gio"
 	"github.com/goreleaser/goreleaser/internal/ids"
 	"github.com/goreleaser/goreleaser/internal/pipe"
 	"github.com/goreleaser/goreleaser/internal/semerrgroup"
 	"github.com/goreleaser/goreleaser/internal/tmpl"
+	"github.com/goreleaser/goreleaser/internal/yaml"
 	"github.com/goreleaser/goreleaser/pkg/config"
 	"github.com/goreleaser/goreleaser/pkg/context"
 )
@@ -94,7 +93,7 @@ type LayoutMetadata struct {
 	Type     string `yaml:",omitempty"`
 }
 
-const defaultNameTemplate = "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
+const defaultNameTemplate = `{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ with .Arm }}v{{ . }}{{ end }}{{ with .Mips }}_{{ . }}{{ end }}{{ if not (eq .Amd64 "v1") }}{{ .Amd64 }}{{ end }}`
 
 // Pipe for snapcraft packaging.
 type Pipe struct{}
@@ -140,6 +139,17 @@ func (Pipe) Run(ctx *context.Context) error {
 }
 
 func doRun(ctx *context.Context, snap config.Snapcraft) error {
+	tpl := tmpl.New(ctx)
+	summary, err := tpl.Apply(snap.Summary)
+	if err != nil {
+		return err
+	}
+	description, err := tpl.Apply(snap.Description)
+	if err != nil {
+		return err
+	}
+	snap.Summary = summary
+	snap.Description = description
 	if snap.Summary == "" && snap.Description == "" {
 		return pipe.Skip("no summary nor description were provided")
 	}
@@ -149,7 +159,7 @@ func doRun(ctx *context.Context, snap config.Snapcraft) error {
 	if snap.Description == "" {
 		return ErrNoDescription
 	}
-	_, err := exec.LookPath("snapcraft")
+	_, err = exec.LookPath("snapcraft")
 	if err != nil {
 		return ErrNoSnapcraft
 	}
@@ -177,7 +187,7 @@ func doRun(ctx *context.Context, snap config.Snapcraft) error {
 
 func isValidArch(arch string) bool {
 	// https://snapcraft.io/docs/architectures
-	for _, a := range []string{"s390x", "ppc64el", "arm64", "armhf", "amd64", "i386"} {
+	for _, a := range []string{"s390x", "ppc64el", "arm64", "armhf", "i386", "amd64"} {
 		if arch == a {
 			return true
 		}
@@ -386,12 +396,13 @@ func create(ctx *context.Context, snap config.Snapcraft, arch string, binaries [
 		return nil
 	}
 	ctx.Artifacts.Add(&artifact.Artifact{
-		Type:   artifact.PublishableSnapcraft,
-		Name:   folder + ".snap",
-		Path:   snapFile,
-		Goos:   binaries[0].Goos,
-		Goarch: binaries[0].Goarch,
-		Goarm:  binaries[0].Goarm,
+		Type:    artifact.PublishableSnapcraft,
+		Name:    folder + ".snap",
+		Path:    snapFile,
+		Goos:    binaries[0].Goos,
+		Goarch:  binaries[0].Goarch,
+		Goarm:   binaries[0].Goarm,
+		Goamd64: binaries[0].Goamd64,
 		Extra: map[string]interface{}{
 			releasesExtra: channels,
 		},
@@ -449,10 +460,18 @@ var archToSnap = map[string]string{
 	"ppc64le": "ppc64el",
 }
 
+// TODO: write tests for this
 func linuxArch(key string) string {
 	// XXX: list of all linux arches: `go tool dist list | grep linux`
 	arch := strings.TrimPrefix(key, "linux")
-	for _, suffix := range []string{"hardfloat", "softfloat"} {
+	for _, suffix := range []string{
+		"hardfloat",
+		"softfloat",
+		"v1",
+		"v2",
+		"v3",
+		"v4",
+	} {
 		arch = strings.TrimSuffix(arch, suffix)
 	}
 
