@@ -44,22 +44,26 @@ changelog:
   use: github
   filters:
     exclude:
-    - '^docs:'
     - '^test:'
     - '^chore'
+    - 'merge conflict'
     - Merge pull request
     - Merge remote-tracking branch
     - Merge branch
     - go mod tidy
   groups:
-    - title: 'New Features'
+    - title: 'New Features and updates'
       regexp: "^.*feat[(\\w)]*:+.*$"
       order: 0
     - title: 'Bug fixes'
       regexp: "^.*fix[(\\w)]*:+.*$"
       order: 10
+    - title: 'Documentation updates'
+      regexp: "^.*docs[(\\w)]*:+.*$"
+      order: 20
     - title: Other work
       order: 999
+
 
 dockers:
 - image_templates:

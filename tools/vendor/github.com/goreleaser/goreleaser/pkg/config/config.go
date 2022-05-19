@@ -4,6 +4,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -42,16 +43,30 @@ type GiteaURLs struct {
 // Repo represents any kind of repo (github, gitlab, etc).
 // to upload releases into.
 type Repo struct {
-	Owner string `yaml:"owner,omitempty"`
-	Name  string `yaml:"name,omitempty"`
+	Owner  string `yaml:"owner,omitempty"`
+	Name   string `yaml:"name,omitempty"`
+	RawURL string `yaml:"-"`
 }
 
 // String of the repo, e.g. owner/name.
 func (r Repo) String() string {
-	if r.Owner == "" && r.Name == "" {
-		return ""
+	if r.isSCM() {
+		return r.Owner + "/" + r.Name
 	}
-	return r.Owner + "/" + r.Name
+	return r.Owner
+}
+
+// CheckSCM returns an error if the given url is not a valid scm url.
+func (r Repo) CheckSCM() error {
+	if r.isSCM() {
+		return nil
+	}
+	return fmt.Errorf("invalid scm url: %s", r.RawURL)
+}
+
+// isSCM returns true if the repo has both an owner and name.
+func (r Repo) isSCM() bool {
+	return r.Owner != "" && r.Name != ""
 }
 
 // RepoRef represents any kind of repo which may differ
@@ -312,7 +327,9 @@ type Build struct {
 	ModTimestamp    string          `yaml:"mod_timestamp,omitempty"`
 	Skip            bool            `yaml:"skip,omitempty"`
 	GoBinary        string          `yaml:"gobinary,omitempty"`
+	Command         string          `yaml:"command,omitempty"`
 	NoUniqueDistDir bool            `yaml:"no_unique_dist_dir,omitempty"`
+	NoMainCheck     bool            `yaml:"no_main_check,omitempty"`
 	UnproxiedMain   string          `yaml:"-"` // used by gomod.proxy
 	UnproxiedDir    string          `yaml:"-"` // used by gomod.proxy
 
@@ -499,6 +516,7 @@ type Archive struct {
 	FormatOverrides           []FormatOverride  `yaml:"format_overrides,omitempty"`
 	WrapInDirectory           string            `yaml:"wrap_in_directory,omitempty"`
 	Files                     []File            `yaml:"files,omitempty"`
+	Meta                      bool              `yaml:"meta,omitempty"`
 	AllowDifferentBinaryCount bool              `yaml:"allow_different_binary_count,omitempty"`
 }
 
