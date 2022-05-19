@@ -1,3 +1,6 @@
+# github.com/antzucaro/matchr v0.0.0-20210222213004-b04723ef80f0
+## explicit; go 1.13
+github.com/antzucaro/matchr
 # github.com/briandowns/spinner v1.18.1
 ## explicit; go 1.14
 github.com/briandowns/spinner
@@ -58,7 +61,7 @@ github.com/sirupsen/logrus
 ## explicit; go 1.13
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
-# github.com/urfave/cli/v2 v2.6.0
+# github.com/urfave/cli/v2 v2.7.1
 ## explicit; go 1.18
 github.com/urfave/cli/v2
 # golang.org/x/sys v0.0.0-20220503163025-988cb79eb6c6
