@@ -9,7 +9,7 @@ require (
 	github.com/obalunenko/logger v0.2.0
 	github.com/obalunenko/version v1.1.0
 	github.com/stretchr/testify v1.7.1
-	github.com/urfave/cli/v2 v2.7.1
+	github.com/urfave/cli/v2 v2.8.0
 )
 
 require (
