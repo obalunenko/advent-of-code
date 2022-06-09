@@ -6,7 +6,7 @@ require (
 	github.com/briandowns/spinner v1.18.1
 	github.com/manifoldco/promptui v0.9.0
 	github.com/obalunenko/getenv v1.0.0
-	github.com/obalunenko/logger v0.2.0
+	github.com/obalunenko/logger v0.4.0
 	github.com/obalunenko/version v1.1.0
 	github.com/stretchr/testify v1.7.2
 	github.com/urfave/cli/v2 v2.8.1
