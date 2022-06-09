@@ -27,8 +27,8 @@ github.com/mattn/go-isatty v0.0.8 h1:HLtExJ+uU2HOZ+wI0Tt5DtUDrx8yhUqDcp7fYERX4CE
 github.com/mattn/go-isatty v0.0.8/go.mod h1:Iq45c/XA43vh69/j3iqttzPXn0bhXyGjM0Hdxcsrc5s=
 github.com/obalunenko/getenv v1.0.0 h1:zYaUeRalCYXs2Jlk6eaz+MedWgA0L5VQTcAC5mDhFvU=
 github.com/obalunenko/getenv v1.0.0/go.mod h1:xXXx25+fQ7SGRkrLwTqCfZ96XAJQGtGZb16j3Qd0Ues=
-github.com/obalunenko/logger v0.2.0 h1:g1CbCK9wB8Q66NMuiroYt4nGFvvOFneMd37olUTADng=
-github.com/obalunenko/logger v0.2.0/go.mod h1:18AGelpMPZ7R+mLv0fxfP5G/ettnNFoU47B+azlE/iw=
+github.com/obalunenko/logger v0.4.0 h1:C4PlzRhKSLCNx74eQ9BFVBLJIIbOt0kTWAGagMXa7vs=
+github.com/obalunenko/logger v0.4.0/go.mod h1:18AGelpMPZ7R+mLv0fxfP5G/ettnNFoU47B+azlE/iw=
 github.com/obalunenko/version v1.1.0 h1:yVua7OHnK3+MJpendeMmAlfzVmq7R1h8MO3Ufz7HEec=
 github.com/obalunenko/version v1.1.0/go.mod h1:Or267aCQxNcAtgOeWA7yOe/RqJS4XDaMfcFwk3ohbOg=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
