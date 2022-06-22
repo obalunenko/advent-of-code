@@ -9,13 +9,13 @@ require (
 	github.com/obalunenko/logger v0.4.0
 	github.com/obalunenko/version v1.1.0
 	github.com/stretchr/testify v1.7.4
-	github.com/urfave/cli/v2 v2.10.1
+	github.com/urfave/cli/v2 v2.10.2
 )
 
 require (
 	github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/evalphobia/logrus_sentry v0.8.2 // indirect
 	github.com/fatih/color v1.7.0 // indirect
