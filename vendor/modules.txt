@@ -36,7 +36,7 @@ github.com/mattn/go-isatty
 # github.com/obalunenko/getenv v1.0.0
 ## explicit; go 1.17
 github.com/obalunenko/getenv
-# github.com/obalunenko/logger v0.5.0
+# github.com/obalunenko/logger v0.5.1
 ## explicit; go 1.18
 github.com/obalunenko/logger
 # github.com/obalunenko/version v1.1.0
