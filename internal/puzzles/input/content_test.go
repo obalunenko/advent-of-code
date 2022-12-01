@@ -80,6 +80,7 @@ func TestGet(t *testing.T) {
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
+			name: "",
 			client: client{
 				ClientDo: newMockHTTPClient(returnParams{
 					status: http.StatusOK,
@@ -96,6 +97,25 @@ func TestGet(t *testing.T) {
 			},
 			want:    []byte("test"),
 			wantErr: assert.NoError,
+		},
+		{
+			name: "",
+			client: client{
+				ClientDo: newMockHTTPClient(returnParams{
+					status: http.StatusOK,
+					body:   io.NopCloser(strings.NewReader("")),
+				}),
+			},
+			args: args{
+				ctx: context.Background(),
+				d: input.Date{
+					Year: "2021",
+					Day:  "25",
+				},
+				session: "123",
+			},
+			want:    nil,
+			wantErr: assert.Error,
 		},
 		{
 			name: "",
