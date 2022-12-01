@@ -5,26 +5,26 @@
 //
 // Example:
 //
-// 	type solver struct {
+//	type solver struct {
 //		name string
 //	}
 //
 //	func init() {
-// 		puzzleName, err := solutions.MakeName("2019", "day01")
+//		puzzleName, err := solutions.MakeName("2019", "day01")
 //		if err != nil {
 //			panic(err)
 //		}
-// 		puzzles.Register(puzzleName, solver{
+//		puzzles.Register(puzzleName, solver{
 //		name: puzzleName,
 //		})
-// 	}
+//	}
 //
 // Then to register solution in the list of all solutions: make a blank import of package with puzzle solution
 // at register_<year>.go
 //
-// 	import  _ "github.com/obalunenko/advent-of-code/puzzles/solutions/day01"
+//	import  _ "github.com/obalunenko/advent-of-code/puzzles/solutions/day01"
 //
 // And then blank import solutions package at main.go to register all solutions
 //
-//  import _ "github.com/obalunenko/advent-of-code/puzzles/solutions
+//	import _ "github.com/obalunenko/advent-of-code/puzzles/solutions
 package solutions

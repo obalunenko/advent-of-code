@@ -9,8 +9,6 @@ TOOLS_DIR=${REPO_ROOT}/tools
 
 echo "${SCRIPT_NAME} is running... "
 
-go env -w GOPROXY=https://proxy.golang.org,direct
-
 sync_vendor() {
   go mod tidy -v
   go mod vendor

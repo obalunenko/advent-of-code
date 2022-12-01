@@ -106,11 +106,11 @@ type keypad struct {
 loadKeypadPart2
 keyboard
 
-       1
-     2 3 4
-   5 6 7 8 9
-     A B C
-       D
+	    1
+	  2 3 4
+	5 6 7 8 9
+	  A B C
+	    D
 
 start at `5`
 
@@ -139,9 +139,10 @@ func loadKeypadPart2() keypad {
 /*
 loadKeypadPart1
 keyboard
-    1 2 3
-    4 5 6
-    7 8 9
+
+	1 2 3
+	4 5 6
+	7 8 9
 
 let's predict that this is a 2 dimension matrix and 5 is a 1,1
 */
