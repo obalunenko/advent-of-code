@@ -27,7 +27,7 @@ func Run(ctx context.Context, year, day string) (puzzles.Result, error) {
 		Day:  day,
 	}, SessionFromContext(ctx))
 	if err != nil {
-		return puzzles.Result{}, err
+		return puzzles.Result{}, fmt.Errorf("failed to get input for puzzle: %w", err)
 	}
 
 	opts := OptionsFromContext(ctx)
