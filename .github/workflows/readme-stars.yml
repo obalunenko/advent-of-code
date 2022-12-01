@@ -109,7 +109,7 @@ jobs:
           starSymbol: ${{env.STAR_SYMBOL}}
 
       - name: Update 2016 year
-        uses: k2bd/advent-readme-stars@v1.0.2
+        uses: k2bd/advent-readme-stars@1.0.2
         env:
           YEAR: 2016
         with:
