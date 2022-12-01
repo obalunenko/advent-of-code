@@ -32,8 +32,6 @@ const (
 
 // Regression tests for all puzzles. Check that answers still correct.
 func TestRun(t *testing.T) {
-	t.Parallel()
-
 	if !getenv.BoolOrDefault(regressionEnabled, false) {
 		t.Skipf("%s disabled", regressionEnabled)
 	}
@@ -61,8 +59,6 @@ func TestRun(t *testing.T) {
 		tt := tests[i]
 
 		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
 			got, err := command.Run(ctx, tt.args.year, tt.args.name)
 			if tt.wantErr {
 				require.Error(t, err)
