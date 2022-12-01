@@ -23,6 +23,34 @@ type mockHTTPClient struct {
 	MockDo dofunc
 }
 
+type returnParams struct {
+	status int
+	body   io.ReadCloser
+}
+
+func newMockHTTPClient(p returnParams) *mockHTTPClient {
+	return &mockHTTPClient{
+		MockDo: func(req *http.Request) (*http.Response, error) {
+			return &http.Response{
+				Status:           http.StatusText(p.status),
+				StatusCode:       p.status,
+				Proto:            "HTTP/1.0",
+				ProtoMajor:       1,
+				ProtoMinor:       0,
+				Header:           nil,
+				Body:             p.body,
+				ContentLength:    0,
+				TransferEncoding: nil,
+				Close:            false,
+				Uncompressed:     false,
+				Trailer:          nil,
+				Request:          nil,
+				TLS:              nil,
+			}, nil
+		},
+	}
+}
+
 // Overriding what the Do function should "do" in our MockClient
 func (m *mockHTTPClient) Do(req *http.Request) (*http.Response, error) {
 	return m.MockDo(req)
@@ -89,36 +117,79 @@ func TestRun(t *testing.T) {
 		puzzles.UnregisterAllSolvers(t)
 	})
 
-	r := io.NopCloser(strings.NewReader("1,2,3"))
+	type expected struct {
+		result  puzzles.Result
+		wantErr assert.ErrorAssertionFunc
+	}
 
-	input.Client = &mockHTTPClient{
-		MockDo: func(req *http.Request) (*http.Response, error) {
-			return &http.Response{
-				Status:           http.StatusText(http.StatusOK),
-				StatusCode:       http.StatusOK,
-				Proto:            "HTTP/1.0",
-				ProtoMajor:       1,
-				ProtoMinor:       0,
-				Header:           nil,
-				Body:             r,
-				ContentLength:    0,
-				TransferEncoding: nil,
-				Close:            false,
-				Uncompressed:     false,
-				Trailer:          nil,
-				Request:          nil,
-				TLS:              nil,
-			}, nil
+	var tests = []struct {
+		name         string
+		returnParams returnParams
+		expected     expected
+	}{
+		{
+			name: "",
+			returnParams: returnParams{
+				status: http.StatusOK,
+				body:   io.NopCloser(strings.NewReader("1,2,3")),
+			},
+			expected: expected{
+				result: puzzles.Result{
+					Year:  "1992",
+					Name:  "31",
+					Part1: "2",
+					Part2: "3",
+				},
+				wantErr: assert.NoError,
+			},
+		},
+		{
+			name: "",
+			returnParams: returnParams{
+				status: http.StatusNotFound,
+				body:   http.NoBody,
+			},
+			expected: expected{
+				result:  puzzles.Result{},
+				wantErr: assert.Error,
+			},
+		},
+		{
+			name: "",
+			returnParams: returnParams{
+				status: http.StatusUnauthorized,
+				body:   http.NoBody,
+			},
+			expected: expected{
+				result:  puzzles.Result{},
+				wantErr: assert.Error,
+			},
+		},
+		{
+			name: "",
+			returnParams: returnParams{
+				status: http.StatusOK,
+				body:   http.NoBody,
+			},
+			expected: expected{
+				result:  puzzles.Result{},
+				wantErr: assert.Error,
+			},
 		},
 	}
 
-	got, err := command.Run(ctx, year, day)
-	assert.NoError(t, err)
+	for i := range tests {
+		tt := tests[i]
 
-	assert.Equal(t, puzzles.Result{
-		Year:  "1992",
-		Name:  "31",
-		Part1: "2",
-		Part2: "3",
-	}, got)
+		t.Run(tt.name, func(t *testing.T) {
+			input.Client = newMockHTTPClient(tt.returnParams)
+
+			got, err := command.Run(ctx, year, day)
+			if !tt.expected.wantErr(t, err) {
+				return
+			}
+
+			assert.Equal(t, tt.expected.result, got)
+		})
+	}
 }

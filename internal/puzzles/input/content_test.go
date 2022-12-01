@@ -22,6 +22,34 @@ type mockHTTPClient struct {
 	MockDo dofunc
 }
 
+type returnParams struct {
+	status int
+	body   io.ReadCloser
+}
+
+func newMockHTTPClient(p returnParams) *mockHTTPClient {
+	return &mockHTTPClient{
+		MockDo: func(req *http.Request) (*http.Response, error) {
+			return &http.Response{
+				Status:           http.StatusText(p.status),
+				StatusCode:       p.status,
+				Proto:            "HTTP/1.0",
+				ProtoMajor:       1,
+				ProtoMinor:       0,
+				Header:           nil,
+				Body:             p.body,
+				ContentLength:    0,
+				TransferEncoding: nil,
+				Close:            false,
+				Uncompressed:     false,
+				Trailer:          nil,
+				Request:          nil,
+				TLS:              nil,
+			}, nil
+		},
+	}
+}
+
 // Overriding what the Do function should "do" in our MockClient
 func (m *mockHTTPClient) Do(req *http.Request) (*http.Response, error) {
 	return m.MockDo(req)
@@ -52,28 +80,11 @@ func TestGet(t *testing.T) {
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
-			name: "",
 			client: client{
-				ClientDo: &mockHTTPClient{
-					MockDo: func(req *http.Request) (*http.Response, error) {
-						return &http.Response{
-							Status:           http.StatusText(http.StatusOK),
-							StatusCode:       http.StatusOK,
-							Proto:            "HTTP/1.0",
-							ProtoMajor:       1,
-							ProtoMinor:       0,
-							Header:           nil,
-							Body:             io.NopCloser(strings.NewReader("test")),
-							ContentLength:    0,
-							TransferEncoding: nil,
-							Close:            false,
-							Uncompressed:     false,
-							Trailer:          nil,
-							Request:          nil,
-							TLS:              nil,
-						}, nil
-					},
-				},
+				ClientDo: newMockHTTPClient(returnParams{
+					status: http.StatusOK,
+					body:   io.NopCloser(strings.NewReader("test")),
+				}),
 			},
 			args: args{
 				ctx: context.Background(),
@@ -89,26 +100,10 @@ func TestGet(t *testing.T) {
 		{
 			name: "",
 			client: client{
-				ClientDo: &mockHTTPClient{
-					MockDo: func(req *http.Request) (*http.Response, error) {
-						return &http.Response{
-							Status:           http.StatusText(http.StatusNotFound),
-							StatusCode:       http.StatusNotFound,
-							Proto:            "HTTP/1.0",
-							ProtoMajor:       1,
-							ProtoMinor:       0,
-							Header:           nil,
-							Body:             http.NoBody,
-							ContentLength:    0,
-							TransferEncoding: nil,
-							Close:            false,
-							Uncompressed:     false,
-							Trailer:          nil,
-							Request:          nil,
-							TLS:              nil,
-						}, nil
-					},
-				},
+				ClientDo: newMockHTTPClient(returnParams{
+					status: http.StatusNotFound,
+					body:   http.NoBody,
+				}),
 			},
 			args: args{
 				ctx: context.Background(),
@@ -124,26 +119,10 @@ func TestGet(t *testing.T) {
 		{
 			name: "",
 			client: client{
-				ClientDo: &mockHTTPClient{
-					MockDo: func(req *http.Request) (*http.Response, error) {
-						return &http.Response{
-							Status:           http.StatusText(http.StatusBadRequest),
-							StatusCode:       http.StatusBadRequest,
-							Proto:            "HTTP/1.0",
-							ProtoMajor:       1,
-							ProtoMinor:       0,
-							Header:           nil,
-							Body:             io.NopCloser(strings.NewReader("no session")),
-							ContentLength:    0,
-							TransferEncoding: nil,
-							Close:            false,
-							Uncompressed:     false,
-							Trailer:          nil,
-							Request:          nil,
-							TLS:              nil,
-						}, nil
-					},
-				},
+				ClientDo: newMockHTTPClient(returnParams{
+					status: http.StatusBadRequest,
+					body:   io.NopCloser(strings.NewReader("no session")),
+				}),
 			},
 			args: args{
 				ctx: context.Background(),
@@ -159,26 +138,10 @@ func TestGet(t *testing.T) {
 		{
 			name: "",
 			client: client{
-				ClientDo: &mockHTTPClient{
-					MockDo: func(req *http.Request) (*http.Response, error) {
-						return &http.Response{
-							Status:           http.StatusText(http.StatusInternalServerError),
-							StatusCode:       http.StatusInternalServerError,
-							Proto:            "HTTP/1.0",
-							ProtoMajor:       1,
-							ProtoMinor:       0,
-							Header:           nil,
-							Body:             io.NopCloser(strings.NewReader("no session")),
-							ContentLength:    0,
-							TransferEncoding: nil,
-							Close:            false,
-							Uncompressed:     false,
-							Trailer:          nil,
-							Request:          nil,
-							TLS:              nil,
-						}, nil
-					},
-				},
+				ClientDo: newMockHTTPClient(returnParams{
+					status: http.StatusInternalServerError,
+					body:   io.NopCloser(strings.NewReader("no session")),
+				}),
 			},
 			args: args{
 				ctx: context.Background(),
@@ -214,26 +177,10 @@ func TestGet(t *testing.T) {
 		{
 			name: "",
 			client: client{
-				ClientDo: &mockHTTPClient{
-					MockDo: func(req *http.Request) (*http.Response, error) {
-						return &http.Response{
-							Status:           http.StatusText(http.StatusOK),
-							StatusCode:       http.StatusOK,
-							Proto:            "HTTP/1.0",
-							ProtoMajor:       1,
-							ProtoMinor:       0,
-							Header:           nil,
-							Body:             io.NopCloser(iotest.ErrReader(errors.New("custom error"))),
-							ContentLength:    0,
-							TransferEncoding: nil,
-							Close:            false,
-							Uncompressed:     false,
-							Trailer:          nil,
-							Request:          nil,
-							TLS:              nil,
-						}, nil
-					},
-				},
+				ClientDo: newMockHTTPClient(returnParams{
+					status: http.StatusOK,
+					body:   io.NopCloser(iotest.ErrReader(errors.New("custom error"))),
+				}),
 			},
 			args: args{
 				ctx: context.Background(),
