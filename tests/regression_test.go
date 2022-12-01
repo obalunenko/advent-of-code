@@ -57,10 +57,12 @@ func TestRun(t *testing.T) {
 	tests = append(tests, testcases2021(t)...)
 	tests = append(tests, testcases2022(t)...)
 
-	for _, tt := range tests {
+	for i := range tests {
+		tt := tests[i]
+
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			
+
 			got, err := command.Run(ctx, tt.args.year, tt.args.name)
 			if tt.wantErr {
 				require.Error(t, err)
