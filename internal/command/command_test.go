@@ -1,4 +1,4 @@
-package command_test
+package command
 
 import (
 	"context"
@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/obalunenko/advent-of-code/internal/command"
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 	"github.com/obalunenko/advent-of-code/internal/puzzles/input"
 )
@@ -182,9 +182,9 @@ func TestRun(t *testing.T) {
 		tt := tests[i]
 
 		t.Run(tt.name, func(t *testing.T) {
-			input.Client = newMockHTTPClient(tt.returnParams)
+			cli := input.NewFetcher(newMockHTTPClient(tt.returnParams), time.Second*5)
 
-			got, err := command.Run(ctx, year, day)
+			got, err := run(ctx, cli, year, day)
 			if !tt.expected.wantErr(t, err) {
 				return
 			}
