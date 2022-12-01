@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Update 2022 year
-        uses: k2bd/advent-readme-stars@v1.0.2
+        uses: k2bd/advent-readme-stars@1.0.2
         env:
           YEAR: 2022
         with:
@@ -39,7 +39,7 @@ jobs:
           starSymbol: ${{env.STAR_SYMBOL}}
 
       - name: Update 2021 year
-        uses: k2bd/advent-readme-stars@v1.0.2
+        uses: k2bd/advent-readme-stars@1.0.2
         env:
           YEAR: 2021
         with:
@@ -53,7 +53,7 @@ jobs:
           starSymbol: ${{env.STAR_SYMBOL}}
 
       - name: Update 2020 year
-        uses: k2bd/advent-readme-stars@v1.0.2
+        uses: k2bd/advent-readme-stars@1.0.2
         env:
           YEAR: 2020
         with:
@@ -67,7 +67,7 @@ jobs:
           starSymbol: ${{env.STAR_SYMBOL}}
 
       - name: Update 2019 year
-        uses: k2bd/advent-readme-stars@v1.0.2
+        uses: k2bd/advent-readme-stars@1.0.2
         env:
           YEAR: 2019
         with:
@@ -81,7 +81,7 @@ jobs:
           starSymbol: ${{env.STAR_SYMBOL}}
 
       - name: Update 2018 year
-        uses: k2bd/advent-readme-stars@v1.0.2
+        uses: k2bd/advent-readme-stars@1.0.2
         env:
           YEAR: 2018
         with:
@@ -95,7 +95,7 @@ jobs:
           starSymbol: ${{env.STAR_SYMBOL}}
 
       - name: Update 2017 year
-        uses: k2bd/advent-readme-stars@v1.0.2
+        uses: k2bd/advent-readme-stars@1.0.2
         env:
           YEAR: 2017
         with:
@@ -123,7 +123,7 @@ jobs:
           starSymbol: ${{env.STAR_SYMBOL}}
 
       - name: Update 2015 year
-        uses: k2bd/advent-readme-stars@v1.0.2
+        uses: k2bd/advent-readme-stars@1.0.2
         env:
           YEAR: 2015
         with:
