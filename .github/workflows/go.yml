@@ -52,7 +52,6 @@ jobs:
       - name: Set up go
         uses: actions/setup-go@v3.3.1
         with:
-          stable: 'true'
           go-version: ${{ matrix.go }}
 
       - run: |
@@ -101,7 +100,6 @@ jobs:
       - name: Set up go
         uses: actions/setup-go@v3.3.1
         with:
-          stable: 'true'
           go-version: ${{ matrix.go }}
       - run: |
           go version
@@ -154,7 +152,6 @@ jobs:
       - name: Set up go
         uses: actions/setup-go@v3.3.1
         with:
-          stable: 'true'
           go-version: ${{ matrix.go }}
       - run: |
           go version
@@ -224,7 +221,6 @@ jobs:
       - name: Set up go
         uses: actions/setup-go@v3.3.1
         with:
-          stable: 'true'
           go-version: ${{ matrix.go }}
 
       - run: |
