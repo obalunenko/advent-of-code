@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/obalunenko/logger"
@@ -73,6 +74,10 @@ func Get(ctx context.Context, d Date, session string) ([]byte, error) {
 
 	switch resp.StatusCode {
 	case http.StatusOK:
+		if strings.TrimSpace(string(body)) == "" {
+			return nil, fmt.Errorf("empty response received")
+		}
+
 		return body, nil
 	case http.StatusNotFound:
 		return nil, fmt.Errorf("[%s]: %w", d, ErrNotFound)
@@ -101,7 +106,7 @@ func createInputReq(ctx context.Context, d Date, sessionID string) (*http.Reques
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), http.NoBody)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("create request: %w", err)
 	}
 
 	req.AddCookie(&http.Cookie{

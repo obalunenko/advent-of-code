@@ -66,6 +66,8 @@ func TestRun(t *testing.T) {
 				return
 			}
 
+			require.NoError(t, err)
+
 			assert.Equal(t, tt.want, got)
 		})
 	}

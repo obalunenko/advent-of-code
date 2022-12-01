@@ -366,16 +366,28 @@ func splitCommand(cmd string) (turn, int, error) {
 	return t, s, nil
 }
 
-type track map[position]bool
+type track struct {
+	t map[position]bool
+	m *sync.Mutex
+}
 
 func newTrack() track {
-	return make(track)
+	return track{
+		t: make(map[position]bool),
+		m: new(sync.Mutex),
+	}
 }
 
 func (t track) record(p position) {
-	t[p] = true
+	t.m.Lock()
+	defer t.m.Unlock()
+
+	t.t[p] = true
 }
 
 func (t track) isVisited(p position) bool {
-	return t[p]
+	t.m.Lock()
+	defer t.m.Unlock()
+
+	return t.t[p]
 }

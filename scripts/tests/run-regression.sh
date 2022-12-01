@@ -15,7 +15,7 @@ if command -v "gotestsum" &>/dev/null; then
   GOTEST="gotestsum --format testname --"
 fi
 
-${GOTEST} -race "${REGRESSION_TESTS_PKG}"
+${GOTEST} -count=1 -race "${REGRESSION_TESTS_PKG}"
 
 unset AOC_REGRESSION_ENABLED
 
