@@ -11,7 +11,7 @@ on:
 
 jobs:
   update-readme:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       USER_ID: ${{ secrets.AOC_USER_ID }}
       BOARD_ID: ${{ secrets.AOC_BOARD_ID}}
@@ -24,8 +24,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Upate 2021 year
-        uses: k2bd/advent-readme-stars@v1.0.1
+      - name: Update 2022 year
+        uses: k2bd/advent-readme-stars@v1.0.2
+        env:
+          YEAR: 2022
+        with:
+          userId: ${{env.USER_ID}}
+          leaderboardId: ${{env.BOARD_ID}}
+          sessionCookie: ${{env.SESSION}}
+          readmeLocation: ${{env.README}}
+          headerPrefix: ${{env.HEADER_PFX}}
+          year: ${{env.YEAR}}
+          tableMarker: <!--- advent_readme_stars table [${{env.YEAR}}] --->
+          starSymbol: ${{env.STAR_SYMBOL}}
+
+      - name: Update 2021 year
+        uses: k2bd/advent-readme-stars@v1.0.2
         env:
           YEAR: 2021
         with:
@@ -38,8 +52,8 @@ jobs:
           tableMarker: <!--- advent_readme_stars table [${{env.YEAR}}] --->
           starSymbol: ${{env.STAR_SYMBOL}}
 
-      - name: Upate 2020 year
-        uses: k2bd/advent-readme-stars@v1.0.1
+      - name: Update 2020 year
+        uses: k2bd/advent-readme-stars@v1.0.2
         env:
           YEAR: 2020
         with:
@@ -52,8 +66,8 @@ jobs:
           tableMarker: <!--- advent_readme_stars table [${{env.YEAR}}] --->
           starSymbol: ${{env.STAR_SYMBOL}}
 
-      - name: Upate 2019 year
-        uses: k2bd/advent-readme-stars@v1.0.1
+      - name: Update 2019 year
+        uses: k2bd/advent-readme-stars@v1.0.2
         env:
           YEAR: 2019
         with:
@@ -66,8 +80,8 @@ jobs:
           tableMarker: <!--- advent_readme_stars table [${{env.YEAR}}] --->
           starSymbol: ${{env.STAR_SYMBOL}}
 
-      - name: Upate 2018 year
-        uses: k2bd/advent-readme-stars@v1.0.1
+      - name: Update 2018 year
+        uses: k2bd/advent-readme-stars@v1.0.2
         env:
           YEAR: 2018
         with:
@@ -80,8 +94,8 @@ jobs:
           tableMarker: <!--- advent_readme_stars table [${{env.YEAR}}] --->
           starSymbol: ${{env.STAR_SYMBOL}}
 
-      - name: Upate 2017 year
-        uses: k2bd/advent-readme-stars@v1.0.1
+      - name: Update 2017 year
+        uses: k2bd/advent-readme-stars@v1.0.2
         env:
           YEAR: 2017
         with:
@@ -94,8 +108,8 @@ jobs:
           tableMarker: <!--- advent_readme_stars table [${{env.YEAR}}] --->
           starSymbol: ${{env.STAR_SYMBOL}}
 
-      - name: Upate 2016 year
-        uses: k2bd/advent-readme-stars@v1.0.1
+      - name: Update 2016 year
+        uses: k2bd/advent-readme-stars@v1.0.2
         env:
           YEAR: 2016
         with:
@@ -108,8 +122,8 @@ jobs:
           tableMarker: <!--- advent_readme_stars table [${{env.YEAR}}] --->
           starSymbol: ${{env.STAR_SYMBOL}}
 
-      - name: Upate 2015 year
-        uses: k2bd/advent-readme-stars@v1.0.1
+      - name: Update 2015 year
+        uses: k2bd/advent-readme-stars@v1.0.2
         env:
           YEAR: 2015
         with:
