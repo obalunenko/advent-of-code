@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 	"testing/iotest"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -56,14 +57,8 @@ func (m *mockHTTPClient) Do(req *http.Request) (*http.Response, error) {
 }
 
 func TestGet(t *testing.T) {
-	prevCli := input.Client
-
-	t.Cleanup(func() {
-		input.Client = prevCli
-	})
-
 	type client struct {
-		input.ClientDo
+		input.IHTTPClient
 	}
 
 	type args struct {
@@ -82,7 +77,7 @@ func TestGet(t *testing.T) {
 		{
 			name: "",
 			client: client{
-				ClientDo: newMockHTTPClient(returnParams{
+				IHTTPClient: newMockHTTPClient(returnParams{
 					status: http.StatusOK,
 					body:   io.NopCloser(strings.NewReader("test")),
 				}),
@@ -101,7 +96,7 @@ func TestGet(t *testing.T) {
 		{
 			name: "",
 			client: client{
-				ClientDo: newMockHTTPClient(returnParams{
+				IHTTPClient: newMockHTTPClient(returnParams{
 					status: http.StatusOK,
 					body:   io.NopCloser(strings.NewReader("")),
 				}),
@@ -120,7 +115,7 @@ func TestGet(t *testing.T) {
 		{
 			name: "",
 			client: client{
-				ClientDo: newMockHTTPClient(returnParams{
+				IHTTPClient: newMockHTTPClient(returnParams{
 					status: http.StatusNotFound,
 					body:   http.NoBody,
 				}),
@@ -139,7 +134,7 @@ func TestGet(t *testing.T) {
 		{
 			name: "",
 			client: client{
-				ClientDo: newMockHTTPClient(returnParams{
+				IHTTPClient: newMockHTTPClient(returnParams{
 					status: http.StatusBadRequest,
 					body:   io.NopCloser(strings.NewReader("no session")),
 				}),
@@ -158,7 +153,7 @@ func TestGet(t *testing.T) {
 		{
 			name: "",
 			client: client{
-				ClientDo: newMockHTTPClient(returnParams{
+				IHTTPClient: newMockHTTPClient(returnParams{
 					status: http.StatusInternalServerError,
 					body:   io.NopCloser(strings.NewReader("no session")),
 				}),
@@ -177,7 +172,7 @@ func TestGet(t *testing.T) {
 		{
 			name: "",
 			client: client{
-				ClientDo: &mockHTTPClient{
+				IHTTPClient: &mockHTTPClient{
 					MockDo: func(req *http.Request) (*http.Response, error) {
 						return &http.Response{}, errors.New("error in test")
 					},
@@ -197,7 +192,7 @@ func TestGet(t *testing.T) {
 		{
 			name: "",
 			client: client{
-				ClientDo: newMockHTTPClient(returnParams{
+				IHTTPClient: newMockHTTPClient(returnParams{
 					status: http.StatusOK,
 					body:   io.NopCloser(iotest.ErrReader(errors.New("custom error"))),
 				}),
@@ -217,9 +212,9 @@ func TestGet(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			input.Client = tt.client
+			cli := input.NewFetcher(tt.client, time.Second*5)
 
-			got, err := input.Get(tt.args.ctx, tt.args.d, tt.args.session)
+			got, err := cli.Fetch(tt.args.ctx, tt.args.d, tt.args.session)
 			if !tt.wantErr(t, err) {
 				return
 			}

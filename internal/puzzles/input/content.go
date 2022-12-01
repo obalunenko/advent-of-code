@@ -32,31 +32,46 @@ func (d Date) String() string {
 	return path.Join(d.Year, d.Day)
 }
 
-// ClientDo provides the interface for custom HTTP client implementations.
-type ClientDo interface {
+// IHTTPClient provides the interface for custom HTTP client implementations.
+type IHTTPClient interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
-// Client is the default Client and is used by Get, Head, and Post.
-var Client ClientDo = http.DefaultClient
+// Fetcher is an input get client.
+type Fetcher interface {
+	Fetch(ctx context.Context, d Date, session string) ([]byte, error)
+}
 
-// Get returns puzzle input.
-func Get(ctx context.Context, d Date, session string) ([]byte, error) {
+type client struct {
+	cli     IHTTPClient
+	timeout time.Duration
+}
+
+// NewFetcher constructor for Fetcher.
+func NewFetcher(c IHTTPClient, timeout time.Duration) Fetcher {
+	return &client{
+		cli:     c,
+		timeout: timeout,
+	}
+}
+
+// Fetch returns puzzle input.
+func (c *client) Fetch(ctx context.Context, d Date, session string) ([]byte, error) {
 	req, err := createInputReq(ctx, d, session)
 	if err != nil {
 		return nil, fmt.Errorf("create input request: %w", err)
 	}
 
-	const (
-		timeoutSecs = 5
-	)
+	var cancel context.CancelFunc
 
-	ctx, cancel := context.WithTimeout(ctx, time.Second*timeoutSecs)
-	defer cancel()
+	if c.timeout > 0 {
+		ctx, cancel = context.WithTimeout(ctx, c.timeout)
+		defer cancel()
+	}
 
 	req = req.Clone(ctx)
 
-	resp, err := Client.Do(req)
+	resp, err := c.cli.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("send request: %w", err)
 	}
@@ -123,9 +138,6 @@ func createInputReq(ctx context.Context, d Date, sessionID string) (*http.Reques
 		Raw:        "",
 		Unparsed:   nil,
 	})
-
-	req.Header.Set("User-Agent",
-		"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36")
 
 	return req, nil
 }
