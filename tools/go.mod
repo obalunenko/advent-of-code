@@ -6,7 +6,7 @@ require (
 	github.com/axw/gocov v1.1.0
 	github.com/golangci/golangci-lint v1.50.1
 	github.com/goreleaser/goreleaser v1.13.1
-	github.com/matm/gocov-html v1.1.1
+	github.com/matm/gocov-html v1.2.0
 	github.com/mattn/goveralls v0.0.11
 	github.com/obalunenko/coverbadger v1.2.0
 	golang.org/x/tools v0.3.0
@@ -240,6 +240,7 @@ require (
 	github.com/quasilyte/regex/syntax v0.0.0-20200407221936-30656e2c4a95 // indirect
 	github.com/quasilyte/stdinfo v0.0.0-20220114132959-f7386bf02567 // indirect
 	github.com/rivo/uniseg v0.4.2 // indirect
+	github.com/rotisserie/eris v0.5.4 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/ryancurrah/gomodguard v1.2.4 // indirect
 	github.com/ryanrolds/sqlclosecheck v0.3.0 // indirect
