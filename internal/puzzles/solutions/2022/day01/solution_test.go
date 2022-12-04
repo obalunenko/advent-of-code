@@ -107,7 +107,7 @@ func Test_solution_Part2(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := s.Part2(tt.args.input)
 			if !tt.wantErr(t, err) {
-
+				return
 			}
 
 			assert.Equal(t, tt.want, got)
