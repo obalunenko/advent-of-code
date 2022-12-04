@@ -114,7 +114,7 @@ func (e elve) totalCalories() int {
 
 	e.total = sum
 
-	return sum
+	return e.total
 }
 
 type elves []elve
