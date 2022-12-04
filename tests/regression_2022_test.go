@@ -19,10 +19,10 @@ func testcases2022(tb testing.TB) []testcase {
 			want: puzzles.Result{
 				Year:  year.String(),
 				Name:  puzzles.Day01.String(),
-				Part1: "",
-				Part2: "",
+				Part1: "69501",
+				Part2: "202346",
 			},
-			wantErr: true,
+			wantErr: false,
 		},
 		{
 			name: tcName(tb, year, puzzles.Day02),
