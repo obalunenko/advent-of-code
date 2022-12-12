@@ -53,6 +53,7 @@ jobs:
       - name: Build
         run: |
           make build
+
   regression_test:
     strategy:
       fail-fast: false
@@ -179,23 +180,10 @@ jobs:
           go version
         shell: bash
 
-      - name: Set up cache
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-vendored-tools-${{ secrets.CACHE_VERSION }}
+      - name: Install GoReleaser
+        uses: goreleaser/goreleaser-action@v3
         with:
-          path: |
-            ${{ env.GOBIN }}
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tools/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tools/go.sum') }}
-
-      - name: Install tools
-        run: |
-          make install-tools
-        shell: bash
+          install-only: true
 
       - name: Run GoReleaser
         if: success()
