@@ -24,6 +24,8 @@ services:
   run-tests-regression:
     extends:
       service: tools
+    environment:
+      AOC_SESSION: ${AOC_SESSION}
     entrypoint: /bin/sh -c 'cd /app/ &&/app/scripts/tests/run-regression.sh'
 
   run-tests-coverage:
