@@ -7,7 +7,10 @@ SHELL := env APP_NAME=$(APP_NAME) $(SHELL)
 GOTOOLS_IMAGE_TAG?=v0.0.1
 SHELL := env GOTOOLS_IMAGE_TAG=$(GOTOOLS_IMAGE_TAG) $(SHELL)
 
-COMPOSE_CMD=docker compose -f deployments/docker-compose/go-tools-docker-compose.yml up --exit-code-from
+COMPOSE_TOOLS_FILE=deployments/docker-compose/go-tools-docker-compose.yml
+COMPOSE_TOOLS_CMD_BASE=docker compose -f $(COMPOSE_TOOLS_FILE)
+COMPOSE_TOOLS_CMD_UP=$(COMPOSE_TOOLS_CMD_BASE) up --exit-code-from
+COMPOSE_TOOLS_CMD_PULL=$(COMPOSE_TOOLS_CMD_BASE) pull
 
 TARGET_MAX_CHAR_NUM=20
 
@@ -40,7 +43,7 @@ compile-app:
 
 ## Test coverage report.
 test-cover:
-	$(COMPOSE_CMD) run-tests-coverage run-tests-coverage
+	$(COMPOSE_TOOLS_CMD_UP) run-tests-coverage run-tests-coverage
 .PHONY: test-cover
 
 ## Tests sonar report generate.
@@ -55,17 +58,17 @@ open-cover-report: test-cover
 
 ## Update readme coverage.
 update-readme-cover: build test-cover
-	$(COMPOSE_CMD) update-readme-coverage update-readme-coverage
+	$(COMPOSE_TOOLS_CMD_UP) update-readme-coverage update-readme-coverage
 .PHONY: update-readme-cover
 
 ## Run tests.
 test:
-	$(COMPOSE_CMD) run-tests run-tests
+	$(COMPOSE_TOOLS_CMD_UP) run-tests run-tests
 .PHONY: test
 
 ## Run regression tests.
 test-regression:
-	$(COMPOSE_CMD) run-tests-regression run-tests-regression
+	$(COMPOSE_TOOLS_CMD_UP) run-tests-regression run-tests-regression
 .PHONY: test-regression
 
 ## Sync vendor and install needed tools.
@@ -78,12 +81,12 @@ sync-vendor:
 
 ## Fix imports sorting.
 imports:
-	$(COMPOSE_CMD) fix-imports fix-imports
+	$(COMPOSE_TOOLS_CMD_UP) fix-imports fix-imports
 .PHONY: imports
 
 ## Format code with go fmt.
 fmt:
-	$(COMPOSE_CMD) fix-fmt fix-fmt
+	$(COMPOSE_TOOLS_CMD_UP) fix-fmt fix-fmt
 .PHONY: fmt
 
 ## Format code and sort imports.
@@ -92,7 +95,8 @@ format-project: fmt imports
 
 ## Installs vendored tools.
 install-tools:
-	docker compose -f scripts/go-tools-docker-compose.yml pull
+	echo "Installing ${GOTOOLS_IMAGE_TAG}"
+	$(COMPOSE_TOOLS_CMD_PULL)
 .PHONY: install-tools
 
 ## vet project
@@ -102,22 +106,22 @@ vet:
 
 ## Run full linting
 lint-full:
-	$(COMPOSE_CMD) lint-full lint-full
+	$(COMPOSE_TOOLS_CMD_UP) lint-full lint-full
 .PHONY: lint-full
 
 ## Run linting for build pipeline
 lint-pipeline:
-	$(COMPOSE_CMD) lint-pipeline lint-pipeline
+	$(COMPOSE_TOOLS_CMD_UP) lint-pipeline lint-pipeline
 .PHONY: lint-pipeline
 
 ## Run linting for sonar report
 lint-sonar:
-	$(COMPOSE_CMD) lint-sonar lint-sonar
+	$(COMPOSE_TOOLS_CMD_UP) lint-sonar lint-sonar
 .PHONY: lint-sonar
 
 ## recreate all generated code and documentation.
 codegen:
-	$(COMPOSE_CMD) go-generate go-generate
+	$(COMPOSE_TOOLS_CMD_UP) go-generate go-generate
 .PHONY: codegen
 
 ## recreate all generated code and swagger documentation and format code.
