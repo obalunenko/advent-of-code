@@ -1,8 +1,10 @@
-NAME=aoc-cli
-BIN_DIR=./bin
-
 SHELL := env VERSION=$(VERSION) $(SHELL)
 VERSION ?= $(shell git describe --tags $(git rev-list --tags --max-count=1))
+
+APP_NAME?=aoc-cli
+SHELL := env APP_NAME=$(APP_NAME) $(SHELL)
+
+COMPOSE_CMD=docker compose -f scripts/go-tools-docker-compose.yml up --exit-code-from
 
 TARGET_MAX_CHAR_NUM=20
 
@@ -24,26 +26,19 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
-
-
 ## Build project.
-build: compile-aoc-cli
+build: compile-app
 .PHONY: build
 
-## Compile aoc-cli.
-compile-aoc-cli:
-	./scripts/build/aoc-cli.sh
-.PHONY: compile-spamassassin-parser-be
+## Compile app.
+compile-app:
+	./scripts/build/app.sh
+.PHONY: compile-app
 
 ## Test coverage report.
 test-cover:
-	./scripts/tests/coverage.sh
+	$(COMPOSE_CMD) run-tests-coverage run-tests-coverage
 .PHONY: test-cover
-
-## Test regression.
-test-regression:
-	./scripts/tests/run-regression.sh
-.PHONY: test-regression
 
 ## Tests sonar report generate.
 test-sonar-report:
@@ -57,13 +52,18 @@ open-cover-report: test-cover
 
 ## Update readme coverage.
 update-readme-cover: build test-cover
-	./scripts/update-readme-coverage.sh
+	$(COMPOSE_CMD) update-readme-coverage update-readme-coverage
 .PHONY: update-readme-cover
 
 ## Run tests.
 test:
-	./scripts/tests/run.sh
+	$(COMPOSE_CMD) run-tests run-tests
 .PHONY: test
+
+## Run regression tests.
+test-regression:
+	$(COMPOSE_CMD) run-tests-regression run-tests-regression
+.PHONY: test-regression
 
 ## Sync vendor and install needed tools.
 configure: sync-vendor install-tools
@@ -75,12 +75,12 @@ sync-vendor:
 
 ## Fix imports sorting.
 imports:
-	./scripts/style/fix-imports.sh
+	$(COMPOSE_CMD) fix-imports fix-imports
 .PHONY: imports
 
 ## Format code with go fmt.
 fmt:
-	./scripts/style/fmt.sh
+	$(COMPOSE_CMD) fix-fmt fix-fmt
 .PHONY: fmt
 
 ## Format code and sort imports.
@@ -89,7 +89,7 @@ format-project: fmt imports
 
 ## Installs vendored tools.
 install-tools:
-	./scripts/install/vendored-tools.sh
+	docker compose -f scripts/go-tools-docker-compose.yml pull
 .PHONY: install-tools
 
 ## vet project
@@ -99,22 +99,22 @@ vet:
 
 ## Run full linting
 lint-full:
-	./scripts/linting/run-linters.sh
+	$(COMPOSE_CMD) lint-full lint-full
 .PHONY: lint-full
 
 ## Run linting for build pipeline
 lint-pipeline:
-	./scripts/linting/golangci-pipeline.sh
+	$(COMPOSE_CMD) lint-pipeline lint-pipeline
 .PHONY: lint-pipeline
 
 ## Run linting for sonar report
 lint-sonar:
-	./scripts/linting/golangci-sonar.sh
+	$(COMPOSE_CMD) lint-sonar lint-sonar
 .PHONY: lint-sonar
 
 ## recreate all generated code and documentation.
 codegen:
-	./scripts/codegen/go-generate.sh
+	$(COMPOSE_CMD) go-generate go-generate
 .PHONY: codegen
 
 ## recreate all generated code and swagger documentation and format code.
