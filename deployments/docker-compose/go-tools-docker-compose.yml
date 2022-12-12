@@ -21,6 +21,11 @@ services:
       service: tools
     entrypoint: /bin/sh -c 'cd /app/ &&/app/scripts/tests/run.sh'
 
+  run-tests-regression:
+    extends:
+      service: tools
+    entrypoint: /bin/sh -c 'cd /app/ &&/app/scripts/tests/run-regression.sh'
+
   run-tests-coverage:
     extends:
       service: tools
