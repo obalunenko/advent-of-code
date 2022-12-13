@@ -1,6 +1,7 @@
 name: Go [lint, test]
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'master'
