@@ -1,4 +1,4 @@
-![coverbadger-tag-do-not-edit](https://img.shields.io/badge/coverage-96.08%25-brightgreen?longCache=true&style=flat)
+![coverbadger-tag-do-not-edit](https://img.shields.io/badge/coverage-96.23%25-brightgreen?longCache=true&style=flat)
 
 
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/obalunenko/getenv)
