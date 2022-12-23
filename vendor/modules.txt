@@ -1,4 +1,4 @@
-# github.com/briandowns/spinner v1.19.0
+# github.com/briandowns/spinner v1.20.0
 ## explicit; go 1.14
 github.com/briandowns/spinner
 # github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d
@@ -67,8 +67,12 @@ github.com/xrash/smetrics
 # golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8
 ## explicit; go 1.17
 golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/plan9
 golang.org/x/sys/unix
 golang.org/x/sys/windows
+# golang.org/x/term v0.1.0
+## explicit; go 1.17
+golang.org/x/term
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3
