@@ -25,8 +25,8 @@ github.com/mattn/go-colorable v0.1.2 h1:/bC9yWikZXAL9uJdulbSfyVNIR3n3trXl+v8+1sx
 github.com/mattn/go-colorable v0.1.2/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
 github.com/mattn/go-isatty v0.0.8 h1:HLtExJ+uU2HOZ+wI0Tt5DtUDrx8yhUqDcp7fYERX4CE=
 github.com/mattn/go-isatty v0.0.8/go.mod h1:Iq45c/XA43vh69/j3iqttzPXn0bhXyGjM0Hdxcsrc5s=
-github.com/obalunenko/getenv v1.2.0 h1:AzszkCVSQNvKujueEjKG6m+GcxcKCgDjqW8xEB0mdTg=
-github.com/obalunenko/getenv v1.2.0/go.mod h1:rQSU30CHN52CamPdfTjUF4dk0oaoTo03kjxw2Yx3s2Y=
+github.com/obalunenko/getenv v1.2.1 h1:K7kcPZ+E4CxfJDI4JyiQyIzxEFPqYwmfxAZqmzPOIUc=
+github.com/obalunenko/getenv v1.2.1/go.mod h1:rQSU30CHN52CamPdfTjUF4dk0oaoTo03kjxw2Yx3s2Y=
 github.com/obalunenko/logger v0.5.1 h1:49DIEwy4sBvRzM/OtD/m7zITi5L3S5DtSYZ/WoUrnno=
 github.com/obalunenko/logger v0.5.1/go.mod h1:/GnmNcmEV7tAL9StHrs3nDkXAK+TEvChoNY+YYRZww4=
 github.com/obalunenko/version v1.1.0 h1:yVua7OHnK3+MJpendeMmAlfzVmq7R1h8MO3Ufz7HEec=
