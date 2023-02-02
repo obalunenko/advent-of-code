@@ -3,7 +3,7 @@ module github.com/obalunenko/advent-of-code
 go 1.19
 
 require (
-	github.com/briandowns/spinner v1.20.0
+	github.com/briandowns/spinner v1.21.0
 	github.com/manifoldco/promptui v0.9.0
 	github.com/obalunenko/getenv v1.2.1
 	github.com/obalunenko/logger v0.5.1
