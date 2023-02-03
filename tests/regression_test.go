@@ -32,11 +32,11 @@ const (
 
 // Regression tests for all puzzles. Check that answers still correct.
 func TestRun(t *testing.T) {
-	if !getenv.BoolOrDefault(regressionEnabled, false) {
+	if !getenv.EnvOrDefault(regressionEnabled, false) {
 		t.Skipf("%s disabled", regressionEnabled)
 	}
 
-	session := getenv.StringOrDefault(puzzles.AOCSession, "")
+	session := getenv.EnvOrDefault(puzzles.AOCSession, "")
 	if session == "" {
 		t.Fatalf("%s not set", puzzles.AOCSession)
 	}
