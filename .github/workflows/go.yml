@@ -227,14 +227,9 @@ jobs:
           make install-tools
         shell: bash
 
-      - name: Prepare test coverage
+      - name: Prepare test coverage and reports
         run: |
-          make test-cover
-        shell: bash
-
-      - name: Tests report
-        run: |
-          make test-sonar-report
+          make prepare-cover-report
         shell: bash
 
       - name: Prepare lint report
