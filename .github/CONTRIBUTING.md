@@ -1,6 +1,7 @@
 # Contributing
 
-By participating to this project, you agree to abide [code of conduct](https://github.com/obalunenko/advent-of-code/blob/master/.github/CODE_OF_CONDUCT.md).
+By participating to this project, you agree to
+abide [code of conduct](https://github.com/obalunenko/advent-of-code/blob/master/.github/CODE_OF_CONDUCT.md).
 
 Please note that I'll not accept any PR with new puzzle solutions - I don't like spoilers.
 
