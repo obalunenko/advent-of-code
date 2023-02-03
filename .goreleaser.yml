@@ -7,7 +7,7 @@ release:
 
 gomod:
   proxy: true
-    # If proxy is true, use these environment variables when running `go mod` commands (namely, `go mod tidy`).
+  # If proxy is true, use these environment variables when running `go mod` commands (namely, `go mod tidy`).
   # Defaults to `os.Environ()`.
   env:
     - GOPROXY=https://proxy.golang.org,direct
@@ -44,8 +44,7 @@ builds:
       - "{{ .Env.GO_BUILD_LDFLAGS }}"
       -
 universal_binaries:
-  -
-    # ID of the source build
+  - # ID of the source build
     #
     # Defaults to the project name.
     id: cli

@@ -41,7 +41,7 @@ jobs:
       max-parallel: 3
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.19' ]
+        go: [ '1.20' ]
     runs-on: ${{ matrix.os }}
     name: Build
     steps:
@@ -93,7 +93,7 @@ jobs:
       max-parallel: 2
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.19' ]
+        go: [ '1.20' ]
     runs-on: ${{ matrix.os }}
     name: Run Tests
     steps:
@@ -140,7 +140,7 @@ jobs:
       max-parallel: 2
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.19' ]
+        go: [ '1.20' ]
     runs-on: ${{ matrix.os }}
     name: Run linters
     steps:
@@ -186,13 +186,13 @@ jobs:
         shell: bash
 
   reports:
-    needs: [testing, linting, build]
+    needs: [ testing, linting, build ]
     strategy:
       fail-fast: true
       max-parallel: 1
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.19' ]
+        go: [ '1.20' ]
     runs-on: ${{ matrix.os }}
     name: Quality reports
     steps:
@@ -227,14 +227,9 @@ jobs:
           make install-tools
         shell: bash
 
-      - name: Prepare test coverage
+      - name: Prepare test coverage and reports
         run: |
-          make test-cover
-        shell: bash
-
-      - name: Tests report
-        run: |
-          make test-sonar-report
+          make prepare-cover-report
         shell: bash
 
       - name: Prepare lint report

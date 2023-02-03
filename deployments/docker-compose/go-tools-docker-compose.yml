@@ -6,6 +6,7 @@ services:
     working_dir: /app/
     volumes:
       - ../../:/app/
+    command: /bin/sh -c ''
 
   fix-imports:
     extends:
@@ -34,6 +35,11 @@ services:
       service: tools
     entrypoint: /bin/sh -c './scripts/tests/coverage.sh'
 
+  prepare-cover-report:
+    extends:
+      service: tools
+    entrypoint: /bin/sh -c 'git config --global --add safe.directory /app && ./scripts/tests/prepare-cover-report.sh'
+
   update-readme-coverage:
     extends:
       service: tools
@@ -47,12 +53,12 @@ services:
   lint-pipeline:
     extends:
       service: tools
-    entrypoint: /bin/sh -c './scripts/linting/golangci-pipeline.sh'
+    entrypoint: /bin/sh -c 'git config --global --add safe.directory /app && ./scripts/linting/golangci-pipeline.sh'
 
   lint-sonar:
     extends:
       service: tools
-    entrypoint: /bin/sh -c './scripts/linting/golangci-sonar.sh'
+    entrypoint: /bin/sh -c 'git config --global --add safe.directory /app && ./scripts/linting/golangci-sonar.sh'
 
   go-generate:
     extends:
