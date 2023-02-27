@@ -1,5 +1,5 @@
-# github.com/briandowns/spinner v1.21.0
-## explicit; go 1.14
+# github.com/briandowns/spinner v1.22.0
+## explicit; go 1.17
 github.com/briandowns/spinner
 # github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d
 ## explicit; go 1.12
