@@ -1,5 +1,5 @@
-# github.com/briandowns/spinner v1.21.0
-## explicit; go 1.14
+# github.com/briandowns/spinner v1.23.0
+## explicit; go 1.17
 github.com/briandowns/spinner
 # github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d
 ## explicit; go 1.12
@@ -33,7 +33,7 @@ github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.8
 ## explicit
 github.com/mattn/go-isatty
-# github.com/obalunenko/getenv v1.3.0
+# github.com/obalunenko/getenv v1.4.2
 ## explicit; go 1.20
 github.com/obalunenko/getenv
 github.com/obalunenko/getenv/internal
@@ -56,11 +56,11 @@ github.com/russross/blackfriday/v2
 # github.com/sirupsen/logrus v1.9.0
 ## explicit; go 1.13
 github.com/sirupsen/logrus
-# github.com/stretchr/testify v1.8.1
+# github.com/stretchr/testify v1.8.2
 ## explicit; go 1.13
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
-# github.com/urfave/cli/v2 v2.24.3
+# github.com/urfave/cli/v2 v2.25.0
 ## explicit; go 1.18
 github.com/urfave/cli/v2
 # github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673

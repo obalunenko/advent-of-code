@@ -33,7 +33,7 @@ services:
   run-tests-coverage:
     extends:
       service: tools
-    entrypoint: /bin/sh -c './scripts/tests/coverage.sh'
+    entrypoint: /bin/sh -c 'git config --global --add safe.directory /app && ./scripts/tests/coverage.sh'
 
   prepare-cover-report:
     extends:
