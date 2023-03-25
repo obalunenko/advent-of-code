@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
 func Test_makeMenuItemsList(t *testing.T) {
@@ -58,4 +60,35 @@ func Test_searcher(t *testing.T) {
 	assert.True(t, s("t", 2))
 
 	assert.False(t, s("1", 2))
+}
+
+func Test_getUrl(t *testing.T) {
+	type args struct {
+		year string
+		day  string
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "",
+			args: args{
+				year: puzzles.Year2022.String(),
+				day:  puzzles.Day01.String(),
+			},
+			want: "https://adventofcode.com/2022/day/1",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := getURL(tt.args.year, tt.args.day)
+
+			assert.Equalf(t, tt.want, got,
+				"getURL(%v, %v)", tt.args.year, tt.args.day)
+		})
+	}
 }
