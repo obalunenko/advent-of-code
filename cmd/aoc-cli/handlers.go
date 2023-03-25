@@ -13,6 +13,7 @@ import (
 	"github.com/manifoldco/promptui"
 	promptlist "github.com/manifoldco/promptui/list"
 	log "github.com/obalunenko/logger"
+	"github.com/savioxavier/termlink"
 	"github.com/urfave/cli/v2"
 
 	"github.com/obalunenko/advent-of-code/internal/command"
@@ -146,7 +147,7 @@ func searcher(items []string) promptlist.Searcher {
 
 func handleYearChoices(ctx context.Context, opt promptui.Select) error {
 	for {
-		_, choice, err := opt.Run()
+		_, yearOpt, err := opt.Run()
 		if err != nil {
 			if isAbort(err) {
 				return nil
@@ -155,11 +156,11 @@ func handleYearChoices(ctx context.Context, opt promptui.Select) error {
 			return fmt.Errorf("prompt failed: %w", err)
 		}
 
-		if isExit(choice) {
+		if isExit(yearOpt) {
 			return nil
 		}
 
-		err = menuPuzzle(ctx, choice)
+		err = menuPuzzle(ctx, yearOpt)
 		if err != nil {
 			if errors.Is(err, errExit) {
 				return nil
@@ -174,7 +175,7 @@ func handleYearChoices(ctx context.Context, opt promptui.Select) error {
 
 func handlePuzzleChoices(ctx context.Context, year string, opt promptui.Select) error {
 	for {
-		_, choice, err := opt.Run()
+		_, dayOpt, err := opt.Run()
 		if err != nil {
 			if isAbort(err) {
 				return errExit
@@ -183,29 +184,45 @@ func handlePuzzleChoices(ctx context.Context, year string, opt promptui.Select) 
 			return fmt.Errorf("prompt failed: %w", err)
 		}
 
-		if isExit(choice) {
+		if isExit(dayOpt) {
 			return errExit
 		}
 
-		if isBack(choice) {
+		if isBack(dayOpt) {
 			return nil
 		}
 
 		stopSpinner := setSpinner()
 
-		res, err := command.Run(ctx, year, choice)
+		res, err := command.Run(ctx, year, dayOpt)
 		if err != nil {
-			log.WithError(ctx, err).Error("Puzzle run failed")
-
 			stopSpinner()
+
+			if errors.Is(err, command.ErrUnauthorized) {
+				fmt.Println(termlink.Link("Authorize here", "https://adventofcode.com/auth/login"))
+
+				log.WithError(ctx, err).Fatal("Session expired")
+			}
+
+			log.WithError(ctx, err).Error("Puzzle run failed")
 
 			continue
 		}
 
-		stopSpinner()
+		stopSpinner("Solved!")
+
+		url := getURL(year, dayOpt)
 
 		fmt.Println(res.String())
+
+		fmt.Println(termlink.Link("Enter puzzle answers here", url))
 	}
+}
+
+func getURL(year, day string) string {
+	const urlFmt = "https://adventofcode.com/%s/day/%s"
+
+	return fmt.Sprintf(urlFmt, year, day)
 }
 
 func isExit(in string) bool {
@@ -253,13 +270,13 @@ func sessionFromCli(c *cli.Context) string {
 }
 
 // setSpinner runs the displaying of spinner to handle long time operations. Returns stop func.
-func setSpinner() func() {
+func setSpinner() func(msg ...string) {
 	const delayMs = 100
 
 	s := spinner.New(
 		spinner.CharSets[62],
 		delayMs*time.Millisecond,
-		spinner.WithFinalMSG("Solved!"),
+		spinner.WithFinalMSG(""),
 		spinner.WithHiddenCursor(true),
 		spinner.WithColor("yellow"),
 		spinner.WithWriter(os.Stderr),
@@ -269,7 +286,11 @@ func setSpinner() func() {
 
 	s.Start()
 
-	return func() {
+	return func(msg ...string) {
+		if len(msg) != 0 {
+			s.FinalMSG = msg[0]
+		}
+
 		s.Stop()
 	}
 }
