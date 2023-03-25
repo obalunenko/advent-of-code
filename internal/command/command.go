@@ -4,6 +4,7 @@ package command
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -12,13 +13,27 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles/input"
 )
 
+var (
+	// ErrUnauthorized returns when session is empty or invalid.
+	ErrUnauthorized = errors.New("unauthorized")
+)
+
 // Run runs puzzle solving for passed year/day date.
 func Run(ctx context.Context, year, day string) (puzzles.Result, error) {
 	const timeout = time.Second * 30
 
 	cli := input.NewFetcher(http.DefaultClient, timeout)
 
-	return run(ctx, cli, year, day)
+	result, err := run(ctx, cli, year, day)
+	if err != nil {
+		if errors.Is(err, input.ErrUnauthorized) {
+			return puzzles.Result{}, ErrUnauthorized
+		}
+
+		return puzzles.Result{}, err
+	}
+
+	return result, nil
 }
 
 func run(ctx context.Context, cli input.Fetcher, year, day string) (puzzles.Result, error) {
