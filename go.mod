@@ -10,7 +10,7 @@ require (
 	github.com/obalunenko/version v1.1.0
 	github.com/savioxavier/termlink v1.2.1
 	github.com/stretchr/testify v1.8.3
-	github.com/urfave/cli/v2 v2.25.4
+	github.com/urfave/cli/v2 v2.25.5
 )
 
 require (
