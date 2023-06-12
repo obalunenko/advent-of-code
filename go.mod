@@ -8,7 +8,7 @@ require (
 	github.com/obalunenko/getenv v1.10.0
 	github.com/obalunenko/logger v0.6.0
 	github.com/obalunenko/version v1.1.0
-	github.com/savioxavier/termlink v1.2.1
+	github.com/savioxavier/termlink v1.3.0
 	github.com/stretchr/testify v1.8.4
 	github.com/urfave/cli/v2 v2.25.5
 )
@@ -21,7 +21,6 @@ require (
 	github.com/evalphobia/logrus_sentry v0.8.2 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/getsentry/raven-go v0.2.0 // indirect
-	github.com/jwalton/go-supportscolor v1.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.9 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
