@@ -75,9 +75,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 	return strconv.Itoa(count), nil
 }
 
-var (
-	pwdRegex = regexp.MustCompile(`(?s)(\d{1,2})-(\d{1,2}) ([a-zA-Z]): (\w+)`)
-)
+var pwdRegex = regexp.MustCompile(`(?s)(\d{1,2})-(\d{1,2}) ([a-zA-Z]): (\w+)`)
 
 const (
 	_ int = iota // full match - not needed
@@ -111,9 +109,7 @@ func pwdCount(input io.Reader, validationFunc pwdValidationFunc) (int, error) {
 
 	go validationFunc(inchan, reschan, donechan)
 
-	var (
-		count, operations int
-	)
+	var count, operations int
 
 	for scanner.Scan() {
 		line := scanner.Text()

@@ -13,10 +13,8 @@ import (
 	"github.com/obalunenko/advent-of-code/internal/puzzles/input"
 )
 
-var (
-	// ErrUnauthorized returns when session is empty or invalid.
-	ErrUnauthorized = errors.New("unauthorized")
-)
+// ErrUnauthorized returns when session is empty or invalid.
+var ErrUnauthorized = errors.New("unauthorized")
 
 // Run runs puzzle solving for passed year/day date.
 func Run(ctx context.Context, year, day string) (puzzles.Result, error) {

@@ -35,9 +35,7 @@ func (s solution) Part2(in io.Reader) (string, error) {
 	return part2(in)
 }
 
-var (
-	re = regexp.MustCompile(`(?s)(?P<sign>[+-])(?P<digits>\d+)`)
-)
+var re = regexp.MustCompile(`(?s)(?P<sign>[+-])(?P<digits>\d+)`)
 
 const (
 	_ = iota
