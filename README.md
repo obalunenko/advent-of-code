@@ -28,6 +28,12 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 ## Implemented solutions
 
 <!--- advent_readme_stars table [2023] --->
+### 2023 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2023/day/1) | ⭐ | ⭐ |
+<!--- advent_readme_stars table [2023] --->
 
 <!--- advent_readme_stars table [2022] --->
 ### 2022 Results
