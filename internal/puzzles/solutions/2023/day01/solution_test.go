@@ -87,9 +87,9 @@ func Test_solution_Part2(t *testing.T) {
 		{
 			name: "",
 			args: args{
-				input: strings.NewReader("1abc2\npqr3stu8vwx\na1b2c3d4e5f\ntreb7uchet"),
+				input: strings.NewReader("two1nine\neightwothree\nabcone2threexyz\nxtwone3four\n4nineeightseven2\nzoneight234\n7pqrstsixteen"),
 			},
-			want:    "",
+			want:    "281",
 			wantErr: assert.NoError,
 		},
 		{
