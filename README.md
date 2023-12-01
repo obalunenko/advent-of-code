@@ -27,6 +27,8 @@ This repository contains solutions for puzzles and cli tool to run solutions to 
 
 ## Implemented solutions
 
+<!--- advent_readme_stars table [2023] --->
+
 <!--- advent_readme_stars table [2022] --->
 ### 2022 Results
 
