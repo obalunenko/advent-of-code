@@ -30,6 +30,13 @@ services:
       service: tools
     entrypoint: /bin/sh -c 'git config --global --add safe.directory /app && ./scripts/tests/run.sh'
 
+  run-tests-regression:
+    extends:
+      service: tools
+    entrypoint: /bin/sh -c 'git config --global --add safe.directory /app && ./scripts/tests/run-regression.sh'
+    environment:
+      AOC_SESSION: ${AOC_SESSION}
+
   run-tests-coverage:
     extends:
       service: tools
