@@ -79,61 +79,9 @@ func calibrate(input io.Reader, dictionary map[string]int) (int, error) {
 			continue
 		}
 
-		first, last := -1, -1
-
-		var word string
-
-		for _, c := range line {
-			if !unicode.IsDigit(c) {
-				word += string(c)
-
-				if d, ok := getDigitFromWord(word, dictionary); ok {
-					if first == -1 {
-						first = d
-					} else {
-						last = d
-					}
-
-					word = word[len(word)-1:]
-				}
-
-				continue
-			}
-
-			word = ""
-
-			if first == -1 {
-				d, err := strconv.Atoi(string(c))
-				if err != nil {
-					return 0, fmt.Errorf("failed to convert %q to int: %w", string(c), err)
-				}
-
-				first = d
-
-				continue
-			}
-
-			if first != -1 {
-				d, err := strconv.Atoi(string(c))
-				if err != nil {
-					return 0, fmt.Errorf("failed to convert %q to int: %w", string(c), err)
-				}
-
-				last = d
-			}
-		}
-
-		if first == -1 {
-			return 0, fmt.Errorf("failed to find first digit in %q", line)
-		}
-
-		if last == -1 {
-			last = first
-		}
-
-		value, err := strconv.Atoi(strconv.Itoa(first) + strconv.Itoa(last))
+		value, err := extractNumberFromLine(line, dictionary)
 		if err != nil {
-			return 0, fmt.Errorf("failed to convert %d%d to int: %w", first, last, err)
+			return 0, fmt.Errorf("extracting number from line %q: %w", line, err)
 		}
 
 		values = append(values, value)
@@ -152,8 +100,63 @@ func calibrate(input io.Reader, dictionary map[string]int) (int, error) {
 	return sum, nil
 }
 
+func extractNumberFromLine(line string, dict map[string]int) (int, error) {
+	first, last := -1, -1
+
+	var word string
+
+	for _, c := range line {
+		if !unicode.IsDigit(c) {
+			word += string(c)
+
+			if d, ok := getDigitFromWord(word, dict); ok {
+				if first == -1 {
+					first = d
+				} else {
+					last = d
+				}
+
+				word = word[len(word)-1:]
+			}
+
+			continue
+		}
+
+		word = ""
+
+		if first == -1 {
+			d, err := strconv.Atoi(string(c))
+			if err != nil {
+				return 0, fmt.Errorf("failed to convert %q to int: %w", string(c), err)
+			}
+
+			first = d
+
+			continue
+		}
+
+		d, err := strconv.Atoi(string(c))
+		if err != nil {
+			return 0, fmt.Errorf("failed to convert %q to int: %w", string(c), err)
+		}
+
+		last = d
+	}
+
+	if last == -1 {
+		last = first
+	}
+
+	value, err := strconv.Atoi(strconv.Itoa(first) + strconv.Itoa(last))
+	if err != nil {
+		return 0, fmt.Errorf("failed to convert %d%d to int: %w", first, last, err)
+	}
+
+	return value, nil
+}
+
 func getDigitFromWord(word string, dict map[string]int) (int, bool) {
-	if len(word) == 0 {
+	if word == "" {
 		return -1, false
 	}
 
