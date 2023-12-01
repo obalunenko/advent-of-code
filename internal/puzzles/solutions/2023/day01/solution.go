@@ -103,41 +103,41 @@ func extractNumberFromLine(line string, dict map[string]int) (int, error) {
 	var word string
 
 	for _, c := range line {
-		if !unicode.IsDigit(c) {
-			word += string(c)
+		var (
+			d   int
+			ok  bool
+			err error
+		)
 
-			if d, ok := getDigitFromWord(word, dict); ok {
-				if first == -1 {
-					first = d
-				} else {
-					last = d
-				}
+		switch {
+		case unicode.IsDigit(c):
+			word = " "
 
-				word = word[len(word)-1:]
-			}
-
-			continue
-		}
-
-		word = ""
-
-		if first == -1 {
-			d, err := strconv.Atoi(string(c))
+			d, err = strconv.Atoi(string(c))
 			if err != nil {
 				return 0, fmt.Errorf("failed to convert %q to int: %w", string(c), err)
 			}
 
-			first = d
+			ok = true
+		case unicode.IsLetter(c):
+			word += string(c)
 
+			d, ok = getDigitFromWord(word, dict)
+		default:
+			word = ""
+		}
+
+		if !ok {
 			continue
 		}
 
-		d, err := strconv.Atoi(string(c))
-		if err != nil {
-			return 0, fmt.Errorf("failed to convert %q to int: %w", string(c), err)
-		}
+		word = word[len(word)-1:]
 
-		last = d
+		if first == -1 {
+			first = d
+		} else {
+			last = d
+		}
 	}
 
 	if last == -1 {
