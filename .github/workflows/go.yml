@@ -41,7 +41,7 @@ jobs:
       max-parallel: 3
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.20' ]
+        go-version: [1.21]
     runs-on: ${{ matrix.os }}
     name: Build
     steps:
@@ -53,7 +53,7 @@ jobs:
       - name: Set up go
         uses: actions/setup-go@v4.1.0
         with:
-          go-version: ${{ matrix.go }}
+          go-version: ${{ matrix.go-version }}
 
       - run: |
           go version
@@ -71,6 +71,11 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tools/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tools/go.sum') }}
+
+      - name: Install tools
+        run: |
+          make install-tools
+        shell: bash
 
       - name: Build
         run: |
@@ -93,7 +98,7 @@ jobs:
       max-parallel: 2
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.20' ]
+        go-version: [1.21]
     runs-on: ${{ matrix.os }}
     name: Run Tests
     steps:
@@ -105,7 +110,7 @@ jobs:
       - name: Set up go
         uses: actions/setup-go@v4.1.0
         with:
-          go-version: ${{ matrix.go }}
+          go-version: ${{ matrix.go-version }}
 
       - run: |
           go version
@@ -140,7 +145,7 @@ jobs:
       max-parallel: 2
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.20' ]
+        go-version: [1.21]
     runs-on: ${{ matrix.os }}
     name: Run linters
     steps:
@@ -152,9 +157,14 @@ jobs:
       - name: Set up go
         uses: actions/setup-go@v4.1.0
         with:
-          go-version: ${{ matrix.go }}
+          go-version: ${{ matrix.go-version }}
       - run: |
           go version
+        shell: bash
+
+      - name: Install tools
+        run: |
+          make install-tools
         shell: bash
 
       - name: Vet
@@ -192,7 +202,7 @@ jobs:
       max-parallel: 1
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.20' ]
+        go-version: [1.21]
     runs-on: ${{ matrix.os }}
     name: Quality reports
     steps:
@@ -204,7 +214,7 @@ jobs:
       - name: Set up go
         uses: actions/setup-go@v4.1.0
         with:
-          go-version: ${{ matrix.go }}
+          go-version: ${{ matrix.go-version }}
       - run: |
           go version
         shell: bash
