@@ -75,9 +75,6 @@ func calibrate(input io.Reader, dictionary map[string]int) (int, error) {
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		if line == "" {
-			continue
-		}
 
 		value, err := extractNumberFromLine(line, dictionary)
 		if err != nil {
