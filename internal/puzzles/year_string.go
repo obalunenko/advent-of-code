@@ -17,12 +17,13 @@ func _() {
 	_ = x[Year2020-6]
 	_ = x[Year2021-7]
 	_ = x[Year2022-8]
-	_ = x[yearSentinel-9]
+	_ = x[Year2023-9]
+	_ = x[yearSentinel-10]
 }
 
-const _Year_name = "yearUnknown20152016201720182019202020212022yearSentinel"
+const _Year_name = "yearUnknown201520162017201820192020202120222023yearSentinel"
 
-var _Year_index = [...]uint8{0, 11, 15, 19, 23, 27, 31, 35, 39, 43, 55}
+var _Year_index = [...]uint8{0, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 59}
 
 func (i Year) String() string {
 	if i < 0 || i >= Year(len(_Year_index)-1) {
