@@ -1,6 +1,8 @@
 SHELL := env VERSION=$(VERSION) $(SHELL)
 VERSION ?= $(shell git describe --tags $(git rev-list --tags --max-count=1))
 
+GOVERSION:=1.21
+
 APP_NAME?=aoc-cli
 SHELL := env APP_NAME=$(APP_NAME) $(SHELL)
 
@@ -31,6 +33,10 @@ help:
 		} \
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
+
+bump-go-version:
+	./scripts/bump-go.sh $(GOVERSION)
+.PHONY: bump-go-version
 
 ## Build project.
 build: compile-app
