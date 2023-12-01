@@ -27,3 +27,19 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+
+
+  - package-ecosystem: "docker"
+    directory: "/build/docker/go-tools"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+      - "docker"
+    assignees:
+      - "obalunenko"
+    reviewers:
+      - "obalunenko"
+    commit-message:
+      prefix: "chore"
+      include: "scope"

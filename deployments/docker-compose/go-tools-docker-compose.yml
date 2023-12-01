@@ -2,7 +2,9 @@ version: '3'
 
 services:
   tools:
-    image: ghcr.io/obalunenko/go-tools:${GOTOOLS_IMAGE_TAG:-latest}
+    build:
+      context: .
+      dockerfile: ../../build/docker/go-tools/Dockerfile
     working_dir: /app/
     volumes:
       - ../../:/app/
