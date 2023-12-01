@@ -343,9 +343,7 @@ func drawDiagram(lines []line) diagram {
 }
 
 func getBounds(lines []line) position {
-	var (
-		maxX, maxY int
-	)
+	var maxX, maxY int
 
 	for _, l := range lines {
 		if l.start.x > maxX {

@@ -28,7 +28,7 @@ func (s solution) Day() string {
 func (s solution) Part1(input io.Reader) (string, error) {
 	scanner := bufio.NewScanner(input)
 
-	var expensereport = make(map[int]bool)
+	expensereport := make(map[int]bool)
 
 	for scanner.Scan() {
 		entry, err := strconv.Atoi(scanner.Text())
@@ -47,9 +47,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		dest = 2020
 	)
 
-	var (
-		a, b int
-	)
+	var a, b int
 
 	for e := range expensereport {
 		a = e

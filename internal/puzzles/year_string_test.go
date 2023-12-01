@@ -9,7 +9,7 @@ import (
 func TestYear_String(t *testing.T) {
 	const yearNotExist Year = 99
 
-	var tests = []struct {
+	tests := []struct {
 		name string
 		i    Year
 		want string

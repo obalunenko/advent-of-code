@@ -68,6 +68,7 @@ func notFound(ctx context.Context) cli.CommandNotFoundFunc {
 		}
 	}
 }
+
 func menu(ctx context.Context) cli.ActionFunc {
 	return func(c *cli.Context) error {
 		ctx = command.ContextWithOptions(ctx, optionsFromCli(c)...)
