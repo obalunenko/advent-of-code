@@ -72,6 +72,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tools/go.sum') }}
 
+      - name: Install tools
+        run: |
+          make install-tools
+        shell: bash
+
       - name: Build
         run: |
           make build
@@ -155,6 +160,11 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - run: |
           go version
+        shell: bash
+
+      - name: Install tools
+        run: |
+          make install-tools
         shell: bash
 
       - name: Vet
