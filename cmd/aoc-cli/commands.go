@@ -9,6 +9,7 @@ import (
 func commands(ctx context.Context) []*cli.Command {
 	const (
 		cmdRun = "run"
+		cmdGen = "gen"
 	)
 
 	cmds := []*cli.Command{
@@ -27,6 +28,29 @@ func commands(ctx context.Context) []*cli.Command {
 			OnUsageError:           nil,
 			Subcommands:            nil,
 			Flags:                  cmdRunFlags(),
+			SkipFlagParsing:        false,
+			HideHelp:               false,
+			HideHelpCommand:        false,
+			Hidden:                 false,
+			UseShortOptionHandling: false,
+			HelpName:               "",
+			CustomHelpTemplate:     "",
+		},
+		{
+			Name:                   cmdGen,
+			Aliases:                nil,
+			Usage:                  "Generates new puzzle solution skeleton",
+			UsageText:              "",
+			Description:            "",
+			ArgsUsage:              "",
+			Category:               "",
+			BashComplete:           nil,
+			Before:                 nil,
+			After:                  nil,
+			Action:                 generate(ctx),
+			OnUsageError:           nil,
+			Subcommands:            nil,
+			Flags:                  cmdGenFlags(),
 			SkipFlagParsing:        false,
 			HideHelp:               false,
 			HideHelpCommand:        false,
