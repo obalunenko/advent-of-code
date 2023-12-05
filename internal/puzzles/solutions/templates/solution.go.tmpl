@@ -1,5 +1,5 @@
-// Package day{{ .Day }} contains solution for https://adventofcode.com/{{ .Year }}/day/{{ .Day }} puzzle.
-package day{{ .Day }}
+// Package day{{ .DayStr }} contains solution for {{ .URL }} puzzle.
+package day{{ .DayStr }}
 
 import (
 	"io"
@@ -18,7 +18,7 @@ func (s solution) Year() string {
 }
 
 func (s solution) Day() string {
-	return puzzles.Day{{ .Day }}.String()
+	return puzzles.Day{{ .DayStr }}.String()
 }
 
 func (s solution) Part1(input io.Reader) (string, error) {
