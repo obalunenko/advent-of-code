@@ -54,6 +54,7 @@ func TestRun(t *testing.T) {
 	tests = append(tests, testcases2020(t)...)
 	tests = append(tests, testcases2021(t)...)
 	tests = append(tests, testcases2022(t)...)
+	tests = append(tests, testcases2023(t)...)
 
 	for i := range tests {
 		tt := tests[i]

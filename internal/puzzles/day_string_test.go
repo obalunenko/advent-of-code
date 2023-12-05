@@ -9,7 +9,7 @@ import (
 func TestDay_String(t *testing.T) {
 	const dayNotExist Day = 99
 
-	var tests = []struct {
+	tests := []struct {
 		name string
 		i    Day
 		want string
