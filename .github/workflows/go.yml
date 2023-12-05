@@ -41,19 +41,19 @@ jobs:
       max-parallel: 3
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.20' ]
+        go-version: [1.21]
     runs-on: ${{ matrix.os }}
     name: Build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up go
-        uses: actions/setup-go@v4.0.0
+        uses: actions/setup-go@v4.1.0
         with:
-          go-version: ${{ matrix.go }}
+          go-version: ${{ matrix.go-version }}
 
       - run: |
           go version
@@ -72,13 +72,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tools/go.sum') }}
 
+      - name: Install tools
+        run: |
+          make install-tools
+        shell: bash
+
       - name: Build
         run: |
           make build
         shell: bash
 
       - name: Install GoReleaser
-        uses: goreleaser/goreleaser-action@v4
+        uses: goreleaser/goreleaser-action@v5
         with:
           install-only: true
 
@@ -93,19 +98,19 @@ jobs:
       max-parallel: 2
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.20' ]
+        go-version: [1.21]
     runs-on: ${{ matrix.os }}
     name: Run Tests
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up go
-        uses: actions/setup-go@v4.0.0
+        uses: actions/setup-go@v4.1.0
         with:
-          go-version: ${{ matrix.go }}
+          go-version: ${{ matrix.go-version }}
 
       - run: |
           go version
@@ -140,21 +145,26 @@ jobs:
       max-parallel: 2
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.20' ]
+        go-version: [1.21]
     runs-on: ${{ matrix.os }}
     name: Run linters
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up go
-        uses: actions/setup-go@v4.0.0
+        uses: actions/setup-go@v4.1.0
         with:
-          go-version: ${{ matrix.go }}
+          go-version: ${{ matrix.go-version }}
       - run: |
           go version
+        shell: bash
+
+      - name: Install tools
+        run: |
+          make install-tools
         shell: bash
 
       - name: Vet
@@ -192,19 +202,19 @@ jobs:
       max-parallel: 1
       matrix:
         os: [ 'ubuntu-22.04' ]
-        go: [ '1.20' ]
+        go-version: [1.21]
     runs-on: ${{ matrix.os }}
     name: Quality reports
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up go
-        uses: actions/setup-go@v4.0.0
+        uses: actions/setup-go@v4.1.0
         with:
-          go-version: ${{ matrix.go }}
+          go-version: ${{ matrix.go-version }}
       - run: |
           go version
         shell: bash

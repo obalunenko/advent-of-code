@@ -196,7 +196,7 @@ func Test_bitrates_consumption(t *testing.T) {
 }
 
 func Test_lifeRate(t *testing.T) {
-	var diagnostic = []string{
+	diagnostic := []string{
 		"00100",
 		"11110",
 		"10110",

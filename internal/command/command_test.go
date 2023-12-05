@@ -122,7 +122,7 @@ func TestRun(t *testing.T) {
 		wantErr assert.ErrorAssertionFunc
 	}
 
-	var tests = []struct {
+	tests := []struct {
 		name         string
 		returnParams returnParams
 		expected     expected

@@ -192,7 +192,7 @@ func (b box) surfaceWithExtra() int {
 }
 
 func (b box) wrapRibbon() int {
-	var sides = []int{
+	sides := []int{
 		b.height, b.width, b.length,
 	}
 

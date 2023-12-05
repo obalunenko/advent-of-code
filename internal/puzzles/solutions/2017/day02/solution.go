@@ -68,7 +68,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 			for j := i + 1; j < len(numbers); j++ {
 				d2 := numbers[j]
 
-				var a, b = d1, d2
+				a, b := d1, d2
 
 				if a < b {
 					a, b = b, a

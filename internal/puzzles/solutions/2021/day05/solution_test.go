@@ -217,7 +217,7 @@ func Test_getLines(t *testing.T) {
 		input io.Reader
 	}
 
-	var tests = []struct {
+	tests := []struct {
 		name    string
 		args    args
 		want    []line
@@ -355,6 +355,7 @@ func getTestLines(tb testing.TB) []line {
 		},
 	}
 }
+
 func Test_filterLines(t *testing.T) {
 	type args struct {
 		lines  []line

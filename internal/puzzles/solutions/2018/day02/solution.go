@@ -36,9 +36,7 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		three = 3
 	)
 
-	var (
-		twoCount, threeCount int
-	)
+	var twoCount, threeCount int
 
 	for i := range boxes {
 		box := boxes[i]
@@ -69,9 +67,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 	// find common letters
 	boxesnum := len(boxes)
 
-	var (
-		box1, box2, common string
-	)
+	var box1, box2, common string
 
 loop:
 	for i := 0; i <= boxesnum; i++ {
