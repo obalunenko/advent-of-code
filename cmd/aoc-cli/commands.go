@@ -9,7 +9,6 @@ import (
 func commands(ctx context.Context) []*cli.Command {
 	const (
 		cmdRun = "run"
-		cmdGen = "gen"
 	)
 
 	cmds := []*cli.Command{
