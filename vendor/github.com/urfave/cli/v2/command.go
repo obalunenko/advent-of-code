@@ -135,6 +135,7 @@ func (c *Command) setup(ctx *Context) {
 		if scmd.HelpName == "" {
 			scmd.HelpName = fmt.Sprintf("%s %s", c.HelpName, scmd.Name)
 		}
+		scmd.separator = c.separator
 		newCmds = append(newCmds, scmd)
 	}
 	c.Subcommands = newCmds
@@ -148,6 +149,9 @@ func (c *Command) Run(cCtx *Context, arguments ...string) (err error) {
 
 	if !c.isRoot {
 		c.setup(cCtx)
+		if err := checkDuplicatedCmds(c); err != nil {
+			return err
+		}
 	}
 
 	a := args(arguments)
@@ -402,4 +406,17 @@ func hasCommand(commands []*Command, command *Command) bool {
 	}
 
 	return false
+}
+
+func checkDuplicatedCmds(parent *Command) error {
+	seen := make(map[string]struct{})
+	for _, c := range parent.Subcommands {
+		for _, name := range c.Names() {
+			if _, exists := seen[name]; exists {
+				return fmt.Errorf("parent command [%s] has duplicated subcommand name or alias: %s", parent.Name, name)
+			}
+			seen[name] = struct{}{}
+		}
+	}
+	return nil
 }

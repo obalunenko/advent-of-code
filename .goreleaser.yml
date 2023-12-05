@@ -6,7 +6,7 @@ release:
     **Full Changelog**: https://github.com/obalunenko/advent-of-code/compare/{{ .PreviousTag }}...{{ .Tag }}
 
 gomod:
-  proxy: true
+  proxy: false
   # If proxy is true, use these environment variables when running `go mod` commands (namely, `go mod tidy`).
   # Defaults to `os.Environ()`.
   env:
@@ -16,24 +16,24 @@ gomod:
     - CGO_ENABLED=0
   # Which Go binary to use.
   # Defaults to `go`.
+  mod: vendor
   gobinary: go
-
-before:
-  hooks:
-    - go mod verify
 
 builds:
   - id: cli
     binary: aoc-cli
     goos:
-      - linux
-      - darwin
-      - windows
+      - 'linux'
+      - 'darwin'
+      - 'windows'
     goarch:
-      - 386
-      - amd64
-      - arm
-      - arm64
+      - 'amd64'
+      - 'arm'
+      - 'arm64'
+    ignore:
+      - goos: darwin
+        goarch: 'arm'
+
     mod_timestamp: '{{ .CommitTimestamp }}'
     env:
       - CGO_ENABLED=0
@@ -71,7 +71,6 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
-    rlcp: true
     name_template: "{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     files:
       - LICENSE
