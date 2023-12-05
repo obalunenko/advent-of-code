@@ -19,7 +19,7 @@ func createNewFromTemplate(purl string) error {
 
 	pd, err := parsePuzzleURL(purl)
 	if err != nil {
-		return fmt.Errorf("parse puzzle url: %w", err)
+		return fmt.Errorf("parse puzzle url %q: %w", purl, err)
 	}
 
 	day := strconv.Itoa(pd.day)
