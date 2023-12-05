@@ -157,5 +157,9 @@ new-version: vet test-regression build
 open-advent-homepage:
 	./scripts/browser-opener.sh -u 'https://adventofcode.com/'
 
+gen-boilerplate:
+	./scripts/codegen/puzzle-boilerplate.sh
+.PHONY: gen-boilerplate
+
 .DEFAULT_GOAL := help
 
