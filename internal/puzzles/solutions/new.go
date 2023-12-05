@@ -12,7 +12,7 @@ import (
 
 func createNewFromTemplate(purl string) error {
 	const (
-		perms   = 0o766
+		perms   = 0o655
 		yearLen = 4
 		dayLen  = 2
 	)
