@@ -1,7 +1,7 @@
 package solutions
 
 import (
-	"strings"
+	"errors"
 	"testing"
 
 	"github.com/obalunenko/getenv"
@@ -10,12 +10,15 @@ import (
 )
 
 func Test_createNewFromTemplate(t *testing.T) {
-	purl := getenv.EnvOrDefault("AOC_PUZZLE_URL", "")
+	const envName = "AOC_PUZZLE_URL"
 
-	purl = strings.TrimSpace(purl)
+	purl, err := getenv.Env[string](envName)
+	if err != nil {
+		if errors.Is(err, getenv.ErrNotSet) {
+			t.Skipf("%s is not set", envName)
+		}
 
-	if purl == "" {
-		t.Skip("AOC_PUZZLE_URL is not set")
+		t.Fatalf("failed to get environment variable[%s]: %v", envName, err)
 	}
 
 	require.NoError(t, createNewFromTemplate(purl))
