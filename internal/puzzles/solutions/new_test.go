@@ -1,6 +1,7 @@
 package solutions
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/obalunenko/getenv"
@@ -10,6 +11,9 @@ import (
 
 func Test_createNewFromTemplate(t *testing.T) {
 	purl := getenv.EnvOrDefault("AOC_PUZZLE_URL", "")
+
+	purl = strings.TrimSpace(purl)
+
 	if purl == "" {
 		t.Skip("AOC_PUZZLE_URL is not set")
 	}
@@ -43,6 +47,28 @@ func Test_parsePuzzleURL(t *testing.T) {
 			name: "invalid url",
 			args: args{
 				url: "https://adventofcode.com/2022",
+			},
+			wandDate: puzzleDate{
+				year: 0,
+				day:  0,
+			},
+			wantErr: assert.Error,
+		},
+		{
+			name: "empty url",
+			args: args{
+				url: "",
+			},
+			wandDate: puzzleDate{
+				year: 0,
+				day:  0,
+			},
+			wantErr: assert.Error,
+		},
+		{
+			name: "whitespace url",
+			args: args{
+				url: " ",
 			},
 			wandDate: puzzleDate{
 				year: 0,
