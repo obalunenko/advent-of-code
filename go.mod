@@ -9,7 +9,7 @@ require (
 	github.com/obalunenko/getenv v1.13.0
 	github.com/obalunenko/logger v1.1.0
 	github.com/obalunenko/version v1.2.0
-	github.com/savioxavier/termlink v1.3.0
+	github.com/savioxavier/termlink v1.4.0
 	github.com/stretchr/testify v1.9.0
 	github.com/urfave/cli/v2 v2.27.4
 )
