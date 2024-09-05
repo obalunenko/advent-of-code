@@ -28,6 +28,10 @@ linters-settings:
         arguments: [ [ "call-chain", "loop", "method-call", "recover", "return" ] ]
 
 issues:
+  exclude-files:
+    - \.pb\.go$
+  exclude-dirs:
+    - vendor
   exclude-use-default: false
   exclude:
     # for "public interface + private struct implementation" cases only!
@@ -97,16 +101,12 @@ issues:
 run:
   issues-exit-code: 1
   tests: true
-  skip-dirs:
-    - vendor/
-  skip-files:
-    - \.pb\.go$
 
 # output configuration options
 output:
   # colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
   # default is "colored-line-number"
-  format: github-actions
+  formats: colored-line-number
 
   # print lines of code with issue, default is true
   print-issued-lines: true
