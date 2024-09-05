@@ -96,15 +96,13 @@ func printTable(w io.Writer, table [][]string) error {
 		case 0:
 			_, err = fmt.Fprintf(w, "\n")
 		case 1:
-			_, err = fmt.Fprintf(writer, "\t"+strings.Join(line, "\t")+"\t\n")
+			_, err = fmt.Fprintf(writer, "\t%s", strings.Join(line, "\t")+"\t\n")
 		default:
-			_, err = fmt.Fprintf(writer, "\t   "+strings.Join(line, "\t")+"\t\n")
+			_, err = fmt.Fprintf(writer, "\t   %s", strings.Join(line, "\t")+"\t\n")
 		}
 
 		if err != nil {
-			if err != nil {
-				return fmt.Errorf("fprintln: %w", err)
-			}
+			return fmt.Errorf("fprintln: %w", err)
 		}
 	}
 
