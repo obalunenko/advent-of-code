@@ -24,8 +24,8 @@ github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.14
 ## explicit; go 1.12
 github.com/mattn/go-isatty
-# github.com/obalunenko/getenv v1.13.0
-## explicit; go 1.22
+# github.com/obalunenko/getenv v1.14.0
+## explicit; go 1.23
 github.com/obalunenko/getenv
 github.com/obalunenko/getenv/internal
 github.com/obalunenko/getenv/option
