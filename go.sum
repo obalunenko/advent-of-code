@@ -21,8 +21,8 @@ github.com/mattn/go-isatty v0.0.14 h1:yVuAays6BHfxijgZPzw+3Zlu5yQgKGP2/hcQbHb7S9
 github.com/mattn/go-isatty v0.0.14/go.mod h1:7GGIvUiUoEMVVmxf/4nioHXj79iQHKdU27kJ6hsGG94=
 github.com/obalunenko/getenv v1.14.0 h1:Q8ClxnNMr5a6N0xNg7nHbdhZI4UUfhZMCjabGruq4gA=
 github.com/obalunenko/getenv v1.14.0/go.mod h1:PsuPvyLaE71FF7ikdCvPGqILTAWuXq7/+dtlOhab5K4=
-github.com/obalunenko/logger v1.1.0 h1:Q5drJuCuwz16mm96tcrl5e20uoGSOI4O+VWSauR/mQg=
-github.com/obalunenko/logger v1.1.0/go.mod h1:rS66dO9P2j/lybFrDB0Sce1DEVaOi6ag6WDIzljTg8c=
+github.com/obalunenko/logger v1.2.0 h1:MwsqJWtaxaHFQK7Cjkqk1NnlNPHH+tR1ergdnpST7Kg=
+github.com/obalunenko/logger v1.2.0/go.mod h1:XaU3GhUJWda3ow3hhRjlItpIVgQRKa2KDsEeprSzBvg=
 github.com/obalunenko/version v1.2.0 h1:eUYme2w38fjzcvToInTGM85xAJycZHo65GvynbH8jCo=
 github.com/obalunenko/version v1.2.0/go.mod h1:kXnCfV2LUe+UHRrzjwPC/5lpnPbypwmLZh7BJx7wG1A=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
