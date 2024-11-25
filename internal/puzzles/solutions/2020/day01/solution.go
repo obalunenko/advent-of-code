@@ -93,6 +93,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 	return strconv.Itoa(res), nil
 }
 
+//nolint:mnd // False positive due to magic numbers.
 func foundEntries(expensereport []int) (a, b, c int, err error) {
 	const (
 		dest = 2020

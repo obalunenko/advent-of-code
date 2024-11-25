@@ -68,8 +68,6 @@ func Test_module_fuel(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			m := module{
 				mass: tt.fields.mass,
@@ -116,8 +114,6 @@ func Test_calcPart1(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			in <- module{mass: tt.input}
 
@@ -175,8 +171,6 @@ func Test_calcPart2(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			in <- module{mass: tt.input}
 
@@ -232,8 +226,6 @@ func Test_calc(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			input := utils.ReaderFromFile(t, tt.args.inputPath)
 			got, err := calc(input, tt.args.calcFn)

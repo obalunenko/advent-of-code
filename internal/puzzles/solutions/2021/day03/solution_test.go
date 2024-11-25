@@ -185,6 +185,7 @@ func Test_bitrates_consumption(t *testing.T) {
 				first:  tt.fields.gamma,
 				second: tt.fields.epsilon,
 			}
+
 			got, err := b.consumption()
 			if !tt.wantErr(t, err, "consumption()") {
 				return
