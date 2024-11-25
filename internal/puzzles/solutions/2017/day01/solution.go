@@ -54,7 +54,7 @@ func part2(in io.Reader) (string, error) {
 		return "", fmt.Errorf("make list: %w", err)
 	}
 
-	shift := len(list) / 2
+	shift := len(list) / 2 //nolint:mnd // False positive.
 
 	itr := newIterator(list, shift, true)
 

@@ -207,6 +207,7 @@ func Test_parseCoordinates(t *testing.T) {
 			if !tt.wantErr(t, err, fmt.Sprintf("parseCoordinates(%v)", tt.args.s)) {
 				return
 			}
+
 			assert.Equalf(t, tt.want, got, "parseCoordinates(%v)", tt.args.s)
 		})
 	}
@@ -247,6 +248,7 @@ func Test_getLines(t *testing.T) {
 			if !tt.wantErr(t, err, fmt.Sprintf("getLines(%v)", tt.args.input)) {
 				return
 			}
+
 			assert.Equalf(t, tt.want, got, "getLines(%v)", tt.args.input)
 		})
 	}

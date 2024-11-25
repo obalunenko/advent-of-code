@@ -49,8 +49,6 @@ func TestMakeName(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := MakeName(tt.args.year, tt.args.puzzle)
 			if tt.wantErr {
@@ -58,7 +56,9 @@ func TestMakeName(t *testing.T) {
 
 				return
 			}
+
 			assert.NoError(t, err)
+
 			assert.Equal(t, tt.want, got)
 		})
 	}

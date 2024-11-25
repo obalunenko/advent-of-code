@@ -119,7 +119,7 @@ let's predict that this is a 2 dimension matrix and '5' is 0,2m
 func loadKeypadPart2() keypad {
 	start := keypadPos{
 		x: 0,
-		y: 2,
+		y: 2, //nolint:mnd // False positive.
 	}
 
 	g := [][]string{
