@@ -19,10 +19,13 @@ var (
 
 // Params contains parameters for templates.
 type Params struct {
-	Year   string // e.g. "2023"
-	Day    int    // e.g. 2
-	DayStr string // e.g. "02"
-	URL    string // e.g. "https://adventofcode.com/2023/day/2"
+	Year               string // e.g. "2023"
+	Day                int    // e.g. 2
+	DayStr             string // e.g. "02"
+	URL                string // e.g. "https://adventofcode.com/2023/day/2"
+	Title              string // For now it's empty.
+	DescriptionPartOne string // For now it's empty.
+	DescriptionPartTwo string // For now it's empty.
 }
 
 // SolutionTmpl returns template for solution.go file.

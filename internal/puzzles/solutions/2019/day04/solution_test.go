@@ -60,8 +60,6 @@ func Test_solution_Part1(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := s.Part1(tt.args.input)
 			if tt.wantErr {
@@ -100,8 +98,6 @@ func Test_findPasswords(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := findPasswords(tt.args.low, tt.args.high, isPasswordPart1)
 			if tt.wantErr {
@@ -150,8 +146,6 @@ func Test_isIncreasing(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got := isIncreasing(tt.args.n)
 			assert.Equal(t, tt.want, got)
@@ -179,8 +173,6 @@ func Test_intToSlice(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got := intToSlice(tt.args.n)
 			assert.Equal(t, tt.want, got)
@@ -215,8 +207,6 @@ func Test_hasRepeated(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got := hasRepeated(tt.args.n)
 			assert.Equal(t, tt.want, got)
@@ -258,8 +248,6 @@ func Test_isPassword(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got := isPasswordPart1(tt.args.n)
 			assert.Equal(t, tt.want, got)
@@ -302,8 +290,6 @@ func Test_isPasswordPart2(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got := isPasswordPart2(tt.args.n)
 			assert.Equal(t, tt.want, got)
@@ -351,8 +337,6 @@ func Test_solution_Part2(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := s.Part2(tt.args.input)
 			if tt.wantErr {

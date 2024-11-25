@@ -125,12 +125,17 @@ func supportsHyperlinks() bool {
 	}
 
 	// Terminals which have a TERM variable set
-	if matchesEnv("TERM", []string{"xterm-kitty", "alacritty", "alacritty-direct"}) {
+	if matchesEnv("TERM", []string{"xterm-kitty", "xterm-256color", "alacritty", "alacritty-direct"}) {
 		return true
 	}
 
 	// Terminals which have a COLORTERM variable set
 	if matchesEnv("COLORTERM", []string{"xfce4-terminal"}) {
+		return true
+	}
+
+	// Terminals in JetBrains IDEs
+	if matchesEnv("TERMINAL_EMULATOR", []string{"JetBrains-JediTerm"}) {
 		return true
 	}
 

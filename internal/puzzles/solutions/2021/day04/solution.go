@@ -60,7 +60,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 func rule(boardsNum int) winRule {
 	var count int
 
-	return func(w winner) bool {
+	return func(_ winner) bool {
 		count++
 
 		return count == boardsNum
