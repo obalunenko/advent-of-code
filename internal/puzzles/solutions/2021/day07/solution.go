@@ -77,19 +77,19 @@ func makeMatrix(crabs []int) [][]int {
 
 	cnum := len(crabs)
 
-	max := crabs[cnum-1]
+	maxC := crabs[cnum-1]
 
 	matrix := make([][]int, cnum+header)
 
 	// matrix[i][j].
-	// 	i - crabs; j - all positions from 0 to max
+	// 	i - crabs; j - all positions from 0 to maxC
 	for i := 0; i < cnum+header; i++ {
-		matrix[i] = make([]int, max+header+1)
+		matrix[i] = make([]int, maxC+header+1)
 
 		if i == 0 {
 			matrix[i][0] = undef
 
-			for j := 1; j <= max+header; j++ {
+			for j := 1; j <= maxC+header; j++ {
 				matrix[i][j] = j - 1
 			}
 
@@ -136,6 +136,7 @@ func part1Cost(p int) int {
 	return p
 }
 
+//nolint:mnd // Formula is not a magic number.
 func part2Cost(p int) int {
 	// formula a_{n}=a_{1}+(n-1)d
 	an := 1 + 1*(p-1)
@@ -164,7 +165,7 @@ func (s swarm) minDistanceCost() int {
 }
 
 func minDistanceCost(matrix [][]int) int {
-	var min int
+	var minC int
 
 	ilen := len(matrix)
 	jlen := len(matrix[0])
@@ -177,13 +178,13 @@ func minDistanceCost(matrix [][]int) int {
 		}
 
 		if j == 1 {
-			min = f
+			minC = f
 		}
 
-		if f < min {
-			min = f
+		if f < minC {
+			minC = f
 		}
 	}
 
-	return min
+	return minC
 }

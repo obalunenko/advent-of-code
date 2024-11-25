@@ -34,10 +34,10 @@ func newMockHTTPClient(p returnParams) *mockHTTPClient {
 			return &http.Response{
 				Status:           http.StatusText(p.status),
 				StatusCode:       p.status,
-				Proto:            "HTTP/1.0",
+				Proto:            req.Proto,
 				ProtoMajor:       1,
-				ProtoMinor:       0,
-				Header:           nil,
+				ProtoMinor:       req.ProtoMinor,
+				Header:           req.Header,
 				Body:             p.body,
 				ContentLength:    0,
 				TransferEncoding: nil,
@@ -173,7 +173,7 @@ func TestGet(t *testing.T) {
 			name: "",
 			client: client{
 				IHTTPClient: &mockHTTPClient{
-					MockDo: func(req *http.Request) (*http.Response, error) {
+					MockDo: func(_ *http.Request) (*http.Response, error) {
 						return &http.Response{}, errors.New("error in test")
 					},
 				},
