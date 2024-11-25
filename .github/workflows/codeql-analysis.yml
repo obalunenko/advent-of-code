@@ -35,7 +35,7 @@ jobs:
         # Learn more about CodeQL language support at https://git.io/codeql-language-support
         language: [ 'go' ]
         os: [ 'ubuntu-22.04' ]
-        go-version: [1.21]
+        go-version: [1.23]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,7 +43,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up go
-        uses: actions/setup-go@v5.0.0
+        uses: actions/setup-go@v5.1.0
         with:
           go-version: ${{ matrix.go-version }}
       - run: |

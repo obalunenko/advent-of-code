@@ -96,15 +96,13 @@ func isIncreasing(n int) bool {
 func hasRepeated(n int) bool {
 	nmbs := intToSlice(n)
 
-	var hasRepeated bool
-
 	for i := 1; i <= len(nmbs)-1; i++ {
 		if nmbs[i] == nmbs[i-1] {
-			hasRepeated = true
+			return true
 		}
 	}
 
-	return hasRepeated
+	return false
 }
 
 func hasRepeatedWithDouble(n int) bool {
@@ -143,6 +141,7 @@ func isPasswordPart2(n int) bool {
 	return isIncreasing(n) && hasRepeatedWithDouble(n)
 }
 
+//nolint:mnd // False positive.
 func intToSlice(n int) [6]int {
 	return [6]int{
 		(n % 1000000) / 100000,
