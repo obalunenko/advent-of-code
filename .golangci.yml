@@ -338,9 +338,7 @@ output:
     - format: colored-line-number
       path: stderr
     - format: checkstyle
-      path: report.xml
-    - format: colored-line-number
-      path: linters.out
+      path: linters-report.xml
 
 
   # Order to use when sorting results.

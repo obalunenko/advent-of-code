@@ -110,7 +110,7 @@ output:
     - format: colored-line-number
       path: stderr
     - format: checkstyle
-      path: report.xml
+      path: linters-report.xml
 
   # print lines of code with issue, default is true
   print-issued-lines: true

@@ -19,4 +19,4 @@ dist/
 .DS_Store
 coverage/
 tests-report.json
-report.xml
+linters-report.xml
