@@ -12,7 +12,7 @@ import (
 
 func createNewFromTemplate(purl string) error {
 	const (
-		perms   = 0o655
+		perms   = os.ModePerm
 		yearLen = 4
 		dayLen  = 2
 	)
@@ -38,10 +38,13 @@ func createNewFromTemplate(purl string) error {
 	}
 
 	params := templates.Params{
-		Year:   year,
-		Day:    pd.day,
-		DayStr: day,
-		URL:    purl,
+		Year:               year,
+		Day:                pd.day,
+		DayStr:             day,
+		URL:                purl,
+		Title:              "<!--- Pass here the title --->",
+		DescriptionPartOne: "<!--- Pass here the description for part one --->",
+		DescriptionPartTwo: "<!--- Pass here the description for part two --->",
 	}
 
 	path := filepath.Clean(filepath.Join(year, "day"+day))
