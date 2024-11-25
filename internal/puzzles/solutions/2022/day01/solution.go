@@ -130,23 +130,23 @@ func (e elves) String() string {
 }
 
 func (e elves) maxTotalCalories() int {
-	var max int
+	var maxC int
 
 	for _, el := range e {
-		if max == 0 {
-			max = el.totalCalories()
+		if maxC == 0 {
+			maxC = el.totalCalories()
 
 			continue
 		}
 
 		c := el.totalCalories()
 
-		if c > max {
-			max = c
+		if c > maxC {
+			maxC = c
 		}
 	}
 
-	return max
+	return maxC
 }
 
 func (e elves) backupSnackCalc() int {

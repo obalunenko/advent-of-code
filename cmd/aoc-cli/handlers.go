@@ -21,7 +21,7 @@ import (
 )
 
 func onExit(_ context.Context) cli.AfterFunc {
-	return func(c *cli.Context) error {
+	return func(_ *cli.Context) error {
 		fmt.Println("Exit...")
 
 		return nil

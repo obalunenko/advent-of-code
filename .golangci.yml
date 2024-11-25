@@ -98,6 +98,8 @@ linters-settings:
     # ).
     # Run `GL_DEBUG=govet golangci-lint run --enable=govet` to see default, all available analyzers, and enabled analyzers.
     # Default: []
+    disable:
+      - fieldalignment
     enable:
       # Check for missing values after append.
       - appends
@@ -127,8 +129,6 @@ linters-settings:
       - directive
       # Report passing non-pointer or non-error values to errors.As.
       - errorsas
-      # Find structs that would use less memory if their fields were sorted.
-      - fieldalignment
       # Find calls to a particular function.
       - findcall
       # Report assembly that clobbers the frame pointer before saving it.

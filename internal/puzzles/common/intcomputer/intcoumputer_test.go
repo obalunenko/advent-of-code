@@ -47,8 +47,6 @@ func Test_New(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := New(tt.args.input)
 			if tt.wantErr {
@@ -116,8 +114,6 @@ func Test_computer_add(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			err := tt.c.add(tt.args.aPos, tt.args.bPos, tt.args.resPos)
 			require.NoError(t, err)
@@ -163,8 +159,6 @@ func Test_computer_mult(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			err := tt.c.mult(tt.args.aPos, tt.args.bPos, tt.args.resPos)
 			require.NoError(t, err)
@@ -195,8 +189,6 @@ func Test_computer_Execute(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			comp := tt.c
 			got, err := comp.Execute()
@@ -233,8 +225,6 @@ func Test_computer_Input(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
 			comp := tt.c
 			comp.Input(tt.args.noun, tt.args.verb)
