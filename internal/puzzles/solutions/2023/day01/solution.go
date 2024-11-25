@@ -56,6 +56,7 @@ const (
 	nine  = "nine"
 )
 
+//nolint:mnd // False positive.
 var digitsDict = map[string]int{
 	one:   1,
 	two:   2,

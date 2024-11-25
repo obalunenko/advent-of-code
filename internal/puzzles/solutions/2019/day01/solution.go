@@ -81,6 +81,7 @@ func calc(input io.Reader, calcFn calcFunc) (string, error) {
 		in <- module{
 			mass: mass,
 		}
+
 		lines++
 	}
 
