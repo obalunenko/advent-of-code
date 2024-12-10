@@ -8,6 +8,9 @@ SHELL := env APP_NAME=$(APP_NAME) $(SHELL)
 
 SHELL := env GOTOOLS_IMAGE_TAG=$(GOTOOLS_IMAGE_TAG) $(SHELL)
 
+AOC_PUZZLE_URL=
+SHELL := env AOC_PUZZLE_URL=$(AOC_PUZZLE_URL) $(SHELL)
+
 COMPOSE_TOOLS_FILE=deployments/docker-compose/go-tools-docker-compose.yml
 COMPOSE_TOOLS_CMD_BASE=docker compose -f $(COMPOSE_TOOLS_FILE)
 COMPOSE_TOOLS_CMD_UP=$(COMPOSE_TOOLS_CMD_BASE) up --exit-code-from
