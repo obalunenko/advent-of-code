@@ -24,6 +24,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Update 2024 year
+        uses: k2bd/advent-readme-stars@v1.0.3
+        env:
+          YEAR: 2024
+        with:
+          userId: ${{env.USER_ID}}
+          leaderboardId: ${{env.BOARD_ID}}
+          sessionCookie: ${{env.SESSION}}
+          readmeLocation: ${{env.README}}
+          headerPrefix: ${{env.HEADER_PFX}}
+          year: ${{env.YEAR}}
+          tableMarker: <!--- advent_readme_stars table [${{env.YEAR}}] --->
+          starSymbol: ${{env.STAR_SYMBOL}}
+
       - name: Update 2023 year
         uses: k2bd/advent-readme-stars@v1.0.3
         env:
