@@ -28,7 +28,7 @@ func (s solution) Year() string {
 
 func (s solution) Part1(input io.Reader) (string, error) {
 	var f checksumFunc = func(row []string) (int, error) {
-		var min, max int
+		var minVal, maxVal int
 
 		for i, number := range row {
 			d, err := strconv.Atoi(number)
@@ -37,19 +37,19 @@ func (s solution) Part1(input io.Reader) (string, error) {
 			}
 
 			if i == 0 {
-				min, max = d, d
+				minVal, maxVal = d, d
 			}
 
-			if d < min {
-				min = d
+			if d < minVal {
+				minVal = d
 			}
 
-			if d > max {
-				max = d
+			if d > maxVal {
+				maxVal = d
 			}
 		}
 
-		return max - min, nil
+		return maxVal - minVal, nil
 	}
 
 	return findChecksum(input, f)
