@@ -87,11 +87,11 @@ func Test_solution_Part2(t *testing.T) {
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
-			name: "",
+			name: "test example from description",
 			args: args{
 				input: utils.ReaderFromFile(t, filepath.Join("testdata", "input.txt")),
 			},
-			want:    "",
+			want:    "31",
 			wantErr: assert.NoError,
 		},
 		{
