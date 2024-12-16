@@ -1,4 +1,4 @@
-package day{{ .DayStr }}
+package day02
 
 import (
 	"errors"
@@ -15,7 +15,7 @@ import (
 func Test_solution_Year(t *testing.T) {
 	var s solution
 
-	want := "{{ .Year }}"
+	want := "2024"
 	got := s.Year()
 
 	assert.Equal(t, want, got)
@@ -24,7 +24,7 @@ func Test_solution_Year(t *testing.T) {
 func Test_solution_Day(t *testing.T) {
 	var s solution
 
-	want := "{{ .Day }}"
+	want := "2"
 	got := s.Day()
 
 	assert.Equal(t, want, got)
@@ -48,7 +48,7 @@ func Test_solution_Part1(t *testing.T) {
 			args: args{
 				input: utils.ReaderFromFile(t, filepath.Join("testdata", "input.txt")),
 			},
-			want:    "",
+			want:    "2",
 			wantErr: assert.NoError,
 		},
 		{
