@@ -52,7 +52,7 @@ func Test_solution_Part1(t *testing.T) {
 			wantErr: assert.NoError,
 		},
 		{
-			name: "",
+			name: "error case",
 			args: args{
 				input: iotest.ErrReader(errors.New("custom error")),
 			},
@@ -87,7 +87,7 @@ func Test_solution_Part2(t *testing.T) {
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
-			name: "",
+			name: "test example from description",
 			args: args{
 				input: utils.ReaderFromFile(t, filepath.Join("testdata", "input.txt")),
 			},
@@ -95,7 +95,7 @@ func Test_solution_Part2(t *testing.T) {
 			wantErr: assert.NoError,
 		},
 		{
-			name: "",
+			name: "error case",
 			args: args{
 				input: iotest.ErrReader(errors.New("custom error")),
 			},
