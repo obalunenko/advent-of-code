@@ -8,7 +8,7 @@ require (
 	github.com/obalunenko/getenv v1.14.0
 	github.com/obalunenko/logger v1.2.0
 	github.com/obalunenko/version v1.2.0
-	github.com/savioxavier/termlink v1.4.1
+	github.com/savioxavier/termlink v1.4.2
 	github.com/stretchr/testify v1.10.0
 	github.com/urfave/cli/v2 v2.27.5
 )
