@@ -54,7 +54,11 @@ func init() {
 		}
 	}
 
-	shortcommit = commit[:7]
+	if len(commit) < 7 {
+		shortcommit = commit
+	} else {
+		shortcommit = commit[:7]
+	}
 
 	if modified {
 		commit += "+CHANGES"
