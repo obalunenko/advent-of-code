@@ -30,11 +30,7 @@ builds:
       - 'windows'
     goarch:
       - 'amd64'
-      - 'arm'
       - 'arm64'
-    ignore:
-      - goos: darwin
-        goarch: 'arm'
 
     mod_timestamp: '{{ .CommitTimestamp }}'
     env:
@@ -42,9 +38,7 @@ builds:
     main: ./cmd/aoc-cli
     flags:
       - -trimpath
-    ldflags:
-      - "{{ .Env.GO_BUILD_LDFLAGS }}"
-      -
+
 universal_binaries:
   - # ID of the source build
     #
@@ -68,11 +62,13 @@ archives:
   - id: cli
     builds:
       - cli
-    format: tar.gz
+    formats:
+      - tar.gz
     wrap_in_directory: true
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
     name_template: "{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     files:
       - LICENSE

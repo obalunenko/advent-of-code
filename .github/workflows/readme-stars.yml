@@ -11,7 +11,7 @@ on:
 
 jobs:
   update-readme:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       USER_ID: ${{ secrets.AOC_USER_ID }}
       BOARD_ID: ${{ secrets.AOC_BOARD_ID}}

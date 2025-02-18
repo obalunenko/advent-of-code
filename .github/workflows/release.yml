@@ -13,8 +13,8 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        os: [ 'ubuntu-22.04' ]
-        go-version: [1.23]
+        os: [ 'ubuntu-24.04' ]
+        go-version: [1.24]
     runs-on: ${{ matrix.os }}
     name: Build
     steps:
@@ -59,8 +59,8 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        os: [ 'ubuntu-22.04' ]
-        go-version: [1.23]
+        os: [ 'ubuntu-24.04' ]
+        go-version: [1.24]
     runs-on: ${{ matrix.os }}
     name: Regression tests
     steps:
@@ -108,8 +108,8 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        os: [ 'ubuntu-22.04' ]
-        go-version: [1.23]
+        os: [ 'ubuntu-24.04' ]
+        go-version: [1.24]
     runs-on: ${{ matrix.os }}
     name: Lint
     steps:
@@ -161,8 +161,8 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        os: [ 'ubuntu-22.04' ]
-        go-version: [1.23]
+        os: [ 'ubuntu-24.04' ]
+        go-version: [1.24]
     runs-on: ${{ matrix.os }}
     name: Release
     steps:
