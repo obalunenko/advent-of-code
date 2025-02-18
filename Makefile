@@ -1,7 +1,7 @@
 SHELL := env VERSION=$(VERSION) $(SHELL)
 VERSION ?= $(shell git describe --tags $(git rev-list --tags --max-count=1))
 
-GOVERSION:=1.23
+GOVERSION:=1.24
 
 APP_NAME?=aoc-cli
 SHELL := env APP_NAME=$(APP_NAME) $(SHELL)

@@ -1,13 +1,15 @@
 module github.com/obalunenko/advent-of-code
 
-go 1.23
+go 1.24
+
+toolchain go1.24.0
 
 require (
 	github.com/briandowns/spinner v1.23.2
 	github.com/manifoldco/promptui v0.9.0
 	github.com/obalunenko/getenv v1.14.0
 	github.com/obalunenko/logger v1.2.0
-	github.com/obalunenko/version v1.2.0
+	github.com/obalunenko/version v1.3.1
 	github.com/savioxavier/termlink v1.4.2
 	github.com/stretchr/testify v1.10.0
 	github.com/urfave/cli/v2 v2.27.5
