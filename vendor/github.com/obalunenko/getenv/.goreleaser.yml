@@ -4,6 +4,22 @@ release:
   github:
     owner: obalunenko
     name: getenv
+  footer: |
+    **Full Changelog**: https://github.com/obalunenko/getenv/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+gomod:
+  proxy: true
+  # If proxy is true, use these environment variables when running `go mod` commands (namely, `go mod tidy`).
+  # Defaults to `os.Environ()`.
+  env:
+    - GOPROXY=https://proxy.golang.org,direct
+    - GOSUMDB=sum.golang.org
+    - GOPRIVATE=example.com/blah
+    - CGO_ENABLED=0
+  # Which Go binary to use.
+  # Defaults to `go`.
+  mod: vendor
+  gobinary: go
 
 builds:
   - skip: true
@@ -16,10 +32,12 @@ snapshot:
 
 changelog:
   sort: asc
+  use: github
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+      - "^docs:"
+      - "^test:"
+      - "^dev:"
       - "README"
       - "^readme"
       - "^scripts"
@@ -29,3 +47,15 @@ changelog:
       - Rebase on master
       - "^Makefile"
       - "goreleaser"
+  groups:
+    - title: 'New Features'
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: 'Bug fixes'
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 10
+    - title: Other work
+      order: 999
+
+milestones:
+  - close: true
