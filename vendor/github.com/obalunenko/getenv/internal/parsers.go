@@ -91,21 +91,36 @@ func parseNumberGen[T Number](raw string) (T, error) {
 			return tt, ErrInvalidValue
 		}
 
-		return any(T(val)).(T), nil
+		res, ok := any(T(val)).(T)
+		if !ok {
+			return tt, ErrInvalidValue
+		}
+
+		return res, nil
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
 		val, err := strconv.ParseUint(raw, base, rt.Bits())
 		if err != nil {
 			return tt, ErrInvalidValue
 		}
 
-		return any(T(val)).(T), nil
+		res, ok := any(T(val)).(T)
+		if !ok {
+			return tt, ErrInvalidValue
+		}
+
+		return res, nil
 	case reflect.Float32, reflect.Float64:
 		val, err := strconv.ParseFloat(raw, rt.Bits())
 		if err != nil {
 			return tt, ErrInvalidValue
 		}
 
-		return any(T(val)).(T), nil
+		res, ok := any(T(val)).(T)
+		if !ok {
+			return tt, ErrInvalidValue
+		}
+
+		return res, nil
 	default:
 		return tt, ErrInvalidValue
 	}
@@ -299,7 +314,12 @@ func parseComplexGen[T Complex](raw string) (T, error) {
 		return tt, newErrInvalidValue(err.Error())
 	}
 
-	return any(T(val)).(T), nil
+	res, ok := any(T(val)).(T)
+	if !ok {
+		return tt, ErrInvalidValue
+	}
+
+	return res, nil
 }
 
 func parseComplexSliceGen[S []T, T Complex](raw []string) (S, error) {

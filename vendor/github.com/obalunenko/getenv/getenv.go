@@ -80,7 +80,12 @@ func Env[T internal.EnvParsable](key string, options ...option.Option) (T, error
 		return t, fmt.Errorf("failed to parse environment variable[%s]: %w", key, err)
 	}
 
-	return val.(T), nil
+	res, ok := val.(T)
+	if !ok {
+		return t, fmt.Errorf("failed to parse environment variable[%s]: %w", key, ErrInvalidValue)
+	}
+
+	return res, nil
 }
 
 // EnvOrDefault retrieves the value of the environment variable named by the key.
