@@ -165,6 +165,6 @@ jobs:
           starSymbol: ${{env.STAR_SYMBOL}}
 
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5.1.0
+        uses: stefanzweifel/git-auto-commit-action@v5.2.0
         with:
           commit_message: Update README stars.
