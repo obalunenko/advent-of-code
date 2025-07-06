@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -19,46 +19,23 @@ func cmdRunFlags() []cli.Flag {
 	var res []cli.Flag
 
 	elapsed := cli.BoolFlag{
-		Name:        flagElapsed,
-		Aliases:     []string{flagShortElapsed},
-		Usage:       "Enables elapsed time metric",
-		EnvVars:     nil,
-		FilePath:    "",
-		Required:    false,
-		Hidden:      false,
-		Value:       false,
-		DefaultText: "",
-		Destination: nil,
-		HasBeenSet:  false,
+		Name:    flagElapsed,
+		Usage:   "Enables elapsed time metric",
+		Aliases: []string{flagShortElapsed},
 	}
 
 	benchmark := cli.BoolFlag{
-		Name:        flagBenchmark,
-		Aliases:     []string{flagShortBenchmark},
-		Usage:       "Enables benchmark metric",
-		EnvVars:     nil,
-		FilePath:    "",
-		Required:    false,
-		Hidden:      false,
-		Value:       false,
-		DefaultText: "",
-		Destination: nil,
-		HasBeenSet:  false,
+		Name:    flagBenchmark,
+		Usage:   "Enables benchmark metric",
+		Aliases: []string{flagShortBenchmark},
 	}
 
 	session := cli.StringFlag{
-		Name:        flagSession,
-		Aliases:     []string{flagShortSession},
-		Usage:       "AOC auth session to get inputs",
-		EnvVars:     []string{puzzles.AOCSession},
-		FilePath:    "",
-		Required:    true,
-		Hidden:      false,
-		TakesFile:   false,
-		Value:       "",
-		DefaultText: "",
-		Destination: nil,
-		HasBeenSet:  false,
+		Name:     flagSession,
+		Usage:    "AOC auth session to get inputs",
+		Sources:  cli.EnvVars(puzzles.AOCSession),
+		Required: true,
+		Aliases:  []string{flagShortSession},
 	}
 
 	res = append(res, &elapsed, &benchmark, &session)
