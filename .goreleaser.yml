@@ -30,7 +30,11 @@ builds:
       - 'windows'
     goarch:
       - 'amd64'
+      - 'arm'
       - 'arm64'
+    ignore:
+      - goos: darwin
+        goarch: 'arm'
 
     mod_timestamp: '{{ .CommitTimestamp }}'
     env:
@@ -56,11 +60,11 @@ universal_binaries:
     # If left as false, your end release might have both several macOS archives: amd64, arm64 and all.
     #
     # Defaults to false.
-    replace: true
+    replace: false
 
 archives:
   - id: cli
-    builds:
+    ids:
       - cli
     formats:
       - tar.gz
