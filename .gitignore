@@ -20,3 +20,4 @@ dist/
 coverage/
 tests-report.json
 linters-report.xml
+report.xml
