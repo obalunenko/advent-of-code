@@ -38,7 +38,7 @@ github.com/pmezard/go-difflib/difflib
 # github.com/savioxavier/termlink v1.4.3
 ## explicit; go 1.17
 github.com/savioxavier/termlink
-# github.com/stretchr/testify v1.10.0
+# github.com/stretchr/testify v1.11.0
 ## explicit; go 1.17
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/assert/yaml
