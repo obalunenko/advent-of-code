@@ -11,8 +11,8 @@ require (
 	github.com/obalunenko/logger v1.2.0
 	github.com/obalunenko/version v1.3.1
 	github.com/savioxavier/termlink v1.4.3
-	github.com/stretchr/testify v1.10.0
-	github.com/urfave/cli/v3 v3.3.8
+	github.com/stretchr/testify v1.11.1
+	github.com/urfave/cli/v3 v3.5.0
 )
 
 require (
