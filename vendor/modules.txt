@@ -38,12 +38,12 @@ github.com/pmezard/go-difflib/difflib
 # github.com/savioxavier/termlink v1.4.3
 ## explicit; go 1.17
 github.com/savioxavier/termlink
-# github.com/stretchr/testify v1.10.0
+# github.com/stretchr/testify v1.11.1
 ## explicit; go 1.17
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/assert/yaml
 github.com/stretchr/testify/require
-# github.com/urfave/cli/v3 v3.3.8
+# github.com/urfave/cli/v3 v3.5.0
 ## explicit; go 1.22
 github.com/urfave/cli/v3
 # golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa

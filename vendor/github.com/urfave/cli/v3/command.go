@@ -85,9 +85,9 @@ type Command struct {
 	Writer io.Writer `json:"-"`
 	// ErrWriter writes error output
 	ErrWriter io.Writer `json:"-"`
-	// ExitErrHandler processes any error encountered while running an App before
-	// it is returned to the caller. If no function is provided, HandleExitCoder
-	// is used as the default behavior.
+	// ExitErrHandler processes any error encountered while running a Command before it is
+	// returned to the caller. If no function is provided, HandleExitCoder is used as the
+	// default behavior.
 	ExitErrHandler ExitErrHandlerFunc `json:"-"`
 	// Other custom info
 	Metadata map[string]interface{} `json:"metadata"`
@@ -127,6 +127,14 @@ type Command struct {
 	// Whether to read arguments from stdin
 	// applicable to root command only
 	ReadArgsFromStdin bool `json:"readArgsFromStdin"`
+	// StopOnNthArg provides v2-like behavior for specific commands by stopping
+	// flag parsing after N positional arguments are encountered. When set to N,
+	// all remaining arguments after the Nth positional argument will be treated
+	// as arguments, not flags.
+	//
+	// A value of 0 means all arguments are treated as positional (no flag parsing).
+	// A nil value means normal v3 flag parsing behavior (flags can appear anywhere).
+	StopOnNthArg *int `json:"stopOnNthArg"`
 
 	// categories contains the categorized commands and is populated on app startup
 	categories CommandCategories
