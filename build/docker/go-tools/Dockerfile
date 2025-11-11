@@ -1,3 +1,3 @@
-FROM ghcr.io/obalunenko/go-tools:v1.9.5 AS builder
+FROM ghcr.io/obalunenko/go-tools:v1.9.6 AS builder
 
 CMD ["/bin/sh", "-c", ""]
