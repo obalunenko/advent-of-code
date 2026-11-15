@@ -12,7 +12,7 @@ source "${SCRIPTS_DIR}/helpers-source.sh"
 
 echo "${SCRIPT_NAME} is running... "
 
-checkInstalled gocov
+check_installed gocov
 
 {
   echo "mode: atomic"
@@ -21,7 +21,7 @@ checkInstalled gocov
 
 gocov convert "${COVER_DIR}/full.cov" >"${COVER_DIR}/full.json"
 
-checkInstalled 'gocov-html'
+check_installed 'gocov-html'
 
 gocov-html "${COVER_DIR}/full.json" >"${COVER_DIR}/full.html"
 

@@ -34,7 +34,7 @@ function vet() {
 function fmt() {
   echo "fmt lint..."
 
-  checkInstalled 'gofmt'
+  check_installed 'gofmt'
 
   declare -a fmts=$(gofmt -s -l $(find . -type f -name '*.go' | grep -v 'vendor' | grep -v '.git'))
 
@@ -53,10 +53,10 @@ function fmt() {
   echo ""
 }
 
-function go-lint() {
+function go_lint() {
   echo "golint..."
 
-  checkInstalled 'golint'
+  check_installed 'golint'
 
   declare -a lints=$(golint $(go list ./...)) ## its a hack to not lint generated code
   if [[ ${lints} ]]; then
@@ -75,10 +75,10 @@ function go-lint() {
   echo ""
 }
 
-function go-group() {
+function go_group() {
   echo "goimports..."
 
-  checkInstalled 'goimports'
+  check_installed 'goimports'
 
   declare -a lints=$(goimports -l -local=$(go list -m) $(find . -type f -name "*.go" | grep -v "vendor/"))
 
@@ -101,17 +101,17 @@ function go-group() {
 function golangci() {
   echo "golangci-lint linter running..."
 
-  checkInstalled 'golangci-lint'
+  check_installed 'golangci-lint'
 
   golangci-lint run --config .golangci.yml ./...
 
   echo ""
 }
 
-function golangci-ci_execute() {
+function golangci_ci_execute() {
   echo "golangci-lint-ci_execute linter running..."
 
-  checkInstalled 'golangci-lint'
+  check_installed 'golangci-lint'
 
   golangci-lint run ./... >linters.out
 

@@ -13,7 +13,7 @@ APP=${APP_NAME}
 
 echo "${SCRIPT_NAME} is running fo ${APP}... "
 
-checkInstalled 'goreleaser'
+check_installed 'goreleaser'
 
 
 # Get new tags from the remote

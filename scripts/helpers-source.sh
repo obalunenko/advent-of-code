@@ -2,7 +2,7 @@
 
 set -Eeuo pipefail
 
-function checkInstalled() {
+function check_installed() {
   CMD=$1
 
   if ! command -v "${CMD}" &>/dev/null; then
@@ -12,7 +12,7 @@ function checkInstalled() {
   fi
 }
 
-function openSource() {
+function open_source() {
   OPEN_CMD=""
   OPEN_SRC=$1
 

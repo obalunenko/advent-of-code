@@ -9,7 +9,7 @@ SCRIPTS_DIR="${REPO_ROOT}/scripts"
 
 source "${SCRIPTS_DIR}/helpers-source.sh"
 
-checkInstalled 'stringer'
+check_installed 'stringer'
 
 go generate -x ./...
 

@@ -11,7 +11,7 @@ echo "${SCRIPT_NAME} is running... "
 
 source "${SCRIPTS_DIR}/linting/linters-source.sh"
 
-checkInstalled golangci-lint
+check_installed golangci-lint
 
 echo "Linting..."
 

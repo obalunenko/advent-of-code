@@ -11,7 +11,7 @@ source "${SCRIPTS_DIR}/helpers-source.sh"
 
 echo "${SCRIPT_NAME} is running... "
 
-checkInstalled 'goimports'
+check_installed 'goimports'
 
 echo "Making filelist"
 FILES=( $(find . -type f -name "*.go" -not -path "./vendor/*" -not -path "./tools/vendor/*" -not -path "./.git/*") )
