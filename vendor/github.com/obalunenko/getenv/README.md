@@ -9,6 +9,7 @@
 
 Package getenv provides a simple way to get environment variables.
 It's type-safe and supports built-in types and slices of them.
+Empty environment variable values are treated as not set.
 
 Types supported:
 - string
@@ -49,6 +50,12 @@ Types supported:
 - []url.URL
 - net.IP
 - []net.IP
+- netip.Addr
+- []netip.Addr
+- netip.Prefix
+- []netip.Prefix
+- net.HardwareAddr
+- []net.HardwareAddr
 - complex64
 - []complex64
 - complex128
@@ -189,11 +196,11 @@ Output:
 ```
 [string]: golly; err: <nil>
 [int]: 123; err: <nil>
-[int]: 0; err: could not parse variable[GH_GETENV_TEST] value[123s4] to type[int]: invalid value
+[int]: 0; err: failed to parse environment variable[GH_GETENV_TEST]: strconv.ParseInt: parsing "123s4": invalid syntax: invalid value
 [time.Time]: 2022-01-20 00:00:00 +0000 UTC; err: <nil>
 [[]float64]: [26.89 0.67]; err: <nil>
 [time.Duration]: 2h35m0s; err: <nil>
-[url.URL]: {https  test:abcd123 golangbyexample.com:8000 /tutorials/intro  false false type=advance&compact=false history }; err: <nil>
+[url.URL]: https://test:abcd123@golangbyexample.com:8000/tutorials/intro?type=advance&compact=false#history; err: <nil>
 [net.IP]: 2001:cb8::17; err: <nil>
 [[]string]: [a b c d]; err: <nil>
 [complex128]: (1+2i); err: <nil>
@@ -331,7 +338,7 @@ Output:
 [time.Time]: 2022-01-20 00:00:00 +0000 UTC
 [[]float64]: [26.89 0.67]
 [time.Duration]: 2h35m0s
-[url.URL]: {https  test:abcd123 golangbyexample.com:8000 /tutorials/intro  false false type=advance&compact=false history }
+[url.URL]: https://test:abcd123@golangbyexample.com:8000/tutorials/intro?type=advance&compact=false#history
 [net.IP]: 2001:cb8::17
 [[]string]: [a b c d]
 [complex128]: (1+2i)
