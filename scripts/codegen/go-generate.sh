@@ -9,7 +9,9 @@ SCRIPTS_DIR="${REPO_ROOT}/scripts"
 
 source "${SCRIPTS_DIR}/helpers-source.sh"
 
-check_installed 'stringer'
+# go:generate runs stringer from PATH.
+STRINGER_BIN="$(tool_path stringer)"
+export PATH="$(dirname "${STRINGER_BIN}"):${PATH}"
 
 go generate -x ./...
 

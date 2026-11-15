@@ -13,7 +13,7 @@ APP=${APP_NAME}
 
 echo "${SCRIPT_NAME} is running fo ${APP}... "
 
-check_installed 'goreleaser'
+GORELEASER="$(tool_path goreleaser)"
 
 
 # Get new tags from the remote
@@ -43,6 +43,6 @@ export GO_BUILD_LDFLAGS="-s -w \
 -X ${BUILDINFO_VARS_PKG}.appname=${APP} \
 -X ${BUILDINFO_VARS_PKG}.goversion=${GOVERSION}"
 
-goreleaser check
+"${GORELEASER}" check
 
-goreleaser build --clean --single-target --snapshot
+"${GORELEASER}" build --clean --single-target --snapshot

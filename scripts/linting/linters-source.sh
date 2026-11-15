@@ -78,9 +78,7 @@ function go_lint() {
 function go_group() {
   echo "goimports..."
 
-  check_installed 'goimports'
-
-  declare -a lints=$(goimports -l -local=$(go list -m) $(find . -type f -name "*.go" | grep -v "vendor/"))
+  declare -a lints=$(go_tool goimports -l -local=$(go list -m) $(find . -type f -name "*.go" | grep -v "vendor/"))
 
   if [[ ${lints} ]]; then
     echo "fix it:"
@@ -101,9 +99,7 @@ function go_group() {
 function golangci() {
   echo "golangci-lint linter running..."
 
-  check_installed 'golangci-lint'
-
-  golangci-lint run --config .golangci.yml ./...
+  go_tool golangci-lint run --config .golangci.yml ./...
 
   echo ""
 }
@@ -111,9 +107,7 @@ function golangci() {
 function golangci_ci_execute() {
   echo "golangci-lint-ci_execute linter running..."
 
-  check_installed 'golangci-lint'
-
-  golangci-lint run ./... >linters.out
+  go_tool golangci-lint run ./... >linters.out
 
   echo ""
 }

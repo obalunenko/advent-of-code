@@ -11,7 +11,7 @@ source "${SCRIPTS_DIR}/helpers-source.sh"
 
 echo "${SCRIPT_NAME} is running... "
 
-check_installed 'gofumpt'
+GOFUMPT="$(tool_path gofumpt)"
 
 echo "Making filelist"
 GO_FILES=( $(find . -type f -name "*.go" -not -path "./vendor/*" -not -path "./tools/vendor/*" -not -path "./.git/*") )
@@ -21,7 +21,7 @@ echo "Local packages prefix: ${LOCAL_PFX}"
 
 for f in "${GO_FILES[@]}"; do
   echo "Fixing fmt at ${f}"
-  gofumpt -l -w "$f"
+  "${GOFUMPT}" -l -w "$f"
 done
 
 echo "${SCRIPT_NAME} done."
