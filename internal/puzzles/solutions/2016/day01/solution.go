@@ -36,23 +36,9 @@ func (s solution) Part1(input io.Reader) (string, error) {
 
 	c := newCab()
 
-	go func() {
-		c.n.start()
-	}()
-
-	cmds := strings.Split(buf.String(), ", ")
-	for _, cmd := range cmds {
-		t, s, err := splitCommand(cmd)
-		if err != nil {
-			return "", fmt.Errorf("split command: %w", err)
-		}
-
-		if err = c.Move(t, s); err != nil {
-			return "", fmt.Errorf("move: %w", err)
-		}
+	if err := c.drive(buf.String()); err != nil {
+		return "", err
 	}
-
-	c.n.stop()
 
 	l := c.n.Pos().manhattan()
 
@@ -67,21 +53,9 @@ func (s solution) Part2(input io.Reader) (string, error) {
 
 	c := newCab()
 
-	go c.n.start()
-
-	cmds := strings.Split(buf.String(), ", ")
-	for _, cmd := range cmds {
-		t, s, err := splitCommand(cmd)
-		if err != nil {
-			return "", fmt.Errorf("split command: %w", err)
-		}
-
-		if err = c.Move(t, s); err != nil {
-			return "", fmt.Errorf("move: %w", err)
-		}
+	if err := c.drive(buf.String()); err != nil {
+		return "", err
 	}
-
-	c.n.stop()
 
 	rl := c.n.revisitedList()
 	if len(rl) == 0 {
@@ -230,6 +204,26 @@ func (c *cab) Move(t turn, steps int) error {
 	return nil
 }
 
+// drive executes all commands from the route and stops the navigator on return,
+// so its track is complete once drive returns, even on error.
+func (c *cab) drive(route string) error {
+	c.n.start()
+	defer c.n.stop()
+
+	for cmd := range strings.SplitSeq(route, ", ") {
+		t, s, err := splitCommand(cmd)
+		if err != nil {
+			return fmt.Errorf("split command: %w", err)
+		}
+
+		if err = c.Move(t, s); err != nil {
+			return fmt.Errorf("move: %w", err)
+		}
+	}
+
+	return nil
+}
+
 type navigator struct {
 	record    chan position
 	pos       position
@@ -268,13 +262,11 @@ func (n *navigator) recordTrack(p position) {
 }
 
 func (n *navigator) start() {
-	n.wg.Add(1)
-
-	for p := range n.record {
-		n.recordTrack(p)
-	}
-
-	n.wg.Done()
+	n.wg.Go(func() {
+		for p := range n.record {
+			n.recordTrack(p)
+		}
+	})
 }
 
 func (n *navigator) stop() {
@@ -283,12 +275,15 @@ func (n *navigator) stop() {
 	n.wg.Wait()
 }
 
-func (n navigator) revisitedList() []position {
+func (n *navigator) revisitedList() []position {
+	n.mu.Lock()
+	defer n.mu.Unlock()
+
 	return n.revisited
 }
 
 func (n *navigator) moveNorth(steps int) {
-	for i := 0; i < steps; i++ {
+	for range steps {
 		n.mu.Lock()
 		n.pos.addY(step)
 		n.mu.Unlock()
@@ -298,7 +293,7 @@ func (n *navigator) moveNorth(steps int) {
 }
 
 func (n *navigator) moveEast(steps int) {
-	for i := 0; i < steps; i++ {
+	for range steps {
 		n.mu.Lock()
 		n.pos.addX(step)
 		n.mu.Unlock()
@@ -308,7 +303,7 @@ func (n *navigator) moveEast(steps int) {
 }
 
 func (n *navigator) moveSouth(steps int) {
-	for i := 0; i < steps; i++ {
+	for range steps {
 		n.mu.Lock()
 		n.pos.subY(step)
 		n.mu.Unlock()
@@ -318,7 +313,7 @@ func (n *navigator) moveSouth(steps int) {
 }
 
 func (n *navigator) moveWest(steps int) {
-	for i := 0; i < steps; i++ {
+	for range steps {
 		n.mu.Lock()
 		n.pos.subX(step)
 		n.mu.Unlock()
@@ -327,7 +322,7 @@ func (n *navigator) moveWest(steps int) {
 	}
 }
 
-func (n navigator) Pos() position {
+func (n *navigator) Pos() position {
 	n.mu.Lock()
 	defer n.mu.Unlock()
 

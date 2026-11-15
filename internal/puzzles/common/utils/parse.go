@@ -25,9 +25,9 @@ func ParseInts(in io.Reader, sep string) ([]int, error) {
 
 			res = append(res, n)
 		} else {
-			split := strings.Split(line, sep)
+			split := strings.SplitSeq(line, sep)
 
-			for _, s := range split {
+			for s := range split {
 				n, err := strconv.Atoi(s)
 				if err != nil {
 					return nil, fmt.Errorf("parse int: %w", err)

@@ -154,11 +154,9 @@ func boxFromDimensions(dimensions string) (box, error) {
 
 func newBox(width, height, length int) box {
 	return box{
-		cuboid: cuboid{
-			width:  width,
-			length: length,
-			height: height,
-		},
+		width:  width,
+		length: length,
+		height: height,
 	}
 }
 
