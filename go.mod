@@ -1,8 +1,6 @@
 module github.com/obalunenko/advent-of-code
 
-go 1.24
-
-toolchain go1.24.0
+go 1.27.4
 
 require (
 	github.com/briandowns/spinner v1.23.2
