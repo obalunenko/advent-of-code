@@ -1,5 +1,6 @@
-github.com/axw/gocov v1.1.0 h1:y5U1krExoJDlb/kNtzxyZQmNRprFOFCutWbNjcQvmVM=
 github.com/axw/gocov v1.1.0/go.mod h1:H9G4tivgdN3pYSSVrTFBr6kGDCmAkgbJhtxFzAvgcdw=
+github.com/axw/gocov v1.2.1 h1:bqtQDBC2tQWcPzTYIVxK0EDCfNRLwsk4NZ0+GB4hX8Q=
+github.com/axw/gocov v1.2.1/go.mod h1:l11/vZBBKfQEE+42jF47myjDrRZHM+hR+XgGjI6FopU=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/matm/gocov-html v1.4.0 h1:fFDUXL6Sagf9vijTAiHqZRhjwrAm5ULbmBAvQ9tBoas=
 github.com/matm/gocov-html v1.4.0/go.mod h1:YtmZATysV+F1Q0CyvMjDgVVHHUaXAUbCpvS9onziLK8=
