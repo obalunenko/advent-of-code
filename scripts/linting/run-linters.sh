@@ -13,7 +13,7 @@ source "${SCRIPTS_DIR}/linting/linters-source.sh"
 
 vet
 fmt
-go-group
+go_group
 golangci
 
 echo "${SCRIPT_NAME} done."

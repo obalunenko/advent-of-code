@@ -11,11 +11,8 @@ echo "${SCRIPT_NAME} is running... "
 
 source "${SCRIPTS_DIR}/linting/linters-source.sh"
 
-checkInstalled golangci-lint
-
 echo "Linting..."
 
-golangci-lint run --out-format=colored-line-number --no-config --disable-all -E govet
-golangci-lint run --config .golangci.pipe.yml
+go_tool golangci-lint run --config .golangci.pipe.yml
 
 echo "${SCRIPT_NAME} done."
