@@ -17,8 +17,8 @@ github.com/mattn/go-colorable v0.1.9/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope
 github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Kysco4FUpU=
 github.com/mattn/go-isatty v0.0.14 h1:yVuAays6BHfxijgZPzw+3Zlu5yQgKGP2/hcQbHb7S9Y=
 github.com/mattn/go-isatty v0.0.14/go.mod h1:7GGIvUiUoEMVVmxf/4nioHXj79iQHKdU27kJ6hsGG94=
-github.com/obalunenko/getenv v1.14.1 h1:nFwG6PMKWKNBWnvlCbIOLgYdj/sSerbLZ9k3Is26HOU=
-github.com/obalunenko/getenv v1.14.1/go.mod h1:O+JIpb//raW/4Mx6sno6lHckuFn7zbagod0KkyDHUX0=
+github.com/obalunenko/getenv v1.15.0 h1:TX+GytSOk0xTK0L8VOIo+L6N77BKQ5iMvnsPRzz/bec=
+github.com/obalunenko/getenv v1.15.0/go.mod h1:kXJjGqFmvucspwNk4/hrHi2bG3cEfSEQJPYmWzUK/KQ=
 github.com/obalunenko/logger v1.2.0 h1:MwsqJWtaxaHFQK7Cjkqk1NnlNPHH+tR1ergdnpST7Kg=
 github.com/obalunenko/logger v1.2.0/go.mod h1:XaU3GhUJWda3ow3hhRjlItpIVgQRKa2KDsEeprSzBvg=
 github.com/obalunenko/version v1.3.1 h1:NN+YSOrti8mEyJSnu+7//YSvGrOhLivh60hJXhIrNTI=
@@ -31,8 +31,6 @@ github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 github.com/urfave/cli/v3 v3.6.1 h1:j8Qq8NyUawj/7rTYdBGrxcH7A/j7/G8Q5LhWEW4G3Mo=
 github.com/urfave/cli/v3 v3.6.1/go.mod h1:ysVLtOEmg2tOy6PknnYVhDoouyC/6N42TMeoMzskhso=
-golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa h1:t2QcU6V556bFjYgu4L6C+6VrCPyJZ+eyRsABUPs1mz4=
-golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa/go.mod h1:BHOTPb3L19zxehTsLoJXVaTktb06DFgmdW6Wb9s8jqk=
 golang.org/x/sys v0.0.0-20181122145206-62eef0e2fa9b/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20200116001909-b77594299b42/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200223170610-d5e6a3e2c0ae/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=

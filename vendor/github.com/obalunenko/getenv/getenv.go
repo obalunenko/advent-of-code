@@ -1,5 +1,6 @@
 // Package getenv provides a simple way to get environment variables.
 // It's type-safe and supports built-in types and slices of them.
+// Note: empty environment variable values are treated as "not set".
 //
 // Types supported:
 // - string
@@ -40,6 +41,12 @@
 // - []url.URL
 // - net.IP
 // - []net.IP
+// - netip.Addr
+// - []netip.Addr
+// - netip.Prefix
+// - []netip.Prefix
+// - net.HardwareAddr
+// - []net.HardwareAddr
 // - complex64
 // - []complex64
 // - complex128
@@ -74,7 +81,17 @@ func Env[T internal.EnvParsable](key string, options ...option.Option) (T, error
 	val, err := w.ParseEnv(key, params)
 	if err != nil {
 		if errors.Is(err, internal.ErrNotSet) {
-			return t, fmt.Errorf("failed to get environment variable[%s]: %w", key, ErrNotSet)
+			return t, fmt.Errorf("failed to get environment variable[%s]: %w", key, publicError{
+				cause:    err,
+				sentinel: ErrNotSet,
+			})
+		}
+
+		if errors.Is(err, internal.ErrInvalidValue) {
+			return t, fmt.Errorf("failed to parse environment variable[%s]: %w", key, publicError{
+				cause:    err,
+				sentinel: ErrInvalidValue,
+			})
 		}
 
 		return t, fmt.Errorf("failed to parse environment variable[%s]: %w", key, err)
@@ -99,6 +116,20 @@ func EnvOrDefault[T internal.EnvParsable](key string, defaultVal T, options ...o
 	}
 
 	return val
+}
+
+// publicError keeps parser details while matching exported sentinels.
+type publicError struct {
+	cause    error
+	sentinel error
+}
+
+func (e publicError) Error() string {
+	return e.cause.Error()
+}
+
+func (e publicError) Unwrap() []error {
+	return []error{e.cause, e.sentinel}
 }
 
 // newParseParams creates new parameters from options.
