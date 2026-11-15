@@ -11,7 +11,7 @@ source "${SCRIPTS_DIR}/helpers-source.sh"
 
 echo "${SCRIPT_NAME} is running... "
 
-checkInstalled 'goimports'
+GOIMPORTS="$(tool_path goimports)"
 
 echo "Making filelist"
 FILES=( $(find . -type f -name "*.go" -not -path "./vendor/*" -not -path "./tools/vendor/*" -not -path "./.git/*") )
@@ -22,7 +22,7 @@ echo "Local packages prefix: ${LOCAL_PFX}"
 for f in "${FILES[@]}"; do
   echo "Fixing imports at ${f}"
   sed -i -- '/^import (/,/)/ {;/^$/ d;}' "$f"
-  goimports -local=${LOCAL_PFX} -w "$f"
+  "${GOIMPORTS}" -local=${LOCAL_PFX} -w "$f"
 done
 
 

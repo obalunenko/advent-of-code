@@ -217,7 +217,7 @@ func (d diagram) String() string {
 		newline = "\n"
 	)
 
-	var res string
+	var res strings.Builder
 
 	last := len(d.data) - 1
 
@@ -226,20 +226,20 @@ func (d diagram) String() string {
 
 		for _, x := range xs {
 			if x == 0 {
-				res += empty
+				res.WriteString(empty)
 
 				continue
 			}
 
-			res += strconv.Itoa(x)
+			res.WriteString(strconv.Itoa(x))
 		}
 
 		if i != last {
-			res += newline
+			res.WriteString(newline)
 		}
 	}
 
-	return res
+	return res.String()
 }
 
 func (d *diagram) draw(lines []line) {

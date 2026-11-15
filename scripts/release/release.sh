@@ -11,7 +11,7 @@ source "${SCRIPTS_DIR}/helpers-source.sh"
 
 echo "${SCRIPT_NAME} is running... "
 
-checkInstalled 'goreleaser'
+GORELEASER="$(tool_path goreleaser)"
 
 APP=${APP_NAME}
 
@@ -40,4 +40,4 @@ export GO_BUILD_LDFLAGS="-s -w \
 -X ${BUILDINFO_VARS_PKG}.appname=${APP} \
 -X ${BUILDINFO_VARS_PKG}.goversion=${GOVERSION}"
 
-goreleaser release --clean
+"${GORELEASER}" release --clean
