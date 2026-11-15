@@ -62,7 +62,7 @@ func (s solution) Part2(input io.Reader) (string, error) {
 			return 0, fmt.Errorf("strings to numbers: %w", err)
 		}
 
-		for i := 0; i < len(numbers); i++ {
+		for i := range numbers {
 			d1 := numbers[i]
 
 			for j := i + 1; j < len(numbers); j++ {

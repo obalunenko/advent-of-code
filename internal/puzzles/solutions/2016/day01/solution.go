@@ -40,8 +40,8 @@ func (s solution) Part1(input io.Reader) (string, error) {
 		c.n.start()
 	}()
 
-	cmds := strings.Split(buf.String(), ", ")
-	for _, cmd := range cmds {
+	cmds := strings.SplitSeq(buf.String(), ", ")
+	for cmd := range cmds {
 		t, s, err := splitCommand(cmd)
 		if err != nil {
 			return "", fmt.Errorf("split command: %w", err)
@@ -69,8 +69,8 @@ func (s solution) Part2(input io.Reader) (string, error) {
 
 	go c.n.start()
 
-	cmds := strings.Split(buf.String(), ", ")
-	for _, cmd := range cmds {
+	cmds := strings.SplitSeq(buf.String(), ", ")
+	for cmd := range cmds {
 		t, s, err := splitCommand(cmd)
 		if err != nil {
 			return "", fmt.Errorf("split command: %w", err)
@@ -288,7 +288,7 @@ func (n navigator) revisitedList() []position {
 }
 
 func (n *navigator) moveNorth(steps int) {
-	for i := 0; i < steps; i++ {
+	for range steps {
 		n.mu.Lock()
 		n.pos.addY(step)
 		n.mu.Unlock()
@@ -298,7 +298,7 @@ func (n *navigator) moveNorth(steps int) {
 }
 
 func (n *navigator) moveEast(steps int) {
-	for i := 0; i < steps; i++ {
+	for range steps {
 		n.mu.Lock()
 		n.pos.addX(step)
 		n.mu.Unlock()
@@ -308,7 +308,7 @@ func (n *navigator) moveEast(steps int) {
 }
 
 func (n *navigator) moveSouth(steps int) {
-	for i := 0; i < steps; i++ {
+	for range steps {
 		n.mu.Lock()
 		n.pos.subY(step)
 		n.mu.Unlock()
@@ -318,7 +318,7 @@ func (n *navigator) moveSouth(steps int) {
 }
 
 func (n *navigator) moveWest(steps int) {
-	for i := 0; i < steps; i++ {
+	for range steps {
 		n.mu.Lock()
 		n.pos.subX(step)
 		n.mu.Unlock()

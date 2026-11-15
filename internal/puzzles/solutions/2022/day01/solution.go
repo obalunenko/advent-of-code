@@ -7,6 +7,7 @@ import (
 	"io"
 	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
@@ -120,13 +121,13 @@ func (e elve) totalCalories() int {
 type elves []elve
 
 func (e elves) String() string {
-	var resp string
+	var resp strings.Builder
 
 	for _, e2 := range e {
-		resp += fmt.Sprintln(e2.String())
+		resp.WriteString(fmt.Sprintln(e2.String()))
 	}
 
-	return resp
+	return resp.String()
 }
 
 func (e elves) maxTotalCalories() int {
@@ -156,7 +157,7 @@ func (e elves) backupSnackCalc() int {
 
 	var sum int
 
-	for i := 0; i < 3; i++ {
+	for i := range 3 {
 		sum += e[i].totalCalories()
 	}
 
