@@ -1,16 +1,16 @@
 #!/bin/bash
 
-set -e
+set -Eeuo pipefail
 
 SCRIPT_NAME="$(basename "$0")"
+SCRIPT_DIR="$(dirname "$0")"
+REPO_ROOT="$(cd "${SCRIPT_DIR}" && git rev-parse --show-toplevel)"
+SCRIPTS_DIR="${REPO_ROOT}/scripts"
+
+source "${SCRIPTS_DIR}/helpers-source.sh"
 
 echo "${SCRIPT_NAME} is running... "
 
-GOTEST="go test -v "
-if command -v "gotestsum" &>/dev/null; then
-  GOTEST="gotestsum --format pkgname-and-test-fails --"
-fi
-
-${GOTEST} -race ./...
+go_tool gotestsum --format pkgname-and-test-fails -- -race ./...
 
 echo "${SCRIPT_NAME} done."

@@ -12,17 +12,13 @@ source "${SCRIPTS_DIR}/helpers-source.sh"
 
 echo "${SCRIPT_NAME} is running... "
 
-checkInstalled gocov
-
 {
   echo "mode: atomic"
   tail -q -n +2 "${COVER_DIR}"/*.cov
 } >>"${COVER_DIR}/full.cov"
 
-gocov convert "${COVER_DIR}/full.cov" >"${COVER_DIR}/full.json"
+go_tool gocov convert "${COVER_DIR}/full.cov" >"${COVER_DIR}/full.json"
 
-checkInstalled 'gocov-html'
-
-gocov-html "${COVER_DIR}/full.json" >"${COVER_DIR}/full.html"
+go_tool gocov-html "${COVER_DIR}/full.json" >"${COVER_DIR}/full.html"
 
 echo "${SCRIPT_NAME} is done... "

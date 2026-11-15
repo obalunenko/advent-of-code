@@ -12,6 +12,6 @@ source "${SCRIPTS_DIR}/helpers-source.sh"
 
 echo "${SCRIPT_NAME} is running... "
 
-openSource "${COVER_DIR}/full.html"
+open_source "${COVER_DIR}/full.html"
 
 echo "${SCRIPT_NAME} done."

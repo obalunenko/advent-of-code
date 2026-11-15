@@ -108,8 +108,8 @@ const (
 )
 
 func (w *wire) run(input string) error {
-	moves := strings.Split(input, ",")
-	for _, m := range moves {
+	moves := strings.SplitSeq(input, ",")
+	for m := range moves {
 		move := m
 
 		act := string(move[0])
@@ -135,28 +135,28 @@ func (w *wire) run(input string) error {
 }
 
 func (w *wire) up(n int) {
-	for i := 0; i < n; i++ {
+	for range n {
 		w.pos.y++
 		w.storePosition()
 	}
 }
 
 func (w *wire) down(n int) {
-	for i := 0; i < n; i++ {
+	for range n {
 		w.pos.y--
 		w.storePosition()
 	}
 }
 
 func (w *wire) left(n int) {
-	for i := 0; i < n; i++ {
+	for range n {
 		w.pos.x--
 		w.storePosition()
 	}
 }
 
 func (w *wire) right(n int) {
-	for i := 0; i < n; i++ {
+	for range n {
 		w.pos.x++
 		w.storePosition()
 	}

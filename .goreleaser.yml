@@ -42,9 +42,7 @@ builds:
     main: ./cmd/aoc-cli
     flags:
       - -trimpath
-    ldflags:
-      - "{{ .Env.GO_BUILD_LDFLAGS }}"
-      -
+
 universal_binaries:
   - # ID of the source build
     #
@@ -62,17 +60,19 @@ universal_binaries:
     # If left as false, your end release might have both several macOS archives: amd64, arm64 and all.
     #
     # Defaults to false.
-    replace: true
+    replace: false
 
 archives:
   - id: cli
-    builds:
+    ids:
       - cli
-    format: tar.gz
+    formats:
+      - tar.gz
     wrap_in_directory: true
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
     name_template: "{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     files:
       - LICENSE

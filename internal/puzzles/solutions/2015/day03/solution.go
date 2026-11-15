@@ -45,7 +45,7 @@ func solve(input io.Reader, santaNum int) (string, error) {
 
 	deliverymen := make([]deliveryman, 0, santaNum)
 
-	for i := 0; i < santaNum; i++ {
+	for range santaNum {
 		deliverymen = append(deliverymen, newSanta())
 	}
 

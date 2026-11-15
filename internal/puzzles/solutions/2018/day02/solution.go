@@ -98,7 +98,7 @@ func getCommonBoxesPart(box1, box2 string) string {
 
 	common := make([]rune, 0, len(br1))
 
-	for i := 0; i < len(br1); i++ {
+	for i := range br1 {
 		a, b := br1[i], br2[i]
 		if a == b {
 			common = append(common, a)
