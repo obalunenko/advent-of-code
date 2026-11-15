@@ -239,8 +239,8 @@ type board struct {
 func (b board) sumMarked() int {
 	var sum int
 
-	for i := 0; i < boardSize; i++ {
-		for j := 0; j < boardSize; j++ {
+	for i := range boardSize {
+		for j := range boardSize {
 			num := b.numbers[i][j]
 			if !num.isMarked {
 				sum += num.val
@@ -281,7 +281,7 @@ func (s *state) update(_ context.Context, p position) {
 }
 
 func (s *state) isWon() bool {
-	for i := 0; i < boardSize; i++ {
+	for i := range boardSize {
 		if s.verticals[i] == boardSize || s.horizontals[i] == boardSize {
 			return true
 		}
@@ -291,8 +291,8 @@ func (s *state) isWon() bool {
 }
 
 func (b board) isPresent(n int) (position, bool) {
-	for i := 0; i < boardSize; i++ {
-		for j := 0; j < boardSize; j++ {
+	for i := range boardSize {
+		for j := range boardSize {
 			if b.numbers[i][j].val == n {
 				return position{
 					vertical:   i,

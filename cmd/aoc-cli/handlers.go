@@ -14,21 +14,19 @@ import (
 	promptlist "github.com/manifoldco/promptui/list"
 	log "github.com/obalunenko/logger"
 	"github.com/savioxavier/termlink"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 
 	"github.com/obalunenko/advent-of-code/internal/command"
 	"github.com/obalunenko/advent-of-code/internal/puzzles"
 )
 
-func onExit(_ context.Context) cli.AfterFunc {
-	return func(_ *cli.Context) error {
-		fmt.Println("Exit...")
+func onExit(_ context.Context, _ *cli.Command) error {
+	fmt.Println("Exit...")
 
-		return nil
-	}
+	return nil
 }
 
-func printHeader(_ context.Context) cli.BeforeFunc {
+func printHeader(ctx context.Context, cmd *cli.Command) (context.Context, error) {
 	const (
 		padding  int  = 1
 		minWidth int  = 0
@@ -36,10 +34,9 @@ func printHeader(_ context.Context) cli.BeforeFunc {
 		padChar  byte = ' '
 	)
 
-	return func(c *cli.Context) error {
-		w := tabwriter.NewWriter(c.App.Writer, minWidth, tabWidth, padding, padChar, tabwriter.TabIndent)
+	w := tabwriter.NewWriter(cmd.Writer, minWidth, tabWidth, padding, padChar, tabwriter.TabIndent)
 
-		_, err := fmt.Fprintf(w, `
+	_, err := fmt.Fprintf(w, `
 
  █████╗ ██████╗ ██╗   ██╗███████╗███╗   ██╗████████╗     ██████╗ ███████╗     ██████╗ ██████╗ ██████╗ ███████╗
 ██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║╚══██╔══╝    ██╔═══██╗██╔════╝    ██╔════╝██╔═══██╗██╔══██╗██╔════╝
@@ -49,54 +46,49 @@ func printHeader(_ context.Context) cli.BeforeFunc {
 ╚═╝  ╚═╝╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝        ╚═════╝ ╚═╝          ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝
 
 `)
-		if err != nil {
-			return fmt.Errorf("print version: %w", err)
-		}
+	if err != nil {
+		return ctx, fmt.Errorf("print version: %w", err)
+	}
 
-		return nil
+	return ctx, nil
+}
+
+func notFound(ctx context.Context, cmd *cli.Command, command string) {
+	if _, err := fmt.Fprintf(
+		cmd.Writer,
+		"Command [%s] not supported.\nTry --help flag to see how to use it\n",
+		command,
+	); err != nil {
+		log.WithError(ctx, err).Fatal("Failed to print not found message")
 	}
 }
 
-func notFound(ctx context.Context) cli.CommandNotFoundFunc {
-	return func(c *cli.Context, command string) {
-		if _, err := fmt.Fprintf(
-			c.App.Writer,
-			"Command [%s] not supported.\nTry --help flag to see how to use it\n",
-			command,
-		); err != nil {
-			log.WithError(ctx, err).Fatal("Failed to print not found message")
-		}
+func menu(ctx context.Context, c *cli.Command) error {
+	ctx = command.ContextWithOptions(ctx, optionsFromCli(c)...)
+	ctx = command.ContextWithSession(ctx, sessionFromCli(c))
+
+	years := puzzles.GetYears()
+
+	items := makeMenuItemsList(years, exit)
+
+	prompt := promptui.Select{
+		Label:             "Years menu (exit' for exit)",
+		Items:             items,
+		Size:              pageSize,
+		CursorPos:         0,
+		IsVimMode:         false,
+		HideHelp:          false,
+		HideSelected:      false,
+		Templates:         nil,
+		Keys:              nil,
+		Searcher:          searcher(items),
+		StartInSearchMode: false,
+		Pointer:           promptui.DefaultCursor,
+		Stdin:             nil,
+		Stdout:            nil,
 	}
-}
 
-func menu(ctx context.Context) cli.ActionFunc {
-	return func(c *cli.Context) error {
-		ctx = command.ContextWithOptions(ctx, optionsFromCli(c)...)
-		ctx = command.ContextWithSession(ctx, sessionFromCli(c))
-
-		years := puzzles.GetYears()
-
-		items := makeMenuItemsList(years, exit)
-
-		prompt := promptui.Select{
-			Label:             "Years menu (exit' for exit)",
-			Items:             items,
-			Size:              pageSize,
-			CursorPos:         0,
-			IsVimMode:         false,
-			HideHelp:          false,
-			HideSelected:      false,
-			Templates:         nil,
-			Keys:              nil,
-			Searcher:          searcher(items),
-			StartInSearchMode: false,
-			Pointer:           promptui.DefaultCursor,
-			Stdin:             nil,
-			Stdout:            nil,
-		}
-
-		return handleYearChoices(ctx, prompt)
-	}
+	return handleYearChoices(ctx, prompt)
 }
 
 func menuPuzzle(ctx context.Context, year string) error {
@@ -238,7 +230,7 @@ func isBack(in string) bool {
 	return strings.EqualFold(back, in)
 }
 
-func optionsFromCli(c *cli.Context) []puzzles.RunOption {
+func optionsFromCli(c *cli.Command) []puzzles.RunOption {
 	const optsNum = 2
 
 	options := make([]puzzles.RunOption, 0, optsNum)
@@ -254,7 +246,7 @@ func optionsFromCli(c *cli.Context) []puzzles.RunOption {
 	return options
 }
 
-func sessionFromCli(c *cli.Context) string {
+func sessionFromCli(c *cli.Command) string {
 	var sess string
 
 	sess = c.String(flagSession)

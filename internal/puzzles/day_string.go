@@ -42,8 +42,9 @@ const _Day_name = "dayUnknown12345678910111213141516171819202122232425daySentine
 var _Day_index = [...]uint8{0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 62}
 
 func (i Day) String() string {
-	if i < 0 || i >= Day(len(_Day_index)-1) {
+	idx := int(i) - 0
+	if i < 0 || idx >= len(_Day_index)-1 {
 		return "Day(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _Day_name[_Day_index[i]:_Day_index[i+1]]
+	return _Day_name[_Day_index[idx]:_Day_index[idx+1]]
 }
