@@ -92,7 +92,7 @@ func jaroWinkler(a, b string) float64 {
 	prefix := int(math.Min(float64(len(a)), math.Min(float64(prefixSize), float64(len(b)))))
 
 	var prefixMatch float64
-	for i := 0; i < prefix; i++ {
+	for i := range prefix {
 		if a[i] == b[i] {
 			prefixMatch++
 		} else {
@@ -120,13 +120,14 @@ func suggestFlag(flags []Flag, provided string, hideHelp bool) string {
 		}
 	}
 
-	if len(suggestion) == 1 {
-		suggestion = "-" + suggestion
-	} else if len(suggestion) > 1 {
-		suggestion = "--" + suggestion
+	if len(suggestion) == 0 {
+		return ""
 	}
 
-	return suggestion
+	// Use the same rune-counting rule that drives the help output
+	// (prefixFor) so that a single-rune name is suggested as a short flag
+	// regardless of how many bytes that rune is encoded in.
+	return prefixFor(suggestion) + suggestion
 }
 
 // suggestCommand takes a list of commands and a provided string to suggest a
