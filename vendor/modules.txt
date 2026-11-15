@@ -4,9 +4,6 @@ github.com/briandowns/spinner
 # github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
 ## explicit
 github.com/chzyer/readline
-# github.com/davecgh/go-spew v1.1.1
-## explicit
-github.com/davecgh/go-spew/spew
 # github.com/fatih/color v1.13.0
 ## explicit; go 1.13
 github.com/fatih/color
@@ -32,20 +29,22 @@ github.com/obalunenko/logger
 # github.com/obalunenko/version v1.3.1
 ## explicit; go 1.24
 github.com/obalunenko/version
-# github.com/pmezard/go-difflib v1.0.0
-## explicit
-github.com/pmezard/go-difflib/difflib
 # github.com/savioxavier/termlink v1.4.3
 ## explicit; go 1.17
 github.com/savioxavier/termlink
-# github.com/stretchr/testify v1.11.1
+# github.com/stretchr/testify v1.12.1
 ## explicit; go 1.17
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/assert/yaml
+github.com/stretchr/testify/internal/difflib
+github.com/stretchr/testify/internal/spew
 github.com/stretchr/testify/require
 # github.com/urfave/cli/v3 v3.6.1
 ## explicit; go 1.22
 github.com/urfave/cli/v3
+# go.yaml.in/yaml/v3 v3.0.5
+## explicit; go 1.16
+go.yaml.in/yaml/v3
 # golang.org/x/sys v0.6.0
 ## explicit; go 1.17
 golang.org/x/sys/internal/unsafeheader
@@ -55,6 +54,3 @@ golang.org/x/sys/windows
 # golang.org/x/term v0.6.0
 ## explicit; go 1.17
 golang.org/x/term
-# gopkg.in/yaml.v3 v3.0.1
-## explicit
-gopkg.in/yaml.v3
