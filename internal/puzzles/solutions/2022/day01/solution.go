@@ -124,7 +124,7 @@ func (e elves) String() string {
 	var resp strings.Builder
 
 	for _, e2 := range e {
-		resp.WriteString(fmt.Sprintln(e2.String()))
+		fmt.Fprintln(&resp, e2.String())
 	}
 
 	return resp.String()
