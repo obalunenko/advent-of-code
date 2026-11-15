@@ -5,10 +5,11 @@ import (
 	"os"
 	"runtime"
 	"strings"
+	"unicode/utf8"
 )
 
 func prefixFor(name string) (prefix string) {
-	if len(name) == 1 {
+	if utf8.RuneCountInString(name) == 1 {
 		prefix = "-"
 	} else {
 		prefix = "--"
@@ -35,21 +36,21 @@ func unquoteUsage(usage string) (string, string) {
 }
 
 func prefixedNames(names []string, placeholder string) string {
-	var prefixed string
+	var prefixed strings.Builder
 	for i, name := range names {
 		if name == "" {
 			continue
 		}
 
-		prefixed += prefixFor(name) + name
+		prefixed.WriteString(prefixFor(name) + name)
 		if placeholder != "" {
-			prefixed += " " + placeholder
+			prefixed.WriteString(" " + placeholder)
 		}
 		if i < len(names)-1 {
-			prefixed += ", "
+			prefixed.WriteString(", ")
 		}
 	}
-	return prefixed
+	return prefixed.String()
 }
 
 func envFormat(envVars []string, prefix, sep, suffix string) string {

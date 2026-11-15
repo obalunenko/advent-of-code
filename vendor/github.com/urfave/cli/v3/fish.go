@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"strings"
-	"text/template"
 )
 
 // ToFishCompletion creates a fish completion string for the `*Command`
@@ -25,14 +24,20 @@ type fishCommandCompletionTemplate struct {
 }
 
 func (cmd *Command) writeFishCompletionTemplate(w io.Writer) error {
-	const name = "cli"
-	t, err := template.New(name).Parse(FishCompletionTemplate)
-	if err != nil {
-		return err
-	}
-
 	// Add global flags
 	completions := prepareFishFlags(cmd.Name, cmd)
+
+	if cmd.ShellComplete != nil {
+		var completion strings.Builder
+		fmt.Fprintf(&completion,
+			"complete -c %s -n '%s' -xa '(%s %s 2>/dev/null)'",
+			cmd.Name,
+			fishFlagHelper(cmd.Name, cmd),
+			cmd.Name,
+			completionFlag,
+		)
+		completions = append(completions, completion.String())
+	}
 
 	// Add commands and their flags
 	completions = append(
@@ -45,7 +50,7 @@ func (cmd *Command) writeFishCompletionTemplate(w io.Writer) error {
 		toplevelCommandNames = append(toplevelCommandNames, child.Names()...)
 	}
 
-	return t.ExecuteTemplate(w, name, &fishCommandCompletionTemplate{
+	return renderFishCompletion(w, &fishCommandCompletionTemplate{
 		Command:     cmd,
 		Completions: completions,
 		AllCommands: toplevelCommandNames,
@@ -72,6 +77,26 @@ func prepareFishCommands(binary string, parent *Command) []string {
 			}
 			completions = append(completions, completion.String())
 		}
+
+		if command.ShellComplete != nil {
+			var completion strings.Builder
+			var path []string
+			lineage := command.Lineage()
+			for i := len(lineage) - 2; i >= 0; i-- {
+				path = append(path, lineage[i].Name)
+			}
+
+			fmt.Fprintf(&completion,
+				"complete -c %s -n '%s' -xa '(%s %s %s 2>/dev/null)'",
+				binary,
+				fishFlagHelper(binary, command),
+				binary,
+				strings.Join(path, " "),
+				completionFlag,
+			)
+			completions = append(completions, completion.String())
+		}
+
 		completions = append(
 			completions,
 			prepareFishFlags(binary, command)...,
@@ -184,6 +209,15 @@ func commandAncestry(command *Command) string {
 	return strings.Join(ancestry, "; and ")
 }
 
+// escapeSingleQuotes escapes a string for use inside a fish single-quoted
+// string, such as a `-d '...'` description. Within single quotes fish only
+// recognizes the escape sequences \\ and \', so the backslash must be escaped
+// as well as the single quote. Escaping the quote without escaping the
+// backslash corrupts any description that contains a backslash, and a trailing
+// backslash even leaves the single-quoted string unterminated.
+// See https://fishshell.com/docs/current/language.html
 func escapeSingleQuotes(input string) string {
-	return strings.ReplaceAll(input, `'`, `\'`)
+	return fishSingleQuoteReplacer.Replace(input)
 }
+
+var fishSingleQuoteReplacer = strings.NewReplacer(`\`, `\\`, `'`, `\'`)

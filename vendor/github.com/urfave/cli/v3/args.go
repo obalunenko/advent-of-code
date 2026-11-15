@@ -77,6 +77,11 @@ type Argument interface {
 	Get() any
 }
 
+type requiredArgument interface {
+	name() string
+	required() bool
+}
+
 // AnyArguments to differentiate between no arguments(nil) vs aleast one
 var AnyArguments = []Argument{
 	&StringArgs{
@@ -89,6 +94,7 @@ type ArgumentBase[T any, C any, VC ValueCreator[T, C]] struct {
 	Value       T      `json:"value"`     // the default value of this argument
 	Destination *T     `json:"-"`         // the destination point for this argument
 	UsageText   string `json:"usageText"` // the usage text to show
+	Required    bool   `json:"required"`  // whether the argument is required or not
 	Config      C      `json:"config"`    // config for this argument similar to Flag Config
 
 	value *T
@@ -98,17 +104,32 @@ func (a *ArgumentBase[T, C, VC]) HasName(s string) bool {
 	return s == a.Name
 }
 
+func (a *ArgumentBase[T, C, VC]) name() string {
+	return a.Name
+}
+
+func (a *ArgumentBase[T, C, VC]) required() bool {
+	return a.Required
+}
+
 func (a *ArgumentBase[T, C, VC]) Usage() string {
 	if a.UsageText != "" {
 		return a.UsageText
 	}
 
-	usageFormat := "%[1]s"
+	usageFormat := "[%[1]s]"
+	if a.Required {
+		usageFormat = "%[1]s"
+	}
 	return fmt.Sprintf(usageFormat, a.Name)
 }
 
 func (a *ArgumentBase[T, C, VC]) Parse(s []string) ([]string, error) {
 	tracef("calling arg%[1] parse with args %[2]", a.Name, s)
+
+	if a.Required && len(s) == 0 {
+		return s, &errRequiredArguments{missingArguments: []string{a.Name}}
+	}
 
 	var vc VC
 	var t T
@@ -180,12 +201,10 @@ func (a *ArgumentsBase[T, C, VC]) Usage() string {
 func (a *ArgumentsBase[T, C, VC]) Parse(s []string) ([]string, error) {
 	tracef("calling arg%[1] parse with args %[2]", &a.Name, s)
 	if a.Max == 0 {
-		fmt.Printf("WARNING args %s has max 0, not parsing argument\n", a.Name)
-		return s, nil
+		return s, fmt.Errorf("args %s has max 0, not parsing argument", a.Name)
 	}
 	if a.Max != -1 && a.Min > a.Max {
-		fmt.Printf("WARNING args %s has min[%d] > max[%d], not parsing argument\n", a.Name, a.Min, a.Max)
-		return s, nil
+		return s, fmt.Errorf("args %s has min[%d] > max[%d], not parsing argument", a.Name, a.Min, a.Max)
 	}
 
 	count := 0

@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"slices"
 	"strings"
-	"text/tabwriter"
-	"text/template"
 	"unicode/utf8"
 )
 
@@ -64,11 +63,12 @@ var ArgsUsageCommandHelp = "[command]"
 
 func buildHelpCommand(withAction bool) *Command {
 	cmd := &Command{
-		Name:      helpName,
-		Aliases:   []string{helpAlias},
-		Usage:     UsageCommandHelp,
-		ArgsUsage: ArgsUsageCommandHelp,
-		HideHelp:  true,
+		Name:        helpName,
+		Aliases:     []string{helpAlias},
+		Usage:       UsageCommandHelp,
+		ArgsUsage:   ArgsUsageCommandHelp,
+		HideHelp:    true,
+		builtInHelp: true,
 	}
 
 	if withAction {
@@ -84,14 +84,22 @@ func helpCommandAction(ctx context.Context, cmd *Command) error {
 
 	tracef("doing help for cmd %[1]q with args %[2]q", cmd, args)
 
-	// This action can be triggered by a "default" action of a command
-	// or via cmd.Run when cmd == helpCmd. So we have following possibilities
+	// helpCommandAction is triggered in several ways:
 	//
-	// 1 $ app
-	// 2 $ app help
-	// 3 $ app foo
-	// 4 $ app help foo
-	// 5 $ app foo help
+	//   * the command has no user-defined Action (default action fallback)
+	//   * the --help / -h flag was parsed (via cmd.checkHelp())
+	//   * the "help" subcommand (or "h" alias) was dispatched
+	//
+	// Possible invocations:
+	//
+	//   $ app                  # default action; show root help
+	//   $ app --help / -h      # flag; show root help (ignores subsequent args)
+	//   $ app help / h         # subcommand; show root help
+	//   $ app help / h foo     # subcommand; show help for subcommand "foo"
+	//   $ app --help / -h foo  # flag; show help for subcommand "foo"
+	//   $ app foo --help / -h  # flag on subcommand; show help for "foo"
+	//   $ app foo help / h     # subcommand on subcommand; show help for "foo"
+	//   $ app foo (no action)  # default action on subcommand; show help for "foo"
 
 	// Case 4. when executing a help command set the context to parent
 	// to allow resolution of subsequent args. This will transform
@@ -99,7 +107,7 @@ func helpCommandAction(ctx context.Context, cmd *Command) error {
 	//     to
 	// $ app foo
 	// which will then be handled as case 3
-	if cmd.parent != nil && (cmd.HasName(helpName) || cmd.HasName(helpAlias)) {
+	if cmd.parent != nil && cmd.builtInHelp {
 		tracef("setting cmd to cmd.parent")
 		cmd = cmd.parent
 	}
@@ -124,18 +132,9 @@ func helpCommandAction(ctx context.Context, cmd *Command) error {
 	}
 
 	// Case 3, 5
-	if (len(cmd.Commands) == 1 && !cmd.HideHelp) ||
-		(len(cmd.Commands) == 0 && cmd.HideHelp) {
-
-		tmpl := cmd.CustomHelpTemplate
-		if tmpl == "" {
-			tmpl = CommandHelpTemplate
-		}
-
+	if len(cmd.VisibleCommands()) == 0 {
 		tracef("running HelpPrinter with command %[1]q", cmd.Name)
-		HelpPrinter(cmd.Root().Writer, tmpl, cmd)
-
-		return nil
+		return ShowCommandHelp(ctx, cmd.parent, cmd.Name)
 	}
 
 	tracef("running ShowSubcommandHelp")
@@ -188,7 +187,7 @@ func printCommandSuggestions(commands []*Command, writer io.Writer) {
 		if command.Hidden {
 			continue
 		}
-		if strings.HasSuffix(os.Getenv("SHELL"), "zsh") {
+		if len(command.Usage) > 0 {
 			_, _ = fmt.Fprintf(writer, "%s:%s\n", command.Name, command.Usage)
 		} else {
 			_, _ = fmt.Fprintf(writer, "%s\n", command.Name)
@@ -204,10 +203,8 @@ func cliArgContains(flagName string, args []string) bool {
 			count = 2
 		}
 		flag := fmt.Sprintf("%s%s", strings.Repeat("-", count), name)
-		for _, a := range args {
-			if a == flag {
-				return true
-			}
+		if slices.Contains(args, flag) {
+			return true
 		}
 	}
 	return false
@@ -217,7 +214,7 @@ func printFlagSuggestions(lastArg string, flags []Flag, writer io.Writer) {
 	// Trim to handle both "-short" and "--long" flags.
 	cur := strings.TrimLeft(lastArg, "-")
 	for _, flag := range flags {
-		if bflag, ok := flag.(*BoolFlag); ok && bflag.Hidden {
+		if vf, ok := flag.(VisibleFlag); ok && !vf.IsVisible() {
 			continue
 		}
 
@@ -240,7 +237,7 @@ func printFlagSuggestions(lastArg string, flags []Flag, writer io.Writer) {
 		// match if last argument matches this flag and it is not repeated
 		if strings.HasPrefix(name, cur) && cur != name /* && !cliArgContains(name, os.Args)*/ {
 			flagCompletion := fmt.Sprintf("%s%s", strings.Repeat("-", count), name)
-			if usage != "" && strings.HasSuffix(os.Getenv("SHELL"), "zsh") {
+			if usage != "" {
 				flagCompletion = fmt.Sprintf("%s:%s", flagCompletion, usage)
 			}
 			fmt.Fprintln(writer, flagCompletion)
@@ -258,17 +255,13 @@ func DefaultCompleteWithFlags(ctx context.Context, cmd *Command) {
 	}
 	argsLen := len(args)
 	lastArg := ""
-	// parent command will have --generate-shell-completion so we need
-	// to account for that
-	if argsLen > 1 {
-		lastArg = args[argsLen-2]
-	} else if argsLen > 0 {
+	// os.Args retains the completion marker, but a child's parsed arguments
+	// have already had it removed.
+	if argsLen > 0 {
 		lastArg = args[argsLen-1]
-	}
-
-	if lastArg == "--" {
-		tracef("No completions due to termination")
-		return
+		if lastArg == completionFlag && argsLen > 1 {
+			lastArg = args[argsLen-2]
+		}
 	}
 
 	if lastArg == completionFlag {
@@ -277,7 +270,15 @@ func DefaultCompleteWithFlags(ctx context.Context, cmd *Command) {
 
 	if strings.HasPrefix(lastArg, "-") {
 		tracef("printing flag suggestion for flag[%v] on command %[1]q", lastArg, cmd.Name)
-		printFlagSuggestions(lastArg, cmd.Flags, cmd.Root().Writer)
+		flags := cmd.allFlags()
+		if !cmd.SkipFlagParsing {
+			for _, fl := range cmd.VisiblePersistentFlags() {
+				if !hasFlag(flags, fl) {
+					flags = append(flags, fl)
+				}
+			}
+		}
+		printFlagSuggestions(lastArg, flags, cmd.Root().Writer)
 		return
 	}
 
@@ -303,7 +304,7 @@ func DefaultShowCommandHelp(ctx context.Context, cmd *Command, commandName strin
 
 		tmpl := subCmd.CustomHelpTemplate
 		if tmpl == "" {
-			if len(subCmd.Commands) == 0 {
+			if len(subCmd.VisibleCommands()) == 0 {
 				tracef("using CommandHelpTemplate")
 				tmpl = CommandHelpTemplate
 			} else {
@@ -375,116 +376,21 @@ func handleTemplateError(err error) {
 	}
 }
 
-// DefaultPrintHelpCustom is the default implementation of HelpPrinterCustom.
-//
-// The customFuncs map will be combined with a default template.FuncMap to
-// allow using arbitrary functions in template rendering.
-func DefaultPrintHelpCustom(out io.Writer, templ string, data any, customFuncs map[string]any) {
-	const maxLineLength = 10000
-
-	tracef("building default funcMap")
-	funcMap := template.FuncMap{
-		"join":           strings.Join,
-		"subtract":       subtract,
-		"indent":         indent,
-		"nindent":        nindent,
-		"trim":           strings.TrimSpace,
-		"wrap":           func(input string, offset int) string { return wrap(input, offset, maxLineLength) },
-		"offset":         offset,
-		"offsetCommands": offsetCommands,
-	}
-
-	if wa, ok := customFuncs["wrapAt"]; ok {
-		if wrapAtFunc, ok := wa.(func() int); ok {
-			wrapAt := wrapAtFunc()
-			customFuncs["wrap"] = func(input string, offset int) string {
-				return wrap(input, offset, wrapAt)
-			}
-		}
-	}
-
-	for key, value := range customFuncs {
-		funcMap[key] = value
-	}
-
-	w := tabwriter.NewWriter(out, 1, 8, 2, ' ', 0)
-	t := template.Must(template.New("help").Funcs(funcMap).Parse(templ))
-
-	if _, err := t.New("helpNameTemplate").Parse(helpNameTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("argsTemplate").Parse(argsTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("usageTemplate").Parse(usageTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("descriptionTemplate").Parse(descriptionTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("visibleCommandTemplate").Parse(visibleCommandTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("copyrightTemplate").Parse(copyrightTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("versionTemplate").Parse(versionTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("visibleFlagCategoryTemplate").Parse(visibleFlagCategoryTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("visibleFlagTemplate").Parse(visibleFlagTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("visiblePersistentFlagTemplate").Parse(visiblePersistentFlagTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("visibleGlobalFlagCategoryTemplate").Parse(strings.ReplaceAll(visibleFlagCategoryTemplate, "OPTIONS", "GLOBAL OPTIONS")); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("authorsTemplate").Parse(authorsTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	if _, err := t.New("visibleCommandCategoryTemplate").Parse(visibleCommandCategoryTemplate); err != nil {
-		handleTemplateError(err)
-	}
-
-	tracef("executing template")
-	handleTemplateError(t.Execute(w, data))
-
-	_ = w.Flush()
-}
-
 // DefaultPrintHelp is the default implementation of HelpPrinter.
 func DefaultPrintHelp(out io.Writer, templ string, data any) {
 	HelpPrinterCustom(out, templ, data, nil)
 }
 
 func checkVersion(cmd *Command) bool {
-	found := false
-	for _, name := range VersionFlag.Names() {
-		if cmd.Bool(name) {
-			found = true
-		}
-	}
-	return found
+	return cmd.versionFlag != nil && cmd.versionFlag.IsSet()
 }
 
 func checkShellCompleteFlag(c *Command, arguments []string) (bool, []string) {
 	if (c.parent == nil && !c.EnableShellCompletion) || (c.parent != nil && !c.Root().shellCompletion) {
+		return false, arguments
+	}
+
+	if len(arguments) == 0 {
 		return false, arguments
 	}
 
@@ -495,19 +401,22 @@ func checkShellCompleteFlag(c *Command, arguments []string) (bool, []string) {
 		return false, arguments
 	}
 
-	for _, arg := range arguments {
-		// If arguments include "--", shell completion is disabled
-		// because after "--" only positional arguments are accepted.
-		// https://unix.stackexchange.com/a/11382
-		if arg == "--" {
-			return false, arguments[:pos]
-		}
+	// If the token being completed is preceded by a "--", only positional
+	// arguments are accepted after it, so nothing will be suggested.
+	// https://unix.stackexchange.com/a/11382
+	// Note: The token being completed is at position pos-1 (immediately before completionFlag).
+	// A "--" at exactly that position is the token being completed, not a
+	// separator, so completing "--" itself still suggests flags.
+	// The request is still recognized as a completion so that the command
+	// action is never executed (https://github.com/urfave/cli/issues/1993).
+	if pos >= 1 && slices.Contains(arguments[:pos-1], "--") {
+		c.shellCompletionPastDoubleDash = true
 	}
 
 	return true, arguments[:pos]
 }
 
-func checkCompletions(ctx context.Context, cmd *Command) bool {
+func shouldRunCompletion(cmd *Command) bool {
 	tracef("checking completions on command %[1]q", cmd.Name)
 
 	if !cmd.Root().shellCompletion {
@@ -524,13 +433,21 @@ func checkCompletions(ctx context.Context, cmd *Command) bool {
 	}
 
 	tracef("no subcommand found for completion %[1]q", cmd.Name)
+	return true
+}
 
+func runCompletion(ctx context.Context, cmd *Command) {
+	// Nothing is suggested past a "--": after it, only positional arguments
+	// are accepted. The request is still treated as a completion so that the
+	// command action is never executed (https://github.com/urfave/cli/issues/1993).
+	if cmd.Root().shellCompletionPastDoubleDash {
+		tracef("completion requested past double dash; suggesting nothing (cmd=%[1]q)", cmd.Name)
+		return
+	}
 	if cmd.ShellComplete != nil {
 		tracef("running shell completion func for command %[1]q", cmd.Name)
 		cmd.ShellComplete(ctx, cmd)
 	}
-
-	return true
 }
 
 func subtract(a, b int) int {
