@@ -61,8 +61,8 @@ func parseSchoolFishesStates(input io.Reader) ([]int, error) {
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		states := strings.Split(line, ",")
-		for _, s := range states {
+		states := strings.SplitSeq(line, ",")
+		for s := range states {
 			n, err := strconv.Atoi(s)
 			if err != nil {
 				return nil, fmt.Errorf("parse fish state: %w", err)

@@ -35,15 +35,15 @@ jobs:
         # Learn more about CodeQL language support at https://git.io/codeql-language-support
         language: [ 'go' ]
         os: [ 'ubuntu-24.04' ]
-        go-version: [1.24]
+        go-version: [1.27.4]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up go
-        uses: actions/setup-go@v5.5.0
+        uses: actions/setup-go@v7.0.0
         with:
           go-version: ${{ matrix.go-version }}
       - run: |
@@ -52,7 +52,7 @@ jobs:
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
           # If you wish to specify custom queries, you can do so here or in a config file.
@@ -65,4 +65,4 @@ jobs:
           make build
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
