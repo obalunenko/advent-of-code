@@ -26,8 +26,8 @@ github.com/obalunenko/getenv/option
 # github.com/obalunenko/logger v1.2.0
 ## explicit; go 1.23
 github.com/obalunenko/logger
-# github.com/obalunenko/version v1.3.1
-## explicit; go 1.24
+# github.com/obalunenko/version v1.4.0
+## explicit; go 1.27
 github.com/obalunenko/version
 # github.com/savioxavier/termlink v1.4.3
 ## explicit; go 1.17

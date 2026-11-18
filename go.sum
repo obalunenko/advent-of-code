@@ -19,8 +19,8 @@ github.com/obalunenko/getenv v1.15.0 h1:TX+GytSOk0xTK0L8VOIo+L6N77BKQ5iMvnsPRzz/
 github.com/obalunenko/getenv v1.15.0/go.mod h1:kXJjGqFmvucspwNk4/hrHi2bG3cEfSEQJPYmWzUK/KQ=
 github.com/obalunenko/logger v1.2.0 h1:MwsqJWtaxaHFQK7Cjkqk1NnlNPHH+tR1ergdnpST7Kg=
 github.com/obalunenko/logger v1.2.0/go.mod h1:XaU3GhUJWda3ow3hhRjlItpIVgQRKa2KDsEeprSzBvg=
-github.com/obalunenko/version v1.3.1 h1:NN+YSOrti8mEyJSnu+7//YSvGrOhLivh60hJXhIrNTI=
-github.com/obalunenko/version v1.3.1/go.mod h1:56ydLXefFem3sEJ2iyguuZ7dwJ25VoIRTev/JfxFIa4=
+github.com/obalunenko/version v1.4.0 h1:KXcerQ90SGZDpTlUzJ2Ch/bCE1bqOshzV8JGleeykJo=
+github.com/obalunenko/version v1.4.0/go.mod h1:6Typ8UM6PZZ2bryOhaW1yEPcTiNvRv2gBG6nJg/bNWY=
 github.com/savioxavier/termlink v1.4.3 h1:Gh6vrG7jSn21cRiYdQqFXYcdXfM+Fg14aG487JTfKpA=
 github.com/savioxavier/termlink v1.4.3/go.mod h1:5T5ePUlWbxCHIwyF8/Ez1qufOoGM89RCg9NvG+3G3gc=
 github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWDWE=

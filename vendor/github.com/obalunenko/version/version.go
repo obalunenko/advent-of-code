@@ -39,34 +39,63 @@ func init() {
 		return
 	}
 
-	goversion = info.GoVersion
+	bi := parseBuildInfo(info)
+
+	version = bi.version
+	builddate = bi.builddate
+	commit = bi.commit
+	shortcommit = bi.shortcommit
+	appname = bi.appname
+	goversion = bi.goversion
+}
+
+type buildInfo struct {
+	version     string
+	builddate   string
+	commit      string
+	shortcommit string
+	appname     string
+	goversion   string
+}
+
+// parseBuildInfo extracts build information from info.
+// Values missing in info stay unset.
+func parseBuildInfo(info *debug.BuildInfo) buildInfo {
+	bi := buildInfo{
+		version:     info.Main.Version,
+		builddate:   unset,
+		commit:      unset,
+		shortcommit: unset,
+		appname:     info.Path,
+		goversion:   info.GoVersion,
+	}
 
 	var modified bool
 
 	for _, setting := range info.Settings {
 		switch setting.Key {
 		case "vcs.revision":
-			commit = setting.Value
+			bi.commit = setting.Value
 		case "vcs.time":
-			builddate = setting.Value
+			bi.builddate = setting.Value
 		case "vcs.modified":
-			modified = true
+			// Go writes this key for every VCS build: "true" or "false".
+			modified = setting.Value == "true"
 		}
 	}
 
-	if len(commit) < 7 {
-		shortcommit = commit
+	if len(bi.commit) < 7 {
+		bi.shortcommit = bi.commit
 	} else {
-		shortcommit = commit[:7]
+		bi.shortcommit = bi.commit[:7]
 	}
 
 	if modified {
-		commit += "+CHANGES"
-		shortcommit += "+CHANGES"
+		bi.commit += "+CHANGES"
+		bi.shortcommit += "+CHANGES"
 	}
 
-	appname = info.Path
-	version = info.Main.Version
+	return bi
 }
 
 // GetGoVersion returns the go version
