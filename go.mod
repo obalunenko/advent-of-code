@@ -7,7 +7,7 @@ require (
 	github.com/manifoldco/promptui v0.9.0
 	github.com/obalunenko/getenv v1.15.0
 	github.com/obalunenko/logger v1.2.0
-	github.com/obalunenko/version v1.3.1
+	github.com/obalunenko/version v1.4.0
 	github.com/savioxavier/termlink v1.4.3
 	github.com/stretchr/testify v1.12.1
 	github.com/urfave/cli/v3 v3.14.0
