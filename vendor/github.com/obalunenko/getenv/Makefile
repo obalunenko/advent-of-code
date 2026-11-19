@@ -1,26 +1,11 @@
-.PHONY: help, test-cover, prepare-cover-report, open-cover-report, update-readme-cover, update-readme-doc, test, test-regression, configure, sync-vendor, imports, fmt, format-project, install-tools, vet, lint-full, lint-pipeline, lint-sonar, release, release-local-snapshot, check-releaser, new-version
-BIN_DIR=./bin
+.PHONY: help test-cover prepare-cover-report open-cover-report update-readme-doc test configure tidy imports fmt format-project install-tools vet lint-full release release-local-snapshot check-releaser new-version
 
-SHELL := env VERSION=$(VERSION) $(SHELL)
-VERSION ?= $(shell git describe --tags $(git rev-list --tags --max-count=1))
-
-APP_NAME?=getenv
-SHELL := env APP_NAME=$(APP_NAME) $(SHELL)
-
-SHELL := env GOTOOLS_IMAGE_TAG=$(GOTOOLS_IMAGE_TAG) $(SHELL)
-
-COMPOSE_TOOLS_FILE=deployments/docker-compose/go-tools-docker-compose.yml
-COMPOSE_TOOLS_CMD_BASE=docker compose -f $(COMPOSE_TOOLS_FILE)
-COMPOSE_TOOLS_CMD_UP=$(COMPOSE_TOOLS_CMD_BASE) up --exit-code-from
-COMPOSE_TOOLS_CMD_PULL=$(COMPOSE_TOOLS_CMD_BASE) pull
-
-GOVERSION:=1.26.2
+GOVERSION:=1.27.4
 
 TARGET_MAX_CHAR_NUM=20
 
 ## Show help
 help:
-	${call colored, help is running...}
 	@echo ''
 	@echo 'Usage:'
 	@echo '  make <target>'
@@ -42,49 +27,41 @@ test-cover:
 	./scripts/tests/coverage.sh
 
 prepare-cover-report: test-cover
-	$(COMPOSE_TOOLS_CMD_UP) prepare-cover-report prepare-cover-report
+	./scripts/tests/prepare-cover-report.sh
 
 ## Open coverage report.
 open-cover-report: prepare-cover-report
 	./scripts/open-coverage-report.sh
 
-## Update readme coverage.
-update-readme-cover: prepare-cover-report
-	$(COMPOSE_TOOLS_CMD_UP) update-readme-coverage update-readme-coverage
-
 ## Update readme doc.
 update-readme-doc:
-	$(COMPOSE_TOOLS_CMD_UP) update-readme-doc update-readme-doc
+	./scripts/update-readme-doc.sh
 
 ## Run tests.
 test:
-	$(COMPOSE_TOOLS_CMD_UP) run-tests run-tests
+	./scripts/tests/run.sh
 
-## Run regression tests.
-test-regression: test
+## Tidy go.mod and install needed tools.
+configure: tidy install-tools
 
-## Sync vendor and install needed tools.
-configure: sync-vendor install-tools
-
-## Sync vendor with go.mod.
-sync-vendor:
-	./scripts/sync-vendor.sh
+## Tidy and verify go.mod.
+tidy:
+	./scripts/tidy.sh
 
 ## Fix imports sorting.
 imports:
-	$(COMPOSE_TOOLS_CMD_UP) fix-imports fix-imports
+	./scripts/style/fix-imports.sh
 
 ## Format code with go fmt.
 fmt:
-	$(COMPOSE_TOOLS_CMD_UP) fix-fmt fix-fmt
+	./scripts/style/fmt.sh
 
 ## Format code and sort imports.
 format-project: fmt imports
 
-## Installs vendored tools.
+## Build tools pinned in tools/<name>/go.mod.
 install-tools:
-	echo "Installing ${GOTOOLS_IMAGE_TAG}"
-	$(COMPOSE_TOOLS_CMD_PULL)
+	./scripts/install-tools.sh
 
 ## vet project
 vet:
@@ -92,15 +69,7 @@ vet:
 
 ## Run full linting
 lint-full:
-	$(COMPOSE_TOOLS_CMD_UP) lint-full lint-full
-
-## Run linting for build pipeline
-lint-pipeline:
-	$(COMPOSE_TOOLS_CMD_UP) lint-pipeline lint-pipeline
-
-## Run linting for sonar report
-lint-sonar:
-	$(COMPOSE_TOOLS_CMD_UP) lint-sonar lint-sonar
+	./scripts/linting/run-linters.sh
 
 ## Release
 release:
@@ -115,7 +84,7 @@ check-releaser:
 	./scripts/release/check.sh
 
 ## Issue new release.
-new-version: vet test-regression
+new-version: vet test
 	./scripts/release/new-version.sh
 
 bump-go-version:

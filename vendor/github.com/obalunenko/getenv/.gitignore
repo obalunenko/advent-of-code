@@ -11,16 +11,20 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+# Dependency directories
+vendor/
 
 bin/
 *.tape
 dist/
 coverage/
 .DS_Store
-tests-report.json
 README_doc.md
+tests-report.json
+linters-report.xml
 .vscode/
 
-linters-report.xml
+# Codecov CLI downloaded by codecov-action in CI
+/codecov
+/codecov.SHA256SUM
+/codecov.SHA256SUM.sig

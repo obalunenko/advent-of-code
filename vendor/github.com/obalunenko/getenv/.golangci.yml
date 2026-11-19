@@ -1,6 +1,5 @@
 version: "2"
 run:
-  issues-exit-code: 0
   tests: true
 output:
   formats:
@@ -8,8 +7,6 @@ output:
       path: stderr
       print-linter-name: true
       print-issued-lines: true
-    checkstyle:
-      path: linters-report.xml
   sort-order:
     - linter
     - severity
@@ -18,9 +15,7 @@ output:
 linters:
   default: none
   enable:
-    - bodyclose
     - copyloopvar
-    - depguard
     - dogsled
     - dupl
     - errcheck
@@ -37,10 +32,8 @@ linters:
     - misspell
     - mnd
     - nakedret
-    - noctx
     - nolintlint
     - revive
-    - rowserrcheck
     - staticcheck
     - unconvert
     - unparam
@@ -48,14 +41,11 @@ linters:
     - whitespace
     - wsl_v5
   settings:
-    depguard:
-      rules:
-        logger:
-          deny:
-            - pkg: github.com/sirupsen/logrus
-              desc: logging is allowed only by github.com/obalunenko/logger
     dupl:
       threshold: 100
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
     funlen:
       lines: 100
       statements: 50
@@ -138,6 +128,16 @@ linters:
       require-explanation: false
       require-specific: false
       allow-unused: false
+    revive:
+      enable-default-rules: true
+      rules:
+        - name: defer
+          arguments:
+            - - call-chain
+              - loop
+              - method-call
+              - recover
+              - return
     wsl_v5:
       allow-first-in-block: true
       allow-whole-block: false
@@ -148,6 +148,7 @@ linters:
       - linters:
           - dupl
           - funlen
+          - goconst
           - gocyclo
           - gosec
         path: _test\.go
@@ -155,12 +156,6 @@ linters:
         text: exported func * returns unexported type *, which can be annoying to use
       - path: (.+)\.go$
         text: should have a package comment, unless it's in another file for this package
-    paths:
-      - \.pb\.go$
-      - vendor/
-      - third_party$
-      - builtin$
-      - examples$
 issues:
   uniq-by-line: true
   new: false
@@ -176,22 +171,8 @@ formatters:
     - gofmt
     - goimports
   settings:
-    gci:
-      sections:
-        - standard
-        - default
-        - prefix(github.com/obalunenko)
-        - localmodule
-      custom-order: true
-      no-lex-order: true
     goimports:
       local-prefixes:
         - github.com/obalunenko/getenv
   exclusions:
     generated: lax
-    paths:
-      - \.pb\.go$
-      - vendor/
-      - third_party$
-      - builtin$
-      - examples$

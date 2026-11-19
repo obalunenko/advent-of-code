@@ -2,63 +2,18 @@
 // It's type-safe and supports built-in types and slices of them.
 // Note: empty environment variable values are treated as "not set".
 //
-// Types supported:
-// - string
-// - []string
-// - int
-// - []int
-// - int8
-// - []int8
-// - int16
-// - []int16
-// - int32
-// - []int32
-// - int64
-// - []int64
-// - uint8
-// - []uint8
-// - uint16
-// - []uint16
-// - uint64
-// - []uint64
-// - uint
-// - []uint
-// - uintptr
-// - []uintptr
-// - uint32
-// - []uint32
-// - float32
-// - []float32
-// - float64
-// - []float64
-// - time.Time
-// - []time.Time
-// - time.Duration
-// - []time.Duration
-// - bool
-// - []bool
-// - url.URL
-// - []url.URL
-// - net.IP
-// - []net.IP
-// - netip.Addr
-// - []netip.Addr
-// - netip.Prefix
-// - []netip.Prefix
-// - net.HardwareAddr
-// - []net.HardwareAddr
-// - complex64
-// - []complex64
-// - complex128
-// - []complex128
+// Slices are split by "," and time.Time values are parsed with the time.RFC3339 layout,
+// unless WithSeparator or WithTimeLayout sets another one.
+// Slice elements are not trimmed, so "1, 2" is not a valid []int,
+// and a trailing separator adds an empty element: "a,b," is []string{"a", "b", ""}.
+//
+// The supported types are listed in Parsable.
 package getenv
 
 import (
 	"errors"
 	"fmt"
-
-	"github.com/obalunenko/getenv/internal"
-	"github.com/obalunenko/getenv/option"
+	"os"
 )
 
 var (
@@ -71,74 +26,31 @@ var (
 // Env retrieves the value of the environment variable named by the key.
 // If the variable is present in the environment, the value will be parsed and returned.
 // Otherwise, an error will be returned.
-func Env[T internal.EnvParsable](key string, options ...option.Option) (T, error) {
-	var t T
+func Env[T Parsable](key string, options ...Option) (T, error) {
+	var zero T
 
-	w := internal.NewEnvParser(t)
+	raw, ok := os.LookupEnv(key)
+	if !ok || raw == "" {
+		return zero, fmt.Errorf("environment variable %q: %w", key, ErrNotSet)
+	}
 
-	params := newParseParams(options)
-
-	val, err := w.ParseEnv(key, params)
+	val, err := parseAs[T](raw, newParams(options))
 	if err != nil {
-		if errors.Is(err, internal.ErrNotSet) {
-			return t, fmt.Errorf("failed to get environment variable[%s]: %w", key, publicError{
-				cause:    err,
-				sentinel: ErrNotSet,
-			})
-		}
-
-		if errors.Is(err, internal.ErrInvalidValue) {
-			return t, fmt.Errorf("failed to parse environment variable[%s]: %w", key, publicError{
-				cause:    err,
-				sentinel: ErrInvalidValue,
-			})
-		}
-
-		return t, fmt.Errorf("failed to parse environment variable[%s]: %w", key, err)
+		return zero, fmt.Errorf("environment variable %q: %w", key, err)
 	}
 
-	res, ok := val.(T)
-	if !ok {
-		return t, fmt.Errorf("failed to parse environment variable[%s]: %w", key, ErrInvalidValue)
-	}
-
-	return res, nil
+	return val, nil
 }
 
 // EnvOrDefault retrieves the value of the environment variable named by the key.
-// If the variable is present in the environment the value will be parsed and returned.
-// Otherwise, the default value will be returned.
-// The value returned will be of the same type as the default value.
-func EnvOrDefault[T internal.EnvParsable](key string, defaultVal T, options ...option.Option) T {
+// If the variable is set and its value can be parsed, the parsed value is returned.
+// Otherwise, defaultVal is returned: both when the variable is not set (or empty)
+// and when its value is invalid. Use Env to tell these cases apart.
+func EnvOrDefault[T Parsable](key string, defaultVal T, options ...Option) T {
 	val, err := Env[T](key, options...)
 	if err != nil {
 		return defaultVal
 	}
 
 	return val
-}
-
-// publicError keeps parser details while matching exported sentinels.
-type publicError struct {
-	cause    error
-	sentinel error
-}
-
-func (e publicError) Error() string {
-	return e.cause.Error()
-}
-
-func (e publicError) Unwrap() []error {
-	return []error{e.cause, e.sentinel}
-}
-
-// newParseParams creates new parameters from options.
-func newParseParams(opts []option.Option) internal.Parameters {
-	var p internal.Parameters
-
-	for _, opt := range opts {
-		opt.Apply(&p)
-	}
-
-	return p
 }
