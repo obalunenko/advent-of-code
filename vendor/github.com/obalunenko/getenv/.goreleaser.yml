@@ -7,25 +7,8 @@ release:
   footer: |
     **Full Changelog**: https://github.com/obalunenko/getenv/compare/{{ .PreviousTag }}...{{ .Tag }}
 
-gomod:
-  proxy: true
-  # If proxy is true, use these environment variables when running `go mod` commands (namely, `go mod tidy`).
-  # Defaults to `os.Environ()`.
-  env:
-    - GOPROXY=https://proxy.golang.org,direct
-    - GOSUMDB=sum.golang.org
-    - GOPRIVATE=example.com/blah
-    - CGO_ENABLED=0
-  # Which Go binary to use.
-  # Defaults to `go`.
-  mod: vendor
-  gobinary: go
-
 builds:
   - skip: true
-
-checksum:
-  name_template: "{{ .ProjectName }}-{{ .Version }}-checksums.txt"
 
 snapshot:
   version_template: SNAPSHOT-{{ .Commit }}
