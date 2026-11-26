@@ -18,4 +18,6 @@ import (
 	_ "github.com/obalunenko/advent-of-code/internal/puzzles/solutions/2021/day06"
 	// register day07 solution.
 	_ "github.com/obalunenko/advent-of-code/internal/puzzles/solutions/2021/day07"
+	// register day08 solution.
+	_ "github.com/obalunenko/advent-of-code/internal/puzzles/solutions/2021/day08"
 )
